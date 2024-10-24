@@ -272,51 +272,51 @@ module "dns_hub" {
   Project for Base Network Hub
 *****************************************/
 
-module "base_network_hub" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 15.0"
-  count   = var.enable_hub_and_spoke ? 1 : 0
+# module "base_network_hub" {
+#   source  = "terraform-google-modules/project-factory/google"
+#   version = "~> 15.0"
+#   count   = var.enable_hub_and_spoke ? 1 : 0
 
-  random_project_id        = true
-  random_project_id_length = 4
-  default_service_account  = "deprivilege"
-  name                     = "${local.project_prefix}-net-hub-base"
-  org_id                   = local.org_id
-  billing_account          = local.billing_account
-  folder_id                = google_folder.network.id
+#   random_project_id        = true
+#   random_project_id_length = 4
+#   default_service_account  = "deprivilege"
+#   name                     = "${local.project_prefix}-net-hub-base"
+#   org_id                   = local.org_id
+#   billing_account          = local.billing_account
+#   folder_id                = google_folder.network.id
 
-  activate_apis = [
-    "compute.googleapis.com",
-    "dns.googleapis.com",
-    "servicenetworking.googleapis.com",
-    "logging.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
-    "billingbudgets.googleapis.com"
-  ]
+#   activate_apis = [
+#     "compute.googleapis.com",
+#     "dns.googleapis.com",
+#     "servicenetworking.googleapis.com",
+#     "logging.googleapis.com",
+#     "cloudresourcemanager.googleapis.com",
+#     "billingbudgets.googleapis.com"
+#   ]
 
-  labels = {
-    environment       = "network"
-    application_name  = "org-net-hub-base"
-    billing_code      = "1234"
-    primary_contact   = "example1"
-    secondary_contact = "example2"
-    business_code     = "shared"
-    env_code          = "net"
-    vpc               = "base"
-  }
-  budget_alert_pubsub_topic   = var.project_budget.base_net_hub_alert_pubsub_topic
-  budget_alert_spent_percents = var.project_budget.base_net_hub_alert_spent_percents
-  budget_amount               = var.project_budget.base_net_hub_budget_amount
-  budget_alert_spend_basis    = var.project_budget.base_net_hub_budget_alert_spend_basis
-}
+#   labels = {
+#     environment       = "network"
+#     application_name  = "org-net-hub-base"
+#     billing_code      = "1234"
+#     primary_contact   = "example1"
+#     secondary_contact = "example2"
+#     business_code     = "shared"
+#     env_code          = "net"
+#     vpc               = "base"
+#   }
+#   budget_alert_pubsub_topic   = var.project_budget.base_net_hub_alert_pubsub_topic
+#   budget_alert_spent_percents = var.project_budget.base_net_hub_alert_spent_percents
+#   budget_amount               = var.project_budget.base_net_hub_budget_amount
+#   budget_alert_spend_basis    = var.project_budget.base_net_hub_budget_alert_spend_basis
+# }
 
-resource "google_project_iam_member" "network_sa_base" {
-  for_each = toset(var.enable_hub_and_spoke ? local.hub_and_spoke_roles : [])
+# resource "google_project_iam_member" "network_sa_base" {
+#   for_each = toset(var.enable_hub_and_spoke ? local.hub_and_spoke_roles : [])
 
-  project = module.base_network_hub[0].project_id
-  role    = each.key
-  member  = "serviceAccount:${local.networks_step_terraform_service_account_email}"
-}
+#   project = module.base_network_hub[0].project_id
+#   role    = each.key
+#   member  = "serviceAccount:${local.networks_step_terraform_service_account_email}"
+# }
 
 /******************************************
   Project for Restricted Network Hub
@@ -364,7 +364,7 @@ module "restricted_network_hub" {
   Base and Restricted Network Projects for each Environment
 ************************************************************/
 
-module "base_restricted_environment_network" {
+module "restricted_environment_network" {
   source   = "../../modules/network"
   for_each = local.environments
 
@@ -377,10 +377,10 @@ module "base_restricted_environment_network" {
   env_code = each.value
 
   project_budget = {
-    base_network_budget_amount                  = var.project_budget.base_network_budget_amount
-    base_network_alert_spent_percents           = var.project_budget.base_network_alert_spent_percents
-    base_network_alert_pubsub_topic             = var.project_budget.base_network_alert_pubsub_topic
-    base_network_budget_alert_spend_basis       = var.project_budget.base_network_budget_alert_spend_basis
+    # base_network_budget_amount                  = var.project_budget.base_network_budget_amount
+    # base_network_alert_spent_percents           = var.project_budget.base_network_alert_spent_percents
+    # base_network_alert_pubsub_topic             = var.project_budget.base_network_alert_pubsub_topic
+    # base_network_budget_alert_spend_basis       = var.project_budget.base_network_budget_alert_spend_basis
     restricted_network_budget_amount            = var.project_budget.restricted_network_budget_amount
     restricted_network_alert_spent_percents     = var.project_budget.restricted_network_alert_spent_percents
     restricted_network_alert_pubsub_topic       = var.project_budget.restricted_network_alert_pubsub_topic
