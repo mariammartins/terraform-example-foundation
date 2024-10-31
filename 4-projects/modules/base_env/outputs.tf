@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-output "base_shared_vpc_project" {
-  description = "Project sample base project."
-  value       = module.base_shared_vpc_project.project_id
-}
+# output "base_shared_vpc_project" {
+#   description = "Project sample base project."
+#   value       = module.base_shared_vpc_project.project_id
+# }
 
-output "base_shared_vpc_project_sa" {
-  description = "Project sample base project SA."
-  value       = module.base_shared_vpc_project.sa
-}
+# output "base_shared_vpc_project_sa" {
+#   description = "Project sample base project SA."
+#   value       = module.base_shared_vpc_project.sa
+# }
 
-output "base_subnets_self_links" {
-  value       = local.base_subnets_self_links
-  description = "The self-links of subnets from base environment."
-}
+# output "base_subnets_self_links" {
+#   value       = local.base_subnets_self_links
+#   description = "The self-links of subnets from base environment."
+# }
 
 output "floating_project" {
   description = "Project sample floating project."
