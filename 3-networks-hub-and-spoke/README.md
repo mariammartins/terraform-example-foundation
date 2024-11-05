@@ -25,7 +25,7 @@ organizational policy.</td>
 Google Cloud organization that you've created.</td>
 </tr>
 <tr>
-<td><a href="../3-networks-dual-svpc">3-networks-dual-svpc</a></td>
+<td><a href="../3-networks-svpc">3-networks-svpc</a></td>
 <td>Sets up base and restricted shared VPCs with default DNS, NAT (optional),
 Private Service networking, VPC service controls, on-premises Dedicated
 Interconnect, and baseline firewall rules for each environment. It also sets
@@ -34,7 +34,7 @@ up the global DNS hub.</td>
 <tr>
 <td><a>3-networks-hub-and-spoke (this file)</a></td>
 <td>Sets up base and restricted shared VPCs with all the default configuration
-found on step 3-networks-dual-svpc, but here the architecture will be based on the
+found on step 3-networks-svpc, but here the architecture will be based on the
 Hub and Spoke network model. It also sets up the global DNS hub</td>
 </tr>
 </tr>
@@ -96,7 +96,7 @@ To enable **Hub and Spoke** transitivity set the variable `enable_hub_and_spoke_
 **Note:** The default `allow-transitivity-ingress` firewall rule will create Security Command Center (SCC) findings because it allows ingress for all ports and protocols in the [Shared Address Space CIDR Block](https://en.wikipedia.org/wiki/IPv4_shared_address_space) set in this rule.
 Because of this, you should update the implemented network access controls between spokes with valid values for your environment through the [firewall functionality](./modules/transitivity/main.tf#L142) of the corresponding NVAs to make them more restrictive.
 
-To see the version that makes use of the **Dual Shared VPC** architecture mode check the step [3-networks-dual-svpc](../3-networks-dual-svpc).
+To see the version that makes use of the **Dual Shared VPC** architecture mode check the step [3-networks-svpc](../3-networks-svpc).
 
 ### Using Dedicated Interconnect
 

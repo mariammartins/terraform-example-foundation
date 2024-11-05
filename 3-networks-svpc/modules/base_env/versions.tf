@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-// List of IPv4 address of target name servers for the forwarding zone configuration.
-// See https://cloud.google.com/dns/docs/overview#dns-forwarding-zones
-target_name_server_addresses = [
-  {
-    ipv4_address    = "192.168.0.1",
-    forwarding_path = "default"
-  },
-  {
-    ipv4_address    = "192.168.0.2",
-    forwarding_path = "default"
+terraform {
+  required_version = ">= 0.13"
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = ">= 3.50"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = ">= 3.50"
+    }
   }
-]
+
+  provider_meta "google" {
+    module_name = "blueprints/terraform/terraform-example-foundation:networks-svpc/v4.1.0"
+  }
+
+  provider_meta "google-beta" {
+    module_name = "blueprints/terraform/terraform-example-foundation:networks-svpc/v4.1.0"
+  }
+}

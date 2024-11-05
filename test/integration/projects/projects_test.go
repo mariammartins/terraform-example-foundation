@@ -111,7 +111,7 @@ func TestProjects(t *testing.T) {
 			// networks created to retrieve output from the network step for this environment
 			var networkTFDir string
 			if networkMode == "" {
-				networkTFDir = "../../../3-networks-dual-svpc/envs/%s"
+				networkTFDir = "../../../3-networks-svpc/envs/%s"
 			} else {
 				networkTFDir = "../../../3-networks-hub-and-spoke/envs/%s"
 			}
