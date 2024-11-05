@@ -32,7 +32,7 @@ module "firewall_rules" {
         priority       = "65530"
         direction      = "EGRESS"
         action         = "deny"
-        rule_name      = "fw-${var.environment_code}-shared-restricted-65530-e-d-all-all-all"
+        rule_name      = "fw-${var.environment_code}-svpc-65530-e-d-all-all-all"
         description    = "Lower priority rule to deny all egress traffic."
         enable_logging = var.firewall_enable_logging
         match = {
@@ -48,7 +48,7 @@ module "firewall_rules" {
         priority       = "1000"
         direction      = "EGRESS"
         action         = "allow"
-        rule_name      = "fw-${var.environment_code}-shared-restricted-1000-e-a-allow-google-apis-all-tcp-443"
+        rule_name      = "fw-${var.environment_code}-svpc-1000-e-a-allow-google-apis-all-tcp-443"
         description    = "Lower priority rule to allow restricted google apis on TCP port 443."
         enable_logging = var.firewall_enable_logging
         match = {

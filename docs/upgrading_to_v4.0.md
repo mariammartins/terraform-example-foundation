@@ -13,7 +13,7 @@ Before moving forward with adopting components of v4, review the list of breakin
   - Subfolders for business units were created in 4-projects step
   - A new Network folder was created be used as parent by network projects:
     - `prj-ENV-shared-base`
-    - `prj-ENV-shared-restricted`
+    - `prj-ENV-svpc`
     - `prj-net-hub-base`
     - `prj-net-hub-restricted`
     - `prj-net-dns`

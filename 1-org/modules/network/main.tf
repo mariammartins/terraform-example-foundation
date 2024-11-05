@@ -24,7 +24,7 @@ module "restricted_shared_vpc_host_project" {
 
   random_project_id           = true
   random_project_id_length    = 4
-  name                        = format("%s-%s-shared-restricted", var.project_prefix, var.env_code)
+  name                        = format("%s-%s-svpc", var.project_prefix, var.env_code)
   org_id                      = var.org_id
   billing_account             = var.billing_account
   folder_id                   = var.folder_id

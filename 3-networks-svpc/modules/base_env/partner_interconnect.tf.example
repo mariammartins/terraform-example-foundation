@@ -18,7 +18,7 @@ module "shared_restricted_interconnect" {
   source = "../partner_interconnect"
 
   attachment_project_id = local.restricted_project_id
-  vpc_name              = "${var.environment_code}-shared-restricted"
+  vpc_name              = "${var.environment_code}-svpc"
   preactivate           = true
 
   region1                         = var.default_region1

@@ -89,9 +89,9 @@ example-organization
     ├── prj-net-hub-restricted
     ├── prj-net-dns
     ├── prj-net-interconnect
-    ├── prj-d-shared-restricted
-    ├── prj-n-shared-restricted
-    └── prj-p-shared-restricted
+    ├── prj-d-svpc
+    ├── prj-n-svpc
+    └── prj-p-svpc
 ```
 
 #### Logs
@@ -259,9 +259,9 @@ example-organization
     ├── prj-net-hub-restricted
     ├── prj-net-dns
     ├── prj-net-interconnect
-    ├── prj-d-shared-restricted
-    ├── prj-n-shared-restricted
-    └── prj-p-shared-restricted
+    ├── prj-d-svpc
+    ├── prj-n-svpc
+    └── prj-p-svpc
 └── fldr-development
     ├── prj-d-kms
     └── prj-d-secrets

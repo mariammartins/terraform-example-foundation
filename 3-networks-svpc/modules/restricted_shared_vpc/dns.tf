@@ -20,7 +20,7 @@
 
 resource "google_dns_policy" "default_policy" {
   project                   = var.project_id
-  name                      = "dp-${var.environment_code}-shared-restricted-default-policy"
+  name                      = "dp-${var.environment_code}-svpc-default-policy"
   enable_inbound_forwarding = var.dns_enable_inbound_forwarding
   enable_logging            = var.dns_enable_logging
   networks {
@@ -42,7 +42,7 @@ module "peering_zone" {
 
   project_id  = var.project_id
   type        = "peering"
-  name        = "dz-${var.environment_code}-shared-restricted-to-dns-hub"
+  name        = "dz-${var.environment_code}-svpc-to-dns-hub"
   domain      = var.domain
   description = "Private DNS peering zone."
 

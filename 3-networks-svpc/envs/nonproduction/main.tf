@@ -56,11 +56,11 @@ locals {
   restricted_subnet_secondary_ranges = {
     (local.default_region1) = [
       {
-        range_name    = "rn-${local.environment_code}-shared-restricted-${local.default_region1}-gke-pod"
+        range_name    = "rn-${local.environment_code}-svpc-${local.default_region1}-gke-pod"
         ip_cidr_range = "100.72.128.0/18"
       },
       {
-        range_name    = "rn-${local.environment_code}-shared-restricted-${local.default_region1}-gke-svc"
+        range_name    = "rn-${local.environment_code}-svpc-${local.default_region1}-gke-svc"
         ip_cidr_range = "100.73.128.0/18"
       }
     ]

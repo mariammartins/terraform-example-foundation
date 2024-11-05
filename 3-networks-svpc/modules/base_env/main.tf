@@ -206,7 +206,7 @@ module "restricted_shared_vpc" {
 
   subnets = [
     {
-      subnet_name                      = "sb-${var.environment_code}-shared-restricted-${var.default_region1}"
+      subnet_name                      = "sb-${var.environment_code}-svpc-${var.default_region1}"
       subnet_ip                        = var.restricted_subnet_primary_ranges[var.default_region1]
       subnet_region                    = var.default_region1
       subnet_private_access            = "true"
@@ -219,7 +219,7 @@ module "restricted_shared_vpc" {
       description                      = "First ${var.env} subnet example."
     },
     {
-      subnet_name                      = "sb-${var.environment_code}-shared-restricted-${var.default_region2}"
+      subnet_name                      = "sb-${var.environment_code}-svpc-${var.default_region2}"
       subnet_ip                        = var.restricted_subnet_primary_ranges[var.default_region2]
       subnet_region                    = var.default_region2
       subnet_private_access            = "true"
@@ -232,7 +232,7 @@ module "restricted_shared_vpc" {
       description                      = "Second ${var.env} subnet example."
     },
     {
-      subnet_name      = "sb-${var.environment_code}-shared-restricted-${var.default_region1}-proxy"
+      subnet_name      = "sb-${var.environment_code}-svpc-${var.default_region1}-proxy"
       subnet_ip        = var.restricted_subnet_proxy_ranges[var.default_region1]
       subnet_region    = var.default_region1
       subnet_flow_logs = false
@@ -241,7 +241,7 @@ module "restricted_shared_vpc" {
       purpose          = "REGIONAL_MANAGED_PROXY"
     },
     {
-      subnet_name      = "sb-${var.environment_code}-shared-restricted-${var.default_region2}-proxy"
+      subnet_name      = "sb-${var.environment_code}-svpc-${var.default_region2}-proxy"
       subnet_ip        = var.restricted_subnet_proxy_ranges[var.default_region2]
       subnet_region    = var.default_region2
       subnet_flow_logs = false
@@ -251,7 +251,7 @@ module "restricted_shared_vpc" {
     }
   ]
   secondary_ranges = {
-    "sb-${var.environment_code}-shared-restricted-${var.default_region1}" = var.restricted_subnet_secondary_ranges[var.default_region1]
+    "sb-${var.environment_code}-svpc-${var.default_region1}" = var.restricted_subnet_secondary_ranges[var.default_region1]
   }
 }
 

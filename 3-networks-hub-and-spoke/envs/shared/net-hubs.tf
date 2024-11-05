@@ -284,7 +284,7 @@ module "restricted_shared_vpc" {
 
   subnets = [
     {
-      subnet_name                      = "sb-c-shared-restricted-hub-${local.default_region1}"
+      subnet_name                      = "sb-c-svpc-hub-${local.default_region1}"
       subnet_ip                        = local.restricted_subnet_primary_ranges[local.default_region1]
       subnet_region                    = local.default_region1
       subnet_private_access            = "true"
@@ -297,7 +297,7 @@ module "restricted_shared_vpc" {
       description                      = "Restricted network hub subnet for ${local.default_region1}"
     },
     {
-      subnet_name                      = "sb-c-shared-restricted-hub-${local.default_region2}"
+      subnet_name                      = "sb-c-svpc-hub-${local.default_region2}"
       subnet_ip                        = local.restricted_subnet_primary_ranges[local.default_region2]
       subnet_region                    = local.default_region2
       subnet_private_access            = "true"
@@ -310,7 +310,7 @@ module "restricted_shared_vpc" {
       description                      = "Restricted network hub subnet for ${local.default_region2}"
     },
     {
-      subnet_name      = "sb-c-shared-restricted-hub-${local.default_region1}-proxy"
+      subnet_name      = "sb-c-svpc-hub-${local.default_region1}-proxy"
       subnet_ip        = local.restricted_subnet_proxy_ranges[local.default_region1]
       subnet_region    = local.default_region1
       subnet_flow_logs = false
@@ -319,7 +319,7 @@ module "restricted_shared_vpc" {
       purpose          = "REGIONAL_MANAGED_PROXY"
     },
     {
-      subnet_name      = "sb-c-shared-restricted-hub-${local.default_region2}-proxy"
+      subnet_name      = "sb-c-svpc-hub-${local.default_region2}-proxy"
       subnet_ip        = local.restricted_subnet_proxy_ranges[local.default_region2]
       subnet_region    = local.default_region2
       subnet_flow_logs = false

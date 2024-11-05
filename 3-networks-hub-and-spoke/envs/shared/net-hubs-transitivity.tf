@@ -84,7 +84,7 @@ module "restricted_transitivity" {
   project_id          = local.restricted_net_hub_project_id
   regions             = keys(local.restricted_subnet_primary_ranges)
   vpc_name            = module.restricted_shared_vpc.network_name
-  gw_subnets          = { for region in keys(local.restricted_subnet_primary_ranges) : region => "sb-c-shared-restricted-hub-${region}" }
+  gw_subnets          = { for region in keys(local.restricted_subnet_primary_ranges) : region => "sb-c-svpc-hub-${region}" }
   regional_aggregates = local.restricted_regional_aggregates
   firewall_policy     = module.restricted_shared_vpc.firewall_policy
   commands = [

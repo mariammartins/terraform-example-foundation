@@ -62,7 +62,7 @@ module "dns_hub_interconnect" {
 module "shared_restricted_interconnect" {
   source = "../../modules/dedicated_interconnect"
 
-  vpc_name                = "c-shared-restricted"
+  vpc_name                = "c-svpc"
   interconnect_project_id = local.restricted_net_hub_project_id
 
   region1                                 = local.default_region1

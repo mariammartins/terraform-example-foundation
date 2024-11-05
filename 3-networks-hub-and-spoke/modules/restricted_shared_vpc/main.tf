@@ -16,7 +16,7 @@
 
 locals {
   mode                       = var.mode == null ? "" : var.mode == "hub" ? "-hub" : "-spoke"
-  vpc_name                   = "${var.environment_code}-shared-restricted${local.mode}"
+  vpc_name                   = "${var.environment_code}-svpc${local.mode}"
   network_name               = "vpc-${local.vpc_name}"
   restricted_googleapis_cidr = module.private_service_connect.private_service_connect_ip
 }
@@ -70,7 +70,7 @@ module "main" {
 data "google_compute_network" "vpc_restricted_net_hub" {
   count = var.mode == "spoke" ? 1 : 0
 
-  name    = "vpc-c-shared-restricted-hub"
+  name    = "vpc-c-svpc-hub"
   project = var.restricted_net_hub_project_id
 }
 

@@ -82,21 +82,21 @@ func TestProjects(t *testing.T) {
 			repo:              "bu1-example-app",
 			baseDir:           "../../../4-projects/business_unit_1/%s",
 			baseNetwork:       fmt.Sprintf("vpc-d-shared-base%s", networkMode),
-			restrictedNetwork: fmt.Sprintf("vpc-d-shared-restricted%s", networkMode),
+			restrictedNetwork: fmt.Sprintf("vpc-d-svpc%s", networkMode),
 		},
 		{
 			name:              "bu1_nonproduction",
 			repo:              "bu1-example-app",
 			baseDir:           "../../../4-projects/business_unit_1/%s",
 			baseNetwork:       fmt.Sprintf("vpc-n-shared-base%s", networkMode),
-			restrictedNetwork: fmt.Sprintf("vpc-n-shared-restricted%s", networkMode),
+			restrictedNetwork: fmt.Sprintf("vpc-n-svpc%s", networkMode),
 		},
 		{
 			name:              "bu1_production",
 			repo:              "bu1-example-app",
 			baseDir:           "../../../4-projects/business_unit_1/%s",
 			baseNetwork:       fmt.Sprintf("vpc-p-shared-base%s", networkMode),
-			restrictedNetwork: fmt.Sprintf("vpc-p-shared-restricted%s", networkMode),
+			restrictedNetwork: fmt.Sprintf("vpc-p-svpc%s", networkMode),
 		},
 	} {
 		tt := tt

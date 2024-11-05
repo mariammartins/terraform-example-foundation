@@ -15,7 +15,7 @@
  */
 
 locals {
-  vpc_name                   = "${var.environment_code}-shared-restricted"
+  vpc_name                   = "${var.environment_code}-svpc"
   network_name               = "vpc-${local.vpc_name}"
   restricted_googleapis_cidr = module.private_service_connect.private_service_connect_ip
 }

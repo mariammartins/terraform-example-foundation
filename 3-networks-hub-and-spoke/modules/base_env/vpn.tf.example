@@ -81,7 +81,7 @@ module "shared_restricted_vpn" {
   env_secret_project_id = local.env_secret_project_id
   default_region1       = var.default_region1
   default_region2       = var.default_region2
-  vpc_name              = "${var.environment_code}-shared-restricted"
+  vpc_name              = "${var.environment_code}-svpc"
   region1_router1_name  = module.restricted_shared_vpc.region1_router1.router.name
   region1_router2_name  = module.restricted_shared_vpc.region1_router2.router.name
   region2_router1_name  = module.restricted_shared_vpc.region2_router1.router.name
