@@ -34,9 +34,6 @@
 | Name | Description |
 |------|-------------|
 | access\_context\_manager\_policy\_id | Access Context Manager Policy ID. |
-| base\_shared\_vpc\_project | Project sample base project. |
-| base\_shared\_vpc\_project\_sa | Project sample base project SA. |
-| base\_subnets\_self\_links | The self-links of subnets from base environment. |
 | bucket | The created storage bucket. |
 | floating\_project | Project sample floating project. |
 | iap\_firewall\_tags | The security tags created for IAP (SSH and RDP) firewall rules and to be used on the VM created on step 5-app-infra on the peering network project. |
