@@ -135,7 +135,7 @@ Another project created under the network folder. This project will host the Ded
 #### Networking
 
 Under the network folder, one project for restricted network, are created per environment (`development`, `nonproduction`, and `production`) which is intended to be used as a [Shared VPC host project](https://cloud.google.com/vpc/docs/shared-vpc) for all projects in that environment.
-This stage only creates the projects and enables the correct APIs, the following networks stages, [3-networks-dual-svpc](./3-networks-dual-svpc/) and [3-networks-hub-and-spoke](./3-networks-hub-and-spoke/), create the actual Shared VPC networks.
+This stage only creates the projects and enables the correct APIs, the following networks stages, [3-networks-svpc](./3-networks-svpc/) and [3-networks-hub-and-spoke](./3-networks-hub-and-spoke/), create the actual Shared VPC networks.
 
 ### [2. environments](./2-environments/)
 
@@ -167,7 +167,7 @@ Under the environment folder, a project is created per environment (`development
 
 Usage instructions are available for the environments step in the [README](./2-environments/README.md).
 
-### [3. networks-dual-svpc](./3-networks-dual-svpc/)
+### [3. networks-svpc](./3-networks-svpc/)
 
 This step focuses on creating a [Shared VPC](https://cloud.google.com/architecture/security-foundations/networking#vpcsharedvpc-id7-1-shared-vpc-) per environment (`development`, `nonproduction`, and `production`) in a standard configuration with a reasonable security baseline. Currently, this includes:
 

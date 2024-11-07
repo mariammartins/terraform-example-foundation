@@ -16,13 +16,11 @@
 
 locals {
   env_project_ids = {
-    "sample-base"     = data.terraform_remote_state.projects_env.outputs.base_shared_vpc_project,
     "sample-floating" = data.terraform_remote_state.projects_env.outputs.floating_project,
     "sample-peering"  = data.terraform_remote_state.projects_env.outputs.peering_project,
     "sample-restrict" = data.terraform_remote_state.projects_env.outputs.restricted_shared_vpc_project,
   }
   env_project_subnets = {
-    "sample-base"     = local.base_subnetwork_self_link,
     "sample-floating" = local.base_subnetwork_self_link,
     "sample-peering"  = data.terraform_remote_state.projects_env.outputs.peering_subnetwork_self_link,
     "sample-restrict" = local.base_subnetwork_self_link,
