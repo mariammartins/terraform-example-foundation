@@ -381,7 +381,6 @@ func TestOrg(t *testing.T) {
 			require.NoError(t, err)
 			if enable_hub_and_spoke {
 				for _, hubAndSpokeProjectOutput := range []string{
-					"base_net_hub_project_id",
 					"restricted_net_hub_project_id",
 				} {
 					projectID := org.GetStringOutput(hubAndSpokeProjectOutput)
