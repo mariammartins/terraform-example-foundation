@@ -181,11 +181,11 @@ This step focuses on creating a [Shared VPC](https://cloud.google.com/architectu
 - (Optional) Cloud NAT configured for all subnets with logging and static outbound IPs.
 - Default Cloud DNS policy applied, with DNS logging and [inbound query forwarding](https://cloud.google.com/dns/docs/overview#dns-server-policy-in) turned on.
 
-Usage instructions are available for the networks step in the [README](./3-networks-dual-svpc/README.md).
+Usage instructions are available for the networks step in the [README](./3-networks-svpc/README.md).
 
 ### [3. networks-hub-and-spoke](./3-networks-hub-and-spoke/)
 
-This step configures the same network resources that the step 3-networks-dual-svpc does, but this time it makes use of the architecture based on the [hub-and-spoke](https://cloud.google.com/architecture/security-foundations/networking#hub-and-spoke) reference network model.
+This step configures the same network resources that the step 3-networks-svpc does, but this time it makes use of the architecture based on the [hub-and-spoke](https://cloud.google.com/architecture/security-foundations/networking#hub-and-spoke) reference network model.
 
 Usage instructions are available for the networks step in the [README](./3-networks-hub-and-spoke/README.md).
 
@@ -331,7 +331,7 @@ Some variables used to deploy the steps have default values, check those **befor
 - Step 0-bootstrap: If you are using Cloud Build in the [CI/CD Pipeline](/docs/GLOSSARY.md#foundation-cicd-pipeline), check the main [README](./0-bootstrap/README.md#Inputs) of the step. If you are using Jenkins, check the [README](./0-bootstrap/modules/jenkins-agent/README.md#Inputs) of the module `jenkins-agent`.
 - Step 1-org: The [README](./1-org/envs/shared/README.md#Inputs) of the environment `shared`.
 - Step 2-environments: The READMEs of the environments [development](./2-environments/envs/development/README.md#Inputs), [nonproduction](./2-environments/envs/nonproduction/README.md#Inputs), and [production](./2-environments/envs/production/README.md#Inputs)
-- Step 3-networks-dual-svpc: The READMEs of the environments [shared](./3-networks-dual-svpc/envs/shared/README.md#inputs), [development](./3-networks-dual-svpc/envs/development/README.md#Inputs), [nonproduction](./3-networks/envs/nonproduction/README.md#Inputs), and [production](./3-networks/envs/production/README.md#Inputs)
+- Step 3-networks-svpc: The READMEs of the environments [shared](./3-networks-svpc/envs/shared/README.md#inputs), [development](./3-networks-svpc/envs/development/README.md#Inputs), [nonproduction](./3-networks/envs/nonproduction/README.md#Inputs), and [production](./3-networks/envs/production/README.md#Inputs)
 - Step 3-networks-hub-and-spoke: The READMEs of the environments [shared](./3-networks-hub-and-spoke/envs/shared/README.md#inputs), [development](./3-networks-hub-and-spoke/envs/development/README.md#Inputs), [nonproduction](./3-networks/envs/nonproduction/README.md#Inputs), and [production](./3-networks/envs/production/README.md#Inputs)
 - Step 4-projects: The READMEs of the environments [shared](./4-projects/business_unit_1/shared/README.md#inputs), [development](./4-projects/business_unit_1/development/README.md#Inputs), [nonproduction](./4-projects/business_unit_1/nonproduction/README.md#Inputs), and [production](./4-projects/business_unit_1/production/README.md#Inputs)
 
