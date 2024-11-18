@@ -42,6 +42,10 @@ module "restricted_shared_vpc_host_project" {
     "billingbudgets.googleapis.com"
   ]
 
+  vpc_service_control_attach_enabled = var.vpc_service_control_attach_enabled
+  vpc_service_control_attach_dry_run = var.vpc_service_control_attach_dry_run
+  vpc_service_control_perimeter_name = var.vpc_service_control_perimeter_name
+
   labels = {
     environment       = var.env
     application_name  = "restricted-shared-vpc-host"
