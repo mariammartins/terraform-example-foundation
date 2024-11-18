@@ -27,6 +27,10 @@ log_export_storage_location = "US"
 
 billing_export_dataset_location = "US"
 
+access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_ID
+
+perimeter_additional_members = ["user:YOUR-USER-EMAIL@example.com"]
+
 //scc_notification_filter = "state=\\\"ACTIVE\\\""
 
 //enable_hub_and_spoke = true
