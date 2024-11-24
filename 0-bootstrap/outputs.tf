@@ -78,12 +78,12 @@ output "optional_groups" {
 
 output "seed_project_number" {
   description = "The seed project number."
-  value       = data.google_project.seed_project_number
+  value       = data.google_project.seed_project.number
 }
 
 output "cloudbuild_project_number" {
   description = "The cloudbuild project number."
-  value       = data.google_project.cloudbuild_project_number
+  value       = data.google_project.cloudbuild_project.number
 }
 
 /* ----------------------------------------
