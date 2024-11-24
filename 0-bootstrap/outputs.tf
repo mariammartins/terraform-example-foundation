@@ -76,6 +76,16 @@ output "optional_groups" {
   value       = var.groups.create_optional_groups == false ? tomap(var.groups.optional_groups) : tomap({ for key, value in module.optional_group : key => value.id })
 }
 
+output "seed_project_number" {
+  description = "The seed project number."
+  value       = data.google_project.seed_project_number
+}
+
+output "cloudbuild_project_number" {
+  description = "The cloudbuild project number."
+  value       = data.google_project.cloudbuild_project_number
+}
+
 /* ----------------------------------------
     Specific to cloudbuild_module
    ---------------------------------------- */

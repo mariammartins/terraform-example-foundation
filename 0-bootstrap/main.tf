@@ -104,3 +104,7 @@ module "seed_bootstrap" {
   depends_on = [module.required_group]
 }
 
+data "google_project" "seed_project_number" {
+  project_id = module.seed_bootstrap.seed_project_id
+  depends_on = [module.seed_bootstrap]
+}

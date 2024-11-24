@@ -273,3 +273,8 @@ resource "google_sourcerepo_repository_iam_member" "member" {
   role       = "roles/viewer"
   member     = "serviceAccount:${google_service_account.terraform-env-sa[each.key].email}"
 }
+
+data "google_project" "cloudbuild_project_number" {
+  project_id = module.tf_source.cloudbuild_project_id
+  depends_on = [module.tf_source]
+}
