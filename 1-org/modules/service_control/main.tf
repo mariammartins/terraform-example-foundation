@@ -32,6 +32,7 @@ module "access_level" {
   description = "${local.prefix} Access Level for use in an enforced perimeter"
   policy      = var.access_context_manager_policy_id
   name        = local.access_level_name
+  members     = var.members
 }
 
 module "access_level_dry_run" {
@@ -70,5 +71,5 @@ module "regular_service_perimeter" {
 resource "time_sleep" "wait_vpc_sc_propagation" {
   create_duration = "60s"
 
-  depends_on      = [module.regular_service_perimeter]
+  depends_on = [module.regular_service_perimeter]
 }
