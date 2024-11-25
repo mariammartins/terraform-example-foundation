@@ -22,6 +22,9 @@ locals {
   folder_prefix   = data.terraform_remote_state.bootstrap.outputs.common_config.folder_prefix
   tags            = data.terraform_remote_state.org.outputs.tags
   required_groups = data.terraform_remote_state.bootstrap.outputs.required_groups
+  enforce_vpcsc   = data.terraform_remote_state.org.outputs.enforce_vpcsc
+  perimeter_name  = data.terraform_remote_state.org.outputs.restricted_service_perimeter_name
+  access_context_manager_policy_id = data.terraform_remote_state.org.outputs.access_context_manager_policy_id
 }
 
 data "terraform_remote_state" "bootstrap" {
