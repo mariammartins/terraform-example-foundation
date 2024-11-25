@@ -38,6 +38,9 @@
 
 | Name | Description |
 |------|-------------|
+| access\_context\_manager\_policy\_id | Access Context Manager Policy ID. |
+| access\_level\_name | Access context manager access level name |
+| access\_level\_name\_dry\_run | Access context manager access level name for the dry-run perimeter |
 | billing\_sink\_names | The name of the sinks under billing account level. |
 | cai\_monitoring\_artifact\_registry | CAI Monitoring Cloud Function Artifact Registry name. |
 | cai\_monitoring\_asset\_feed | CAI Monitoring Cloud Function Organization Asset Feed name. |
@@ -47,6 +50,7 @@
 | common\_kms\_project\_id | The org Cloud Key Management Service (KMS) project ID |
 | dns\_hub\_project\_id | The DNS hub project ID |
 | domains\_to\_allow | The list of domains to allow users from in IAM. |
+| enforce\_vpcsc | Enable the enforced mode for VPC Service Controls. It is not recommended to enable VPC-SC on the first run deploying your foundation. Review [best practices for enabling VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/enable), then only enforce the perimeter after you have analyzed the access patterns in your dry-run perimeter and created the necessary exceptions for your use cases. |
 | interconnect\_project\_id | The Dedicated Interconnect project ID |
 | interconnect\_project\_number | The Dedicated Interconnect project number |
 | logs\_export\_project\_linked\_dataset\_name | The resource name of the Log Bucket linked BigQuery dataset for the project destination. |
@@ -62,6 +66,7 @@
 | parent\_resource\_type | The parent resource type |
 | restricted\_net\_hub\_project\_id | The Restricted Network hub project ID |
 | restricted\_net\_hub\_project\_number | The Restricted Network hub project number |
+| restricted\_service\_perimeter\_name | Access context manager service perimeter name |
 | scc\_notification\_name | Name of SCC Notification |
 | scc\_notifications\_project\_id | The SCC notifications project ID |
 | shared\_vpc\_projects | Restricted shared VPC Projects info grouped by environment (development, nonproduction, production). |

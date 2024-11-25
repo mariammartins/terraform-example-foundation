@@ -153,3 +153,28 @@ output "cai_monitoring_topic" {
   value       = try(module.cai_monitoring[0].topic_name, null)
   description = "CAI Monitoring Cloud Function Pub/Sub Topic name."
 }
+
+output "access_level_name" {
+  value       = module.service_control.access_level_name
+  description = "Access context manager access level name"
+}
+
+output "access_level_name_dry_run" {
+  value       = module.service_control.access_level_name_dry_run
+  description = "Access context manager access level name for the dry-run perimeter"
+}
+
+output "enforce_vpcsc" {
+  value       = module.service_control.enforce_vpcsc
+  description = "Enable the enforced mode for VPC Service Controls. It is not recommended to enable VPC-SC on the first run deploying your foundation. Review [best practices for enabling VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/enable), then only enforce the perimeter after you have analyzed the access patterns in your dry-run perimeter and created the necessary exceptions for your use cases."
+}
+
+output "restricted_service_perimeter_name" {
+  value       = module.service_control.service_perimeter_name
+  description = "Access context manager service perimeter name"
+}
+
+output "access_context_manager_policy_id" {
+  value       = var.access_context_manager_policy_id
+  description = "Access Context Manager Policy ID."
+}

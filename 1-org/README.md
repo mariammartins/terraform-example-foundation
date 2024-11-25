@@ -155,6 +155,12 @@ If required, run `terraform output cloudbuild_project_id` in the `0-bootstrap` f
    echo "access_context_manager_policy_id = ${ACCESS_CONTEXT_MANAGER_ID}"
    ```
 
+1. Update `envs/shared/terraform.tfvars` file with the `access_context_manager_policy_id`.
+
+   ```bash
+   sed -i'' -e "s/ACCESS_CONTEXT_MANAGER_ID/${ACCESS_CONTEXT_MANAGER_ID}/" ./envs/shared/terraform.tfvars
+   ```
+
 1. Update the `envs/shared/terraform.tfvars` file with values from your environment and 0-bootstrap step. If the previous step showed a numeric value, un-comment the variable `create_access_context_manager_access_policy = false`. See the shared folder [README.md](./envs/shared/README.md) for additional information on the values in the `terraform.tfvars` file.
 
    ```bash
@@ -237,6 +243,12 @@ Change into the `1-org` folder, copy the Terraform wrapper script, and ensure it
    echo "access_context_manager_policy_id = ${ACCESS_CONTEXT_MANAGER_ID}"
    ```
 
+1. Update `envs/shared/terraform.tfvars` file with the `access_context_manager_policy_id`.
+
+   ```bash
+   sed -i'' -e "s/ACCESS_CONTEXT_MANAGER_ID/${ACCESS_CONTEXT_MANAGER_ID}/" ./envs/shared/terraform.tfvars
+   ```
+
 1. Update the `envs/shared/terraform.tfvars` file with values from your environment and 0-bootstrap step. If the previous step showed a numeric value, un-comment the variable `create_access_context_manager_access_policy = false`. See the shared folder [README.md](./envs/shared/README.md) for additional information on the values in the `terraform.tfvars` file.
 
    ```bash
@@ -247,6 +259,7 @@ Change into the `1-org` folder, copy the Terraform wrapper script, and ensure it
 
    if [ ! -z "${ACCESS_CONTEXT_MANAGER_ID}" ]; then sed -i'' -e "s=//create_access_context_manager_access_policy=create_access_context_manager_access_policy=" ./envs/shared/terraform.tfvars; fi
    ```
+   **Note:** Make sure that you update the `perimeter_additional_members` variable with your user identity in order to be able to view/access resources in the project protected by the VPC Service Controls.
 
 You can now deploy your environment (production) using this script.
 When using Cloud Build or Jenkins as your CI/CD tool, each environment corresponding to a branch is the repository for 1-org step and only the corresponding environment is applied.

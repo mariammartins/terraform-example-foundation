@@ -170,4 +170,5 @@ module "service_control" {
   ingress_policies_dry_run = var.ingress_policies_dry_run
   egress_policies          = distinct(var.egress_policies)
   egress_policies_dry_run  = distinct(var.egress_policies_dry_run)
+  enforce_vpcsc            = true
 }

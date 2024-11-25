@@ -398,6 +398,7 @@ module "restricted_environment_network" {
     restricted_network_budget_alert_spend_basis = var.project_budget.restricted_network_budget_alert_spend_basis
   }
 
+  depends_on = [module.service_control]
 }
 
 /*********************************************************************
@@ -418,10 +419,10 @@ resource "google_project_iam_member" "network_sa_restricted" {
 
 resource "google_access_context_manager_service_perimeter_resource" "cloudbuild_project" {
   perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-  resource = "projects/CLOUDBUILD_PROJECT_NUMBER"
+  resource       = "projects/${local.cloudbuild_project_number}"
 }
 
 resource "google_access_context_manager_service_perimeter_resource" "seed_project" {
   perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-  resource = "projects/SEED_PROJECT_NUMBER"
+  resource       = "projects/${local.seed_project_number}"
 }
