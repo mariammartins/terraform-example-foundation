@@ -49,15 +49,9 @@ module "base_env" {
   env                                   = local.env
   environment_code                      = local.environment_code
   access_context_manager_policy_id      = var.access_context_manager_policy_id
-  perimeter_additional_members          = var.perimeter_additional_members
-  perimeter_additional_members_dry_run  = var.perimeter_additional_members_dry_run
   default_region1                       = local.default_region1
   default_region2                       = local.default_region2
   domain                                = var.domain
-  ingress_policies                      = var.ingress_policies
-  ingress_policies_dry_run              = var.ingress_policies_dry_run
-  egress_policies                       = var.egress_policies
-  egress_policies_dry_run               = var.egress_policies_dry_run
   enable_partner_interconnect           = false
   restricted_private_service_cidr       = local.restricted_private_service_cidr
   restricted_subnet_primary_ranges      = local.restricted_subnet_primary_ranges
