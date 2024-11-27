@@ -266,12 +266,10 @@ example-organization
     ├── prj-d-kms
     └── prj-d-secrets
     └── fldr-development-bu1
-
         ├── prj-d-bu1-sample-floating
         ├── prj-d-bu1-sample-restrict
         ├── prj-d-bu1-sample-peering
     └── fldr-development-bu2
-
         ├── prj-d-bu2-sample-floating
         ├── prj-d-bu2-sample-restrict
         └── prj-d-bu2-sample-peering
@@ -279,12 +277,10 @@ example-organization
     ├── prj-n-kms
     └── prj-n-secrets
     └── fldr-nonproduction-bu1
-
         ├── prj-n-bu1-sample-floating
         ├── prj-n-bu1-sample-restrict
         ├── prj-n-bu1-sample-peering
     └── fldr-nonproduction-bu2
-
         ├── prj-n-bu2-sample-floating
         ├── prj-n-bu2-sample-restrict
         └── prj-n-bu2-sample-peering
@@ -292,12 +288,10 @@ example-organization
     ├── prj-p-kms
     └── prj-p-secrets
     └── fldr-production-bu1
-
         ├── prj-p-bu1-sample-floating
         ├── prj-p-bu1-sample-restrict
         ├── prj-p-bu1-sample-peering
     └── fldr-production-bu2
-
         ├── prj-p-bu2-sample-floating
         ├── prj-p-bu2-sample-restrict
         └── prj-p-bu2-sample-peering

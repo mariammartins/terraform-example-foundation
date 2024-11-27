@@ -20,6 +20,9 @@ locals {
   parent                             = data.terraform_remote_state.bootstrap.outputs.common_config.parent_id
   billing_account                    = data.terraform_remote_state.bootstrap.outputs.common_config.billing_account
   common_folder_name                 = data.terraform_remote_state.org.outputs.common_folder_name
+  perimeter_name                     = data.terraform_remote_state.org.outputs.restricted_service_perimeter_name
+  access_context_manager_policy_id   = data.terraform_remote_state.org.outputs.access_context_manager_policy_id
+  enforce_vpcsc                      = data.terraform_remote_state.org.outputs.enforce_vpcsc
   default_region                     = data.terraform_remote_state.bootstrap.outputs.common_config.default_region
   project_prefix                     = data.terraform_remote_state.bootstrap.outputs.common_config.project_prefix
   folder_prefix                      = data.terraform_remote_state.bootstrap.outputs.common_config.folder_prefix
