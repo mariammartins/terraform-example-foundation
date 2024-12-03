@@ -422,10 +422,14 @@ resource "google_access_context_manager_service_perimeter_resource" "cloudbuild_
   count          = local.enforce_vpcsc ? 1 : 0
   perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
   resource       = "projects/${local.cloudbuild_project_number}"
+
+  depends_on = [module.service_control]
 }
 
 resource "google_access_context_manager_service_perimeter_resource" "seed_project" {
   count          = local.enforce_vpcsc ? 1 : 0
   perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
   resource       = "projects/${local.seed_project_number}"
+
+  depends_on = [module.service_control]
 }
