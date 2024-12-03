@@ -371,6 +371,23 @@ For example, to create a new business unit similar to business_unit_1, run the f
    ./tf-wrapper.sh apply development
    ```
 
+### Include APP Infra Pipeline terraform service account in the restricted perimeter
+
+App Infra Pipeline terraform service account needs to be added to the restricted VPC-SC perimeter.
+
+1. Use `terraform output` to get the APP Infra Pipeline terraform service account
+
+   ```bash
+   export APP_INFRA_PIPELINE_SERVICE_ACCOUNT=$(terraform -chdir="business_unit_1/shared/" output -json terraform_service_accounts | jq '."bu1-example-app"' --raw-output)
+   echo ${APP_INFRA_PIPELINE_SERVICE_ACCOUNT}
+   ```
+
+1. Update file `1-org/envs/shared/terraform.tfvars` in the production branch adding the APP Infra Pipeline service account to the perimeter by updating the value for the variable `perimeter_additional_members`.
+
+   ```hcl
+   perimeter_additional_members = ["user:YOUR-USER-EMAIL@example.com", "serviceAccount:APP-INFRA-PIPELINE-SERVICE_ACCOUNT@example.com"]
+   ```
+
 If you received any errors or made any changes to the Terraform config or any `.tfvars`, you must re-run `./tf-wrapper.sh plan <env>` before running `./tf-wrapper.sh apply <env>`.
 
 Before executing the next stages, unset the `GOOGLE_IMPERSONATE_SERVICE_ACCOUNT` environment variable.
