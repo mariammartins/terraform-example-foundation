@@ -15,7 +15,7 @@
  */
 
 locals {
-  default_region = data.terraform_remote_state.projects_env.outputs.default_region
+  default_region             = data.terraform_remote_state.projects_env.outputs.default_region
 }
 
 data "terraform_remote_state" "projects_env" {
