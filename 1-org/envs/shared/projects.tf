@@ -419,13 +419,13 @@ resource "google_project_iam_member" "network_sa_restricted" {
 *****************************************/
 
 resource "google_access_context_manager_service_perimeter_resource" "cloudbuild_project" {
-  count = local.enforce_vpcsc ? 1 : 0
+  count          = local.enforce_vpcsc ? 1 : 0
   perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
   resource       = "projects/${local.cloudbuild_project_number}"
 }
 
 resource "google_access_context_manager_service_perimeter_resource" "seed_project" {
-  count = local.enforce_vpcsc ? 1 : 0
+  count          = local.enforce_vpcsc ? 1 : 0
   perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
   resource       = "projects/${local.seed_project_number}"
 }
