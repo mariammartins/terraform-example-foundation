@@ -20,7 +20,13 @@ output "default_region" {
 }
 
 output "cloudbuild_project_id" {
+  description = "Cloud Build project ID."
   value = try(module.app_infra_cloudbuild_project[0].project_id, "")
+}
+
+output "cloudbuild_project_number" {
+  description = "Cloud Build project number."
+  value       = module.app_infra_cloudbuild_project[0].project_number
 }
 
 output "terraform_service_accounts" {
