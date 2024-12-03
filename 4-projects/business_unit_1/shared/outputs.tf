@@ -21,7 +21,7 @@ output "default_region" {
 
 output "cloudbuild_project_id" {
   description = "Cloud Build project ID."
-  value = try(module.app_infra_cloudbuild_project[0].project_id, "")
+  value       = try(module.app_infra_cloudbuild_project[0].project_id, "")
 }
 
 output "cloudbuild_project_number" {
