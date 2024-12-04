@@ -28,7 +28,7 @@ locals {
   common_folder_name         = data.tfe_outputs.org.nonsensitive_values.common_folder_name
   network_folder_name        = data.tfe_outputs.org.nonsensitive_values.network_folder_name
   development_folder_name    = data.tfe_outputs.env_development.nonsensitive_values.env_folder
-  nonproduction_folder_name = data.tfe_outputs.env_nonproduction.nonsensitive_values.env_folder
+  nonproduction_folder_name  = data.tfe_outputs.env_nonproduction.nonsensitive_values.env_folder
   production_folder_name     = data.tfe_outputs.env_production.nonsensitive_values.env_folder
 }
 
