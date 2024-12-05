@@ -472,7 +472,7 @@ func TestOrg(t *testing.T) {
 					apis          []string
 				}{
 					{
-						projectOutput: "restricted_shared_vpc_project_id",
+						projectOutput: "shared_vpc_project_id",
 						apis: []string{
 							"compute.googleapis.com",
 							"dns.googleapis.com",

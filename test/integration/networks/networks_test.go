@@ -348,13 +348,13 @@ func TestNetworks(t *testing.T) {
 					// Resource issue: https://github.com/hashicorp/terraform-provider-google/issues/16804
 					// networks.DefaultVerify(assert)
 
-					servicePerimeterLink := fmt.Sprintf("accessPolicies/%s/servicePerimeters/%s", policyID, networks.GetStringOutput("restricted_service_perimeter_name"))
+					servicePerimeterLink := fmt.Sprintf("accessPolicies/%s/servicePerimeters/%s", policyID, networks.GetStringOutput("service_perimeter_name"))
 					accessLevel := fmt.Sprintf("accessPolicies/%s/accessLevels/%s", policyID, networks.GetStringOutput("access_level_name_dry_run"))
 					networkNames := getNetworkResourceNames(envCode, networkMode, firewallMode)
 
 					servicePerimeter, err := gcloud.RunCmdE(t, fmt.Sprintf("access-context-manager perimeters dry-run describe %s --policy %s", servicePerimeterLink, policyID))
 					assert.NoError(err)
-					perimeterName := networks.GetStringOutput("restricted_service_perimeter_name")
+					perimeterName := networks.GetStringOutput("service_perimeter_name")
 					assert.True(strings.Contains(servicePerimeter, perimeterName), fmt.Sprintf("service perimeter %s should exist", perimeterName))
 					assert.True(strings.Contains(servicePerimeter, accessLevel), fmt.Sprintf("service perimeter %s should have access level %s", servicePerimeterLink, accessLevel))
 					for _, service := range restrictedServices {

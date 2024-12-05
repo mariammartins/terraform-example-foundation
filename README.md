@@ -74,8 +74,8 @@ Usage instructions are available in the 0-bootstrap [README](./0-bootstrap/READM
 
 The purpose of this stage is:
 - Set up the common folder used to house projects that contain shared resources such as Security Command Center notification, Cloud Key Management Service (KMS), org level secrets, and org level logging.
-This stage also sets up the network folder used to house network related projects such as DNS Hub, Interconnect, network hub, and restricted projects for each environment  (`development`, `nonproduction` or `production`).
-- Set up the Restricted Shared VPC with [restricted.googleapis.com](https://cloud.google.com/vpc-service-controls/docs/supported-products) configured for restricted access to googleapis.com and gcr.io. Route added for VIP so no internet access is required to access APIs.
+This stage also sets up the network folder used to house network related projects such as DNS Hub, Interconnect, network hub, and projects for each environment  (`development`, `nonproduction` or `production`).
+- Set up the Shared VPC with [restricted.googleapis.com](https://cloud.google.com/vpc-service-controls/docs/supported-products) configured for restricted access to googleapis.com and gcr.io. Route added for VIP so no internet access is required to access APIs.
 
 This will create the following folder and project structure:
 
@@ -88,7 +88,7 @@ example-organization
     ├── prj-c-kms
     └── prj-c-secrets
 └── fldr-network
-    ├── prj-net-hub-restricted
+    ├── prj-net-hub
     ├── prj-net-dns
     ├── prj-net-interconnect
     ├── prj-d-svpc
@@ -136,7 +136,7 @@ Another project created under the network folder. This project will host the Ded
 
 #### Networking
 
-Under the network folder, one project for restricted network, are created per environment (`development`, `nonproduction`, and `production`) which is intended to be used as a [Shared VPC host project](https://cloud.google.com/vpc/docs/shared-vpc) for all projects in that environment.
+Under the network folder, one project for network are created per environment (`development`, `nonproduction`, and `production`) which is intended to be used as a [Shared VPC host project](https://cloud.google.com/vpc/docs/shared-vpc) for all projects in that environment.
 This stage only creates the projects and enables the correct APIs, the following networks stages, [3-networks-svpc](./3-networks-svpc/) and [3-networks-hub-and-spoke](./3-networks-hub-and-spoke/), create the actual Shared VPC networks.
 
 ### [2. environments](./2-environments/)
@@ -256,7 +256,7 @@ example-organization
     ├── prj-c-bu1-infra-pipeline
     └── prj-c-bu2-infra-pipeline
 └── fldr-network
-    ├── prj-net-hub-restricted
+    ├── prj-net-hub
     ├── prj-net-dns
     ├── prj-net-interconnect
     ├── prj-d-svpc
