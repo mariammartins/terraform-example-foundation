@@ -56,8 +56,8 @@ module "restricted_shared_vpc_host_project" {
     env_code          = var.env_code
     vpc               = "restricted"
   }
-  budget_alert_pubsub_topic   = var.project_budget.restricted_network_alert_pubsub_topic
-  budget_alert_spent_percents = var.project_budget.restricted_network_alert_spent_percents
-  budget_amount               = var.project_budget.restricted_network_budget_amount
-  budget_alert_spend_basis    = var.project_budget.restricted_network_budget_alert_spend_basis
+  budget_alert_pubsub_topic   = var.project_budget.network_alert_pubsub_topic
+  budget_alert_spent_percents = var.project_budget.network_alert_spent_percents
+  budget_amount               = var.project_budget.network_budget_amount
+  budget_alert_spend_basis    = var.project_budget.network_budget_alert_spend_basis
 }

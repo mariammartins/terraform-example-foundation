@@ -393,10 +393,10 @@ module "restricted_environment_network" {
   vpc_service_control_perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
   project_budget = {
-    restricted_network_budget_amount            = var.project_budget.restricted_network_budget_amount
-    restricted_network_alert_spent_percents     = var.project_budget.restricted_network_alert_spent_percents
-    restricted_network_alert_pubsub_topic       = var.project_budget.restricted_network_alert_pubsub_topic
-    restricted_network_budget_alert_spend_basis = var.project_budget.restricted_network_budget_alert_spend_basis
+    network_budget_amount            = var.project_budget.network_budget_amount
+    network_alert_spent_percents     = var.project_budget.network_alert_spent_percents
+    network_alert_pubsub_topic       = var.project_budget.network_alert_pubsub_topic
+    network_budget_alert_spend_basis = var.project_budget.network_budget_alert_spend_basis
   }
 
   depends_on = [module.service_control]

@@ -86,12 +86,12 @@ output "dns_hub_project_id" {
 
 output "net_hub_project_id" {
   value       = try(module.network_hub[0].project_id, null)
-  description = "The Restricted Network hub project ID"
+  description = "The Network hub project ID"
 }
 
 output "net_hub_project_number" {
   value       = try(module.network_hub[0].project_number, null)
-  description = "The Restricted Network hub project number"
+  description = "The Network hub project number"
 }
 
 output "domains_to_allow" {
