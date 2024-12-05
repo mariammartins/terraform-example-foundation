@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-output "restricted_host_project_id" {
-  value       = module.base_env.restricted_host_project_id
-  description = "The restricted host project ID"
+output "host_project_id" {
+  value       = module.base_env.host_project_id
+  description = "The host project ID"
 }
 
 output "restricted_network_name" {

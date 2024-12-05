@@ -36,7 +36,7 @@
 | access\_level\_name | Access context manager access level name for the enforced perimeter |
 | access\_level\_name\_dry\_run | Access context manager access level name for the dry-run perimeter |
 | enforce\_vpcsc | Enable the enforced mode for VPC Service Controls. It is not recommended to enable VPC-SC on the first run deploying your foundation. Review [best practices for enabling VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/enable), then only enforce the perimeter after you have analyzed the access patterns in your dry-run perimeter and created the necessary exceptions for your use cases. |
-| restricted\_host\_project\_id | The restricted host project ID |
+| host\_project\_id | The host project ID |
 | restricted\_network\_name | The name of the VPC being created |
 | restricted\_network\_self\_link | The URI of the VPC being created |
 | restricted\_service\_perimeter\_name | Access context manager service perimeter name for the enforced perimeter |

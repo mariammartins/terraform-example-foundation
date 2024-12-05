@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-output "restricted_host_project_id" {
+output "host_project_id" {
   value       = local.restricted_project_id
-  description = "The restricted host project ID"
+  description = "The host project ID"
 }
 
 output "restricted_network_name" {

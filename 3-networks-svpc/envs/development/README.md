@@ -25,7 +25,7 @@ The purpose of this step is to set up restricted shared VPCs with default DNS, N
 | Name | Description |
 |------|-------------|
 | access\_context\_manager\_policy\_id | Access Context Manager Policy ID. |
-| restricted\_host\_project\_id | The restricted host project ID |
+| host\_project\_id | The host project ID |
 | restricted\_network\_name | The name of the VPC being created |
 | restricted\_network\_self\_link | The URI of the VPC being created |
 | restricted\_subnets\_ips | The IPs and CIDRs of the subnets being created |
