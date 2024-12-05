@@ -48,7 +48,7 @@ module "shared_vpc_host_project" {
 
   labels = {
     environment       = var.env
-    application_name  = "restricted-shared-vpc-host"
+    application_name  = "shared-vpc-host"
     billing_code      = "1234"
     primary_contact   = "example1"
     secondary_contact = "example2"
