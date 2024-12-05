@@ -26,14 +26,14 @@ Google Cloud organization that you've created.</td>
 </tr>
 <tr>
 <td><a href="../3-networks-svpc">3-networks-svpc</a></td>
-<td>Sets up restricted shared VPCs with default DNS, NAT (optional),
+<td>Sets up shared VPCs with default DNS, NAT (optional),
 Private Service networking, VPC service controls, on-premises Dedicated
 Interconnect, and baseline firewall rules for each environment. It also sets
 up the global DNS hub.</td>
 </tr>
 <tr>
 <td><a href="../3-networks-hub-and-spoke">3-networks-hub-and-spoke</a></td>
-<td>Sets up restricted shared VPCs with all the default configuration
+<td>Sets up shared VPCs with all the default configuration
 found on step 3-networks-svpc, but here the architecture will be based on the
 Hub and Spoke network model. It also sets up the global DNS hub</td>
 </tr>
@@ -59,7 +59,7 @@ The purpose of this step is to deploy a simple [Compute Engine](https://cloud.go
 The infra pipeline is created in step `4-projects` within the shared env and has a [Cloud Build](https://cloud.google.com/build/docs) pipeline configured to manage infrastructure within projects.
 
 There is also a [Source Repository](https://cloud.google.com/source-repositories) configured with build triggers similar to the [CI/CD Pipeline](https://github.com/terraform-google-modules/terraform-example-foundation#0-bootstrap) setup in `0-bootstrap`.
-This Compute Engine instance is created using the base network from step `3-networks` and is used to access private services.
+This Compute Engine instance is created using the network from step `3-networks` and is used to access private services.
 
 ## Prerequisites
 
