@@ -322,7 +322,7 @@ module "dns_hub" {
 }
 
 /******************************************
-  Project for Restricted Network Hub
+  Project for Network Hub
 *****************************************/
 
 module "network_hub" {
@@ -371,7 +371,7 @@ module "network_hub" {
 }
 
 /************************************************************
-Restricted Network Project for each Environment
+Network Project for each Environment
 ************************************************************/
 
 module "restricted_environment_network" {
