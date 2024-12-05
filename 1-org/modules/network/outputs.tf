@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-output "restricted_shared_vpc_project_id" {
-  description = "Project id for restricted shared VPC network."
+output "shared_vpc_project_id" {
+  description = "Project id for shared VPC network."
   value       = module.shared_vpc_host_project.project_id
 }
 
-output "restricted_shared_vpc_project_number" {
-  description = "Project number for restricted shared VPC."
+output "shared_vpc_project_number" {
+  description = "Project number for shared VPC."
   value       = module.shared_vpc_host_project.project_number
 }
