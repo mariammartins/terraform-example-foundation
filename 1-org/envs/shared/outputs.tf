@@ -85,12 +85,12 @@ output "dns_hub_project_id" {
 }
 
 output "net_hub_project_id" {
-  value       = try(module.restricted_network_hub[0].project_id, null)
+  value       = try(module.network_hub[0].project_id, null)
   description = "The Restricted Network hub project ID"
 }
 
 output "net_hub_project_number" {
-  value       = try(module.restricted_network_hub[0].project_number, null)
+  value       = try(module.network_hub[0].project_number, null)
   description = "The Restricted Network hub project number"
 }
 

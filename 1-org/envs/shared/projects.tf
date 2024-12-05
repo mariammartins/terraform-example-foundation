@@ -325,7 +325,7 @@ module "dns_hub" {
   Project for Restricted Network Hub
 *****************************************/
 
-module "restricted_network_hub" {
+module "network_hub" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 17.0"
   count   = var.enable_hub_and_spoke ? 1 : 0
@@ -409,7 +409,7 @@ module "restricted_environment_network" {
 resource "google_project_iam_member" "network_sa_restricted" {
   for_each = toset(var.enable_hub_and_spoke ? local.hub_and_spoke_roles : [])
 
-  project = module.restricted_network_hub[0].project_id
+  project = module.network_hub[0].project_id
   role    = each.key
   member  = "serviceAccount:${local.networks_step_terraform_service_account_email}"
 }
