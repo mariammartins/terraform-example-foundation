@@ -66,9 +66,9 @@
 | org\_secrets\_project\_id | The org secrets project ID |
 | parent\_resource\_id | The parent resource id |
 | parent\_resource\_type | The parent resource type |
-| restricted\_service\_perimeter\_name | Access context manager service perimeter name |
 | scc\_notification\_name | Name of SCC Notification |
 | scc\_notifications\_project\_id | The SCC notifications project ID |
+| service\_perimeter\_name | Access context manager service perimeter name |
 | shared\_vpc\_projects | Shared VPC Projects info grouped by environment (development, nonproduction, production). |
 | tags | Tag Values to be applied on next steps. |
 

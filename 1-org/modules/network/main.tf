@@ -54,7 +54,6 @@ module "shared_vpc_host_project" {
     secondary_contact = "example2"
     business_code     = "shared"
     env_code          = var.env_code
-    vpc               = "restricted"
   }
   budget_alert_pubsub_topic   = var.project_budget.network_alert_pubsub_topic
   budget_alert_spent_percents = var.project_budget.network_alert_spent_percents
