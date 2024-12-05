@@ -161,8 +161,8 @@ module "restricted_shared_vpc" {
   project_id                        = local.restricted_project_id
   project_number                    = local.restricted_project_number
   dns_hub_project_id                = local.dns_hub_project_id
-  restricted_net_hub_project_id     = local.restricted_net_hub_project_id
-  restricted_net_hub_project_number = local.restricted_net_hub_project_number
+  net_hub_project_id     = local.net_hub_project_id
+  net_hub_project_number = local.net_hub_project_number
   environment_code                  = var.environment_code
   access_context_manager_policy_id  = var.access_context_manager_policy_id
   restricted_services               = local.restricted_services

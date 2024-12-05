@@ -46,7 +46,7 @@ module "restricted_transitivity" {
   source = "../../modules/transitivity"
   count  = local.enable_transitivity ? 1 : 0
 
-  project_id          = local.restricted_net_hub_project_id
+  project_id          = local.net_hub_project_id
   regions             = keys(local.restricted_subnet_primary_ranges)
   vpc_name            = module.restricted_shared_vpc.network_name
   gw_subnets          = { for region in keys(local.restricted_subnet_primary_ranges) : region => "sb-c-svpc-hub-${region}" }

@@ -67,11 +67,11 @@ module "main" {
 /***************************************************************
   VPC Peering Configuration
  **************************************************************/
-data "google_compute_network" "vpc_restricted_net_hub" {
+data "google_compute_network" "vpc_net_hub" {
   count = var.mode == "spoke" ? 1 : 0
 
   name    = "vpc-c-svpc-hub"
-  project = var.restricted_net_hub_project_id
+  project = var.net_hub_project_id
 }
 
 module "peering" {
@@ -81,7 +81,7 @@ module "peering" {
 
   prefix                    = "np"
   local_network             = module.main.network_self_link
-  peer_network              = data.google_compute_network.vpc_restricted_net_hub[0].self_link
+  peer_network              = data.google_compute_network.vpc_net_hub[0].self_link
   export_peer_custom_routes = true
 }
 

@@ -362,10 +362,10 @@ module "restricted_network_hub" {
     env_code          = "net"
     vpc               = "restricted"
   }
-  budget_alert_pubsub_topic   = var.project_budget.restricted_net_hub_alert_pubsub_topic
-  budget_alert_spent_percents = var.project_budget.restricted_net_hub_alert_spent_percents
-  budget_amount               = var.project_budget.restricted_net_hub_budget_amount
-  budget_alert_spend_basis    = var.project_budget.restricted_net_hub_budget_alert_spend_basis
+  budget_alert_pubsub_topic   = var.project_budget.net_hub_alert_pubsub_topic
+  budget_alert_spent_percents = var.project_budget.net_hub_alert_spent_percents
+  budget_amount               = var.project_budget.net_hub_budget_amount
+  budget_alert_spend_basis    = var.project_budget.net_hub_budget_alert_spend_basis
 
   depends_on = [module.service_control]
 }

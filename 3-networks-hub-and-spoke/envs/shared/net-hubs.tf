@@ -163,8 +163,8 @@ locals {
 module "restricted_shared_vpc" {
   source = "../../modules/restricted_shared_vpc"
 
-  project_id                       = local.restricted_net_hub_project_id
-  project_number                   = local.restricted_net_hub_project_number
+  project_id                       = local.net_hub_project_id
+  project_number                   = local.net_hub_project_number
   dns_hub_project_id               = local.dns_hub_project_id
   environment_code                 = local.environment_code
   private_service_connect_ip       = "10.17.0.5"

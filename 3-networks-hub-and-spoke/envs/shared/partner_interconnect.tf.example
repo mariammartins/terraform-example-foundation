@@ -49,7 +49,7 @@ module "dns_hub_interconnect" {
 module "shared_restricted_interconnect" {
   source = "../../modules/partner_interconnect"
 
-  attachment_project_id = local.restricted_net_hub_project_id
+  attachment_project_id = local.net_hub_project_id
   vpc_name              = "${local.environment_code}-svpc"
   preactivate           = var.preactivate_partner_interconnect
 

@@ -383,7 +383,7 @@ func TestOrg(t *testing.T) {
 			require.NoError(t, err)
 			if enable_hub_and_spoke {
 				for _, hubAndSpokeProjectOutput := range []string{
-					"restricted_net_hub_project_id",
+					"net_hub_project_id",
 				} {
 					projectID := org.GetStringOutput(hubAndSpokeProjectOutput)
 					gcOps := gcloud.WithCommonArgs([]string{"--filter", fmt.Sprintf("projectId:%s", projectID), "--format", "json"})

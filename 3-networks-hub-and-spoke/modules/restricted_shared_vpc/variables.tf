@@ -34,13 +34,13 @@ variable "dns_hub_project_id" {
   description = "The DNS hub project ID"
 }
 
-variable "restricted_net_hub_project_id" {
+variable "net_hub_project_id" {
   type        = string
   description = "The restricted net hub project ID"
   default     = ""
 }
 
-variable "restricted_net_hub_project_number" {
+variable "net_hub_project_number" {
   type        = string
   description = "The restricted net hub project number"
   default     = ""
