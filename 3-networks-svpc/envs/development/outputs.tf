@@ -19,10 +19,6 @@ output "access_context_manager_policy_id" {
   value       = var.access_context_manager_policy_id
 }
 
-/*********************
- Restricted Outputs
-*********************/
-
 output "restricted_host_project_id" {
   value       = module.base_env.restricted_host_project_id
   description = "The restricted host project ID"

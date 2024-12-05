@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-/*********************
- Restricted Outputs
-*********************/
-
 output "restricted_host_project_id" {
   value       = module.base_env.restricted_host_project_id
   description = "The restricted host project ID"
