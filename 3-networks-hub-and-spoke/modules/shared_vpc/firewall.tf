@@ -49,10 +49,10 @@ module "firewall_rules" {
         direction      = "EGRESS"
         action         = "allow"
         rule_name      = "fw-${var.environment_code}-svpc-1000-e-a-allow-google-apis-all-tcp-443"
-        description    = "Lower priority rule to allow restricted google apis on TCP port 443."
+        description    = "Lower priority rule to allow google apis on TCP port 443."
         enable_logging = var.firewall_enable_logging
         match = {
-          dest_ip_ranges = [local.restricted_googleapis_cidr]
+          dest_ip_ranges = [local.googleapis_cidr]
           layer4_configs = [
             {
               ip_protocol = "tcp"
@@ -62,41 +62,5 @@ module "firewall_rules" {
         }
       }
     ],
-    !var.enable_all_vpc_internal_traffic ? [] : [
-      {
-        priority       = "10000"
-        direction      = "EGRESS"
-        action         = "allow"
-        rule_name      = "fw-${var.environment_code}-shared-base-10000-e-a-all-all-all"
-        description    = "Allow all egress to the provided IP range."
-        enable_logging = var.firewall_enable_logging
-        match = {
-          dest_ip_ranges = module.main.subnets_ips
-          layer4_configs = [
-            {
-              ip_protocol = "all"
-            },
-          ]
-        }
-      }
-    ],
-    !var.enable_all_vpc_internal_traffic ? [] : [
-      {
-        priority       = "10001"
-        direction      = "INGRESS"
-        action         = "allow"
-        rule_name      = "fw-${var.environment_code}-shared-base-10001-i-a-all"
-        description    = "Allow all ingress to the provided IP range."
-        enable_logging = var.firewall_enable_logging
-        match = {
-          src_ip_ranges = module.main.subnets_ips
-          layer4_configs = [
-            {
-              ip_protocol = "all"
-            },
-          ]
-        }
-      }
-    ]
   )
 }
