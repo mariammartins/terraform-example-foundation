@@ -19,7 +19,7 @@ locals {
   billing_account                     = data.terraform_remote_state.bootstrap.outputs.common_config.billing_account
   project_prefix                      = data.terraform_remote_state.bootstrap.outputs.common_config.project_prefix
   projects_backend_bucket             = data.terraform_remote_state.bootstrap.outputs.projects_gcs_bucket_tfstate
-  perimeter_name                      = data.terraform_remote_state.org.outputs.restricted_service_perimeter_name
+  perimeter_name                      = data.terraform_remote_state.org.outputs.service_perimeter_name
   access_context_manager_policy_id    = data.terraform_remote_state.org.outputs.access_context_manager_policy_id
   enforce_vpcsc                       = data.terraform_remote_state.org.outputs.enforce_vpcsc
   network_self_link                   = data.terraform_remote_state.network_env.outputs.network_self_link

@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-module "restricted_shared_vpc_project" {
+module "shared_vpc_project" {
   source = "../single_project"
 
   org_id                     = local.org_id
   billing_account            = local.billing_account
   folder_id                  = google_folder.env_business_unit.name
   environment                = var.env
-  vpc                        = "restricted"
   shared_vpc_host_project_id = local.host_project_id
   shared_vpc_subnets         = local.subnets_self_links
   project_budget             = var.project_budget
