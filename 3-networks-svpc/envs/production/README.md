@@ -25,11 +25,11 @@ The purpose of this step is to set up restricted shared VPCs with default DNS, N
 | Name | Description |
 |------|-------------|
 | host\_project\_id | The host project ID |
-| restricted\_network\_name | The name of the VPC being created |
-| restricted\_network\_self\_link | The URI of the VPC being created |
-| restricted\_subnets\_ips | The IPs and CIDRs of the subnets being created |
-| restricted\_subnets\_names | The names of the subnets being created |
-| restricted\_subnets\_secondary\_ranges | The secondary ranges associated with these subnets |
-| restricted\_subnets\_self\_links | The self-links of subnets being created |
+| network\_name | The name of the VPC being created |
+| network\_self\_link | The URI of the VPC being created |
+| subnets\_ips | The IPs and CIDRs of the subnets being created |
+| subnets\_names | The names of the subnets being created |
+| subnets\_secondary\_ranges | The secondary ranges associated with these subnets |
+| subnets\_self\_links | The self-links of subnets being created |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
