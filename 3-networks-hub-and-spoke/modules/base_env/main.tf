@@ -158,15 +158,15 @@ locals {
 module "restricted_shared_vpc" {
   source = "../restricted_shared_vpc"
 
-  project_id                        = local.restricted_project_id
-  project_number                    = local.restricted_project_number
-  dns_hub_project_id                = local.dns_hub_project_id
-  net_hub_project_id     = local.net_hub_project_id
-  net_hub_project_number = local.net_hub_project_number
-  environment_code                  = var.environment_code
-  access_context_manager_policy_id  = var.access_context_manager_policy_id
-  restricted_services               = local.restricted_services
-  restricted_services_dry_run       = local.restricted_services_dry_run
+  project_id                       = local.restricted_project_id
+  project_number                   = local.restricted_project_number
+  dns_hub_project_id               = local.dns_hub_project_id
+  net_hub_project_id               = local.net_hub_project_id
+  net_hub_project_number           = local.net_hub_project_number
+  environment_code                 = var.environment_code
+  access_context_manager_policy_id = var.access_context_manager_policy_id
+  restricted_services              = local.restricted_services
+  restricted_services_dry_run      = local.restricted_services_dry_run
   members = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
     "serviceAccount:${local.projects_service_account}",
