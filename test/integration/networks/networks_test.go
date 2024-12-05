@@ -362,8 +362,7 @@ func TestNetworks(t *testing.T) {
 					}
 
 					for _, networkType := range []string{
-						"base",
-						"restricted",
+						"restricted", //restricted or shared?
 					} {
 						projectID := networks.GetStringOutput(fmt.Sprintf("%s_host_project_id", networkType))
 

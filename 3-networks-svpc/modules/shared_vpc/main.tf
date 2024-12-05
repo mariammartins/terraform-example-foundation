@@ -15,9 +15,9 @@
  */
 
 locals {
-  vpc_name                   = "${var.environment_code}-svpc"
-  network_name               = "vpc-${local.vpc_name}"
-  restricted_googleapis_cidr = module.private_service_connect.private_service_connect_ip
+  vpc_name        = "${var.environment_code}-svpc"
+  network_name    = "vpc-${local.vpc_name}"
+  googleapis_cidr = module.private_service_connect.private_service_connect_ip
 }
 
 /******************************************
@@ -105,7 +105,7 @@ module "region1_router1" {
   bgp = {
     asn                  = var.bgp_asn_subnet
     advertised_groups    = ["ALL_SUBNETS"]
-    advertised_ip_ranges = [{ range = local.restricted_googleapis_cidr }]
+    advertised_ip_ranges = [{ range = local.googleapis_cidr }]
   }
 }
 
@@ -120,7 +120,7 @@ module "region1_router2" {
   bgp = {
     asn                  = var.bgp_asn_subnet
     advertised_groups    = ["ALL_SUBNETS"]
-    advertised_ip_ranges = [{ range = local.restricted_googleapis_cidr }]
+    advertised_ip_ranges = [{ range = local.googleapis_cidr }]
   }
 }
 
@@ -135,7 +135,7 @@ module "region2_router1" {
   bgp = {
     asn                  = var.bgp_asn_subnet
     advertised_groups    = ["ALL_SUBNETS"]
-    advertised_ip_ranges = [{ range = local.restricted_googleapis_cidr }]
+    advertised_ip_ranges = [{ range = local.googleapis_cidr }]
   }
 }
 
@@ -150,6 +150,6 @@ module "region2_router2" {
   bgp = {
     asn                  = var.bgp_asn_subnet
     advertised_groups    = ["ALL_SUBNETS"]
-    advertised_ip_ranges = [{ range = local.restricted_googleapis_cidr }]
+    advertised_ip_ranges = [{ range = local.googleapis_cidr }]
   }
 }
