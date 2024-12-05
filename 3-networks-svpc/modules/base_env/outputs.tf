@@ -15,36 +15,36 @@
  */
 
 output "host_project_id" {
-  value       = local.restricted_project_id
+  value       = local.shared_project_id
   description = "The host project ID"
 }
 
 output "network_name" {
-  value       = module.restricted_shared_vpc.network_name
+  value       = module.shared_vpc.network_name
   description = "The name of the VPC being created"
 }
 
 output "network_self_link" {
-  value       = module.restricted_shared_vpc.network_self_link
+  value       = module.shared_vpc.network_self_link
   description = "The URI of the VPC being created"
 }
 
 output "subnets_names" {
-  value       = module.restricted_shared_vpc.subnets_names
+  value       = module.shared_vpc.subnets_names
   description = "The names of the subnets being created"
 }
 
 output "subnets_ips" {
-  value       = module.restricted_shared_vpc.subnets_ips
+  value       = module.shared_vpc.subnets_ips
   description = "The IPs and CIDRs of the subnets being created"
 }
 
 output "subnets_self_links" {
-  value       = module.restricted_shared_vpc.subnets_self_links
+  value       = module.shared_vpc.subnets_self_links
   description = "The self-links of subnets being created"
 }
 
 output "subnets_secondary_ranges" {
-  value       = module.restricted_shared_vpc.subnets_secondary_ranges
+  value       = module.shared_vpc.subnets_secondary_ranges
   description = "The secondary ranges associated with these subnets"
 }

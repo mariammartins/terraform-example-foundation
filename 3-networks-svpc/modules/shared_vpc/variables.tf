@@ -21,12 +21,12 @@ variable "access_context_manager_policy_id" {
 
 variable "project_id" {
   type        = string
-  description = "Project ID for Restricted Shared VPC."
+  description = "Project ID for Shared VPC."
 }
 
 variable "project_number" {
   type        = number
-  description = "Project number for Restricted Shared VPC. It is the project INSIDE the regular service perimeter."
+  description = "Project number for Shared VPC. It is the project INSIDE the regular service perimeter."
 }
 
 variable "dns_hub_project_id" {

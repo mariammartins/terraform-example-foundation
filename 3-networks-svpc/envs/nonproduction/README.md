@@ -1,6 +1,6 @@
 # 3-networks-svpc/nonproduction
 
-The purpose of this step is to set up restricted shared VPCs with default DNS, NAT (optional), Private Service networking, VPC service controls, onprem Dedicated Interconnect, onprem VPN and baseline firewall rules for environment nonproduction.
+The purpose of this step is to set up shared VPCs with default DNS, NAT (optional), Private Service networking, VPC service controls, onprem Dedicated Interconnect, onprem VPN and baseline firewall rules for environment nonproduction.
 
 ## Prerequisites
 
