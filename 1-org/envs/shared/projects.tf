@@ -374,7 +374,7 @@ module "network_hub" {
 Network Project for each Environment
 ************************************************************/
 
-module "restricted_environment_network" {
+module "environment_network" {
   source   = "../../modules/network"
   for_each = local.environments
 
@@ -406,7 +406,7 @@ module "restricted_environment_network" {
   Roles granted to the networks SA for Hub and Spoke network topology
 *********************************************************************/
 
-resource "google_project_iam_member" "network_sa_restricted" {
+resource "google_project_iam_member" "network_sa" {
   for_each = toset(var.enable_hub_and_spoke ? local.hub_and_spoke_roles : [])
 
   project = module.network_hub[0].project_id
