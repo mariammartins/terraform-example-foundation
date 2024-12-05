@@ -121,7 +121,7 @@ module "peering" {
 
   prefix            = "${var.business_code}-${local.env_code}"
   local_network     = module.peering_network.network_self_link
-  peer_network      = local.restricted_network_self_link
+  peer_network      = local.network_self_link
   module_depends_on = var.peering_module_depends_on
 }
 

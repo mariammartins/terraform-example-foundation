@@ -39,8 +39,8 @@ output "restricted_shared_vpc_project_number" {
   value       = module.restricted_shared_vpc_project.project_number
 }
 
-output "restricted_subnets_self_links" {
-  value       = local.restricted_subnets_self_links
+output "subnets_self_links" {
+  value       = local.subnets_self_links
   description = "The self-links of subnets from restricted environment."
 }
 

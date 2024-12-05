@@ -23,7 +23,7 @@ module "restricted_shared_vpc_project" {
   environment                = var.env
   vpc                        = "restricted"
   shared_vpc_host_project_id = local.host_project_id
-  shared_vpc_subnets         = local.restricted_subnets_self_links
+  shared_vpc_subnets         = local.subnets_self_links
   project_budget             = var.project_budget
   project_prefix             = local.project_prefix
 
