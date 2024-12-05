@@ -18,7 +18,7 @@
   Projects for Shared VPCs
 *****************************************/
 
-module "restricted_shared_vpc_host_project" {
+module "shared_vpc_host_project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 17.0"
 

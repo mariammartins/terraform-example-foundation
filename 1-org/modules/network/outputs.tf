@@ -16,10 +16,10 @@
 
 output "restricted_shared_vpc_project_id" {
   description = "Project id for restricted shared VPC network."
-  value       = module.restricted_shared_vpc_host_project.project_id
+  value       = module.shared_vpc_host_project.project_id
 }
 
 output "restricted_shared_vpc_project_number" {
   description = "Project number for restricted shared VPC."
-  value       = module.restricted_shared_vpc_host_project.project_number
+  value       = module.shared_vpc_host_project.project_number
 }
