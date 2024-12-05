@@ -31,7 +31,7 @@ locals {
     "sample-restrict" = null,
   }
 
-  subnetwork_self_links           = data.terraform_remote_state.projects_env.outputs.restricted_subnets_self_links
+  subnetwork_self_links           = data.terraform_remote_state.projects_env.outputs.subnets_self_links
   restricted_subnetwork_self_link = [for subnet in local.subnetwork_self_links : subnet if length(regexall("regions/${var.region}/subnetworks", subnet)) > 0][0]
 
   env_project_id        = local.env_project_ids[var.project_suffix]
