@@ -18,25 +18,25 @@ locals {
   env_project_ids = {
     "sample-floating" = data.terraform_remote_state.projects_env.outputs.floating_project,
     "sample-peering"  = data.terraform_remote_state.projects_env.outputs.peering_project,
-    "sample-restrict" = data.terraform_remote_state.projects_env.outputs.restricted_shared_vpc_project,
+    "sample-vpc"      = data.terraform_remote_state.projects_env.outputs.shared_vpc_project,
   }
   env_project_subnets = {
-    "sample-floating" = local.restricted_subnetwork_self_link,
+    "sample-floating" = local.subnetwork_self_link,
     "sample-peering"  = data.terraform_remote_state.projects_env.outputs.peering_subnetwork_self_link,
-    "sample-restrict" = local.restricted_subnetwork_self_link,
+    "sample-vpc"      = local.subnetwork_self_link,
   }
   env_project_resource_manager_tags = {
     "sample-floating" = null,
     "sample-peering"  = data.terraform_remote_state.projects_env.outputs.iap_firewall_tags,
-    "sample-restrict" = null,
+    "sample-vpc"      = null,
   }
 
-  subnetwork_self_links           = data.terraform_remote_state.projects_env.outputs.subnets_self_links
-  restricted_subnetwork_self_link = [for subnet in local.subnetwork_self_links : subnet if length(regexall("regions/${var.region}/subnetworks", subnet)) > 0][0]
+  subnetwork_self_links = data.terraform_remote_state.projects_env.outputs.subnets_self_links
+  subnetwork_self_link  = [for subnet in local.subnetwork_self_links : subnet if length(regexall("regions/${var.region}/subnetworks", subnet)) > 0][0]
 
   env_project_id        = local.env_project_ids[var.project_suffix]
-  subnetwork_self_link  = local.env_project_subnets[var.project_suffix]
-  subnetwork_project    = element(split("/", local.subnetwork_self_link), index(split("/", local.subnetwork_self_link), "projects") + 1, )
+  subnets_self_link     = local.env_project_subnets[var.project_suffix]
+  subnetwork_project    = element(split("/", local.subnets_self_link), index(split("/", local.subnets_self_link), "projects") + 1, )
   resource_manager_tags = local.env_project_resource_manager_tags[var.project_suffix]
 }
 
