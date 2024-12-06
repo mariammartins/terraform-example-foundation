@@ -29,8 +29,8 @@ locals {
 module "shared_vpc" {
   source = "../shared_vpc"
 
-  project_id                       = local.project_id
-  project_number                   = local.project_number
+  project_id                       = local.shared_vpc_project_id
+  project_number                   = local.shared_vpc_project_number
   dns_hub_project_id               = local.dns_hub_project_id
   net_hub_project_id               = local.net_hub_project_id
   net_hub_project_number           = local.net_hub_project_number

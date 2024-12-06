@@ -15,7 +15,7 @@
  */
 
 output "host_project_id" {
-  value       = local.project_id
+  value       = local.shared_vpc_project_id
   description = "The host project ID"
 }
 

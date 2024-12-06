@@ -25,9 +25,9 @@ locals {
 module "shared_vpc" {
   source = "../shared_vpc"
 
-  project_id                       = local.shared_project_id
+  project_id                       = local.shared_vpc_project_id
   dns_hub_project_id               = local.dns_hub_project_id
-  project_number                   = local.shared_project_number
+  project_number                   = local.shared_vpc_project_number
   environment_code                 = var.environment_code
   access_context_manager_policy_id = var.access_context_manager_policy_id
   private_service_cidr             = var.private_service_cidr
