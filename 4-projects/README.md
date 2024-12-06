@@ -25,16 +25,16 @@ organizational policy.</td>
 Google Cloud organization that you've created.</td>
 </tr>
 <tr>
-<td><a href="../3-networks-dual-svpc">3-networks-dual-svpc</a></td>
-<td>Sets up base and restricted shared VPCs with default DNS, NAT (optional),
+<td><a href="../3-networks-svpc">3-networks-svpc</a></td>
+<td>Sets up shared VPCs with default DNS, NAT (optional),
 Private Service networking, VPC service controls, on-premises Dedicated
 Interconnect, and baseline firewall rules for each environment. It also sets
 up the global DNS hub.</td>
 </tr>
 <tr>
 <td><a href="../3-networks-hub-and-spoke">3-networks-hub-and-spoke</a></td>
-<td>Sets up base and restricted shared VPCs with all the default configuration
-found on step 3-networks-dual-svpc, but here the architecture will be based on the
+<td>Sets up shared VPCs with all the default configuration
+found on step 3-networks-svpc, but here the architecture will be based on the
 Hub and Spoke network model. It also sets up the global DNS hub</td>
 </tr>
 </tr>
@@ -369,6 +369,23 @@ For example, to create a new business unit similar to business_unit_1, run the f
 
    ```bash
    ./tf-wrapper.sh apply development
+   ```
+
+### Include APP Infra Pipeline terraform service account in the perimeter
+
+App Infra Pipeline terraform service account needs to be added to the VPC-SC perimeter.
+
+1. Use `terraform output` to get the APP Infra Pipeline terraform service account
+
+   ```bash
+   export APP_INFRA_PIPELINE_SERVICE_ACCOUNT=$(terraform -chdir="business_unit_1/shared/" output -json terraform_service_accounts | jq '."bu1-example-app"' --raw-output)
+   echo ${APP_INFRA_PIPELINE_SERVICE_ACCOUNT}
+   ```
+
+1. Update file `1-org/envs/shared/terraform.tfvars` in the production branch adding the APP Infra Pipeline service account to the perimeter by updating the value for the variable `perimeter_additional_members`.
+
+   ```hcl
+   perimeter_additional_members = ["user:YOUR-USER-EMAIL@example.com", "serviceAccount:APP-INFRA-PIPELINE-SERVICE_ACCOUNT@example.com"]
    ```
 
 If you received any errors or made any changes to the Terraform config or any `.tfvars`, you must re-run `./tf-wrapper.sh plan <env>` before running `./tf-wrapper.sh apply <env>`.

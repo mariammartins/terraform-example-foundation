@@ -51,6 +51,7 @@ locals {
       "roles/securitycenter.sourcesEditor",
     ], local.common_roles)),
     "env" = distinct(concat([
+      "roles/accesscontextmanager.policyAdmin",
       "roles/resourcemanager.tagUser",
       "roles/assuredworkloads.admin",
     ], local.common_roles)),

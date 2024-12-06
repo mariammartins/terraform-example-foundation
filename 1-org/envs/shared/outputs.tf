@@ -84,19 +84,14 @@ output "dns_hub_project_id" {
   description = "The DNS hub project ID"
 }
 
-output "base_net_hub_project_id" {
-  value       = try(module.base_network_hub[0].project_id, null)
-  description = "The Base Network hub project ID"
+output "net_hub_project_id" {
+  value       = try(module.network_hub[0].project_id, null)
+  description = "The Network hub project ID"
 }
 
-output "restricted_net_hub_project_id" {
-  value       = try(module.restricted_network_hub[0].project_id, null)
-  description = "The Restricted Network hub project ID"
-}
-
-output "restricted_net_hub_project_number" {
-  value       = try(module.restricted_network_hub[0].project_number, null)
-  description = "The Restricted Network hub project number"
+output "net_hub_project_number" {
+  value       = try(module.network_hub[0].project_number, null)
+  description = "The Network hub project number"
 }
 
 output "domains_to_allow" {
@@ -135,8 +130,8 @@ output "tags" {
 }
 
 output "shared_vpc_projects" {
-  value       = { for k, v in module.base_restricted_environment_network : k => v }
-  description = "Base and restricted shared VPC Projects info grouped by environment (development, nonproduction, production)."
+  value       = { for k, v in module.environment_network : k => v }
+  description = "Shared VPC Projects info grouped by environment (development, nonproduction, production)."
 }
 
 output "cai_monitoring_artifact_registry" {
@@ -157,4 +152,29 @@ output "cai_monitoring_bucket" {
 output "cai_monitoring_topic" {
   value       = try(module.cai_monitoring[0].topic_name, null)
   description = "CAI Monitoring Cloud Function Pub/Sub Topic name."
+}
+
+output "access_level_name" {
+  value       = module.service_control.access_level_name
+  description = "Access context manager access level name"
+}
+
+output "access_level_name_dry_run" {
+  value       = module.service_control.access_level_name_dry_run
+  description = "Access context manager access level name for the dry-run perimeter"
+}
+
+output "enforce_vpcsc" {
+  value       = module.service_control.enforce_vpcsc
+  description = "Enable the enforced mode for VPC Service Controls. It is not recommended to enable VPC-SC on the first run deploying your foundation. Review [best practices for enabling VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/enable), then only enforce the perimeter after you have analyzed the access patterns in your dry-run perimeter and created the necessary exceptions for your use cases."
+}
+
+output "service_perimeter_name" {
+  value       = module.service_control.service_perimeter_name
+  description = "Access context manager service perimeter name"
+}
+
+output "access_context_manager_policy_id" {
+  value       = var.access_context_manager_policy_id
+  description = "Access Context Manager Policy ID."
 }
