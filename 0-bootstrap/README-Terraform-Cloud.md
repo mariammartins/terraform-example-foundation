@@ -499,7 +499,7 @@ or go to [Deploying step 3-networks-hub-and-spoke](#deploying-step-3-networks-hu
 
 1. Update `common.auto.tfvars` file with values from your GCP environment.
 See any of the envs folder [README.md](../3-networks-svpc/envs/production/README.md#inputs) files for additional information on the values in the `common.auto.tfvars` file.
-1. You must add your user email in the variable `perimeter_additional_members` to be able to see the resources created in the restricted project.
+1. You must add your user email in the variable `perimeter_additional_members` to be able to see the resources created in the shared vpc.
 
 1. You must manually plan and apply the `shared` environment from your (only once) since the `development`, `nonproduction` and `production` environments depend on it.
 
@@ -648,7 +648,7 @@ An environment variable `GOOGLE_IMPERSONATE_SERVICE_ACCOUNT` will be set with th
 
 1. Update `common.auto.tfvars` file with values from your GCP environment.
 See any of the envs folder [README.md](../3-networks-hub-and-spoke/envs/production/README.md#inputs) files for additional information on the values in the `common.auto.tfvars` file.
-1. You must add your user email in the variable `perimeter_additional_members` to be able to see the resources created in the restricted project.
+1. You must add your user email in the variable `perimeter_additional_members` to be able to see the resources created in the shared vpc.
 
 1. You must manually plan and apply the `shared` environment (only once) since the `development`, `nonproduction` and `production` environments depend on it.
 
