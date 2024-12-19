@@ -160,15 +160,22 @@ module "service_control" {
     "serviceAccount:${local.organization_service_account}",
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
+  resources = distinct(concat([
+    "projects/${local.cloudbuild_project_number}",
+    "projects/${local.seed_project_number}"
+  ], var.resources))
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
     "serviceAccount:${local.projects_service_account}",
     "serviceAccount:${local.organization_service_account}",
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
+  resources_dry_run = distinct(concat([
+    "projects/${local.cloudbuild_project_number}",
+    "projects/${local.seed_project_number}"
+  ]))
   ingress_policies         = var.ingress_policies
   ingress_policies_dry_run = var.ingress_policies_dry_run
   egress_policies          = distinct(var.egress_policies)
   egress_policies_dry_run  = distinct(var.egress_policies_dry_run)
-  enforce_vpcsc            = true
 }
