@@ -65,6 +65,11 @@ module "peering_project" {
     "dns.googleapis.com"
   ]
 
+  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  vpc_service_control_sleep_duration = "60s"
+
   # Metadata
   project_suffix    = "sample-peering"
   application_name  = "${var.business_code}-sample-peering"
@@ -116,7 +121,7 @@ module "peering" {
 
   prefix            = "${var.business_code}-${local.env_code}"
   local_network     = module.peering_network.network_self_link
-  peer_network      = local.base_network_self_link
+  peer_network      = local.network_self_link
   module_depends_on = var.peering_module_depends_on
 }
 

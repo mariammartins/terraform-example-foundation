@@ -14,21 +14,6 @@
  * limitations under the License.
  */
 
-output "base_shared_vpc_project" {
-  description = "Project sample base project."
-  value       = module.base_shared_vpc_project.project_id
-}
-
-output "base_shared_vpc_project_sa" {
-  description = "Project sample base project SA."
-  value       = module.base_shared_vpc_project.sa
-}
-
-output "base_subnets_self_links" {
-  value       = local.base_subnets_self_links
-  description = "The self-links of subnets from base environment."
-}
-
 output "floating_project" {
   description = "Project sample floating project."
   value       = module.floating_project.project_id
@@ -44,19 +29,19 @@ output "peering_network" {
   value       = module.peering.peer_network_peering
 }
 
-output "restricted_shared_vpc_project" {
-  description = "Project sample restricted project id."
-  value       = module.restricted_shared_vpc_project.project_id
+output "shared_vpc_project" {
+  description = "Project sample shared vpc id."
+  value       = module.shared_vpc_project.project_id
 }
 
-output "restricted_shared_vpc_project_number" {
-  description = "Project sample restricted project."
-  value       = module.restricted_shared_vpc_project.project_number
+output "shared_vpc_project_number" {
+  description = "Project sample shared vpc."
+  value       = module.shared_vpc_project.project_number
 }
 
-output "restricted_subnets_self_links" {
-  value       = local.restricted_subnets_self_links
-  description = "The self-links of subnets from restricted environment."
+output "subnets_self_links" {
+  value       = local.subnets_self_links
+  description = "The self-links of subnets from environment."
 }
 
 output "vpc_service_control_perimeter_name" {
@@ -69,9 +54,9 @@ output "access_context_manager_policy_id" {
   value       = local.access_context_manager_policy_id
 }
 
-output "restricted_enabled_apis" {
+output "enabled_apis" {
   description = "Activated APIs."
-  value       = module.restricted_shared_vpc_project.enabled_apis
+  value       = module.shared_vpc_project.enabled_apis
 }
 
 output "peering_complete" {

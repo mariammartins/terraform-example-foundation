@@ -25,16 +25,16 @@ organizational policy.</td>
 Google Cloud organization that you've created.</td>
 </tr>
 <tr>
-<td><a href="../3-networks-dual-svpc">3-networks-dual-svpc</a></td>
-<td>Sets up base and restricted shared VPCs with default DNS, NAT (optional),
+<td><a href="../3-networks-svpc">3-networks-svpc</a></td>
+<td>Sets up shared VPCs with default DNS, NAT (optional),
 Private Service networking, VPC service controls, on-premises Dedicated
 Interconnect, and baseline firewall rules for each environment. It also sets
 up the global DNS hub.</td>
 </tr>
 <tr>
 <td><a href="../3-networks-hub-and-spoke">3-networks-hub-and-spoke</a></td>
-<td>Sets up base and restricted shared VPCs with all the default configuration
-found on step 3-networks-dual-svpc, but here the architecture will be based on the
+<td>Sets up shared VPCs with all the default configuration
+found on step 3-networks-svpc, but here the architecture will be based on the
 Hub and Spoke network model. It also sets up the global DNS hub.</td>
 </tr>
 </tr>
@@ -245,7 +245,7 @@ The following steps introduce the steps to deploy with Cloud Build Alternatively
    terraform apply bootstrap.tfplan
    ```
 
-1. Run `terraform output` to get the email address of the terraform service accounts that will be used to run manual steps for `shared` environments in steps `3-networks-dual-svpc`, `3-networks-hub-and-spoke`, and `4-projects` and the state bucket that will be used by step 4-projects.
+1. Run `terraform output` to get the email address of the terraform service accounts that will be used to run manual steps for `shared` environments in steps `3-networks-svpc`, `3-networks-hub-and-spoke`, and `4-projects` and the state bucket that will be used by step 4-projects.
 
    ```bash
    export network_step_sa=$(terraform output -raw networks_step_terraform_service_account_email)
@@ -382,6 +382,7 @@ Each step has instructions for this change.
 | cloud\_build\_worker\_range\_id | The Cloud Build private worker IP range ID. |
 | cloud\_builder\_artifact\_repo | Artifact Registry (AR) Repository created to store TF Cloud Builder images. |
 | cloudbuild\_project\_id | Project where Cloud Build configuration and terraform container image will reside. |
+| cloudbuild\_project\_number | The cloudbuild project number. |
 | common\_config | Common configuration data to be used in other steps. |
 | csr\_repos | List of Cloud Source Repos created by the module, linked to Cloud Build triggers. |
 | environment\_step\_terraform\_service\_account\_email | Environment Step Terraform Account |
@@ -395,5 +396,6 @@ Each step has instructions for this change.
 | projects\_step\_terraform\_service\_account\_email | Projects Step Terraform Account |
 | required\_groups | List of Google Groups created that are required by the Example Foundation steps. |
 | seed\_project\_id | Project where service accounts and core APIs will be enabled. |
+| seed\_project\_number | The seed project number. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

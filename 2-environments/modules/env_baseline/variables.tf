@@ -43,22 +43,18 @@ variable "project_budget" {
   alert_spend_basis: The type of basis used to determine if spend has passed the threshold. Possible choices are `CURRENT_SPEND` or `FORECASTED_SPEND` (default).
   EOT
   type = object({
-    base_network_budget_amount                  = optional(number, 1000)
-    base_network_alert_spent_percents           = optional(list(number), [1.2])
-    base_network_alert_pubsub_topic             = optional(string, null)
-    base_network_budget_alert_spend_basis       = optional(string, "FORECASTED_SPEND")
-    restricted_network_budget_amount            = optional(number, 1000)
-    restricted_network_alert_spent_percents     = optional(list(number), [1.2])
-    restricted_network_alert_pubsub_topic       = optional(string, null)
-    restricted_network_budget_alert_spend_basis = optional(string, "FORECASTED_SPEND")
-    secret_budget_amount                        = optional(number, 1000)
-    secret_alert_spent_percents                 = optional(list(number), [1.2])
-    secret_alert_pubsub_topic                   = optional(string, null)
-    secret_budget_alert_spend_basis             = optional(string, "FORECASTED_SPEND")
-    kms_budget_amount                           = optional(number, 1000)
-    kms_alert_spent_percents                    = optional(list(number), [1.2])
-    kms_alert_pubsub_topic                      = optional(string, null)
-    kms_budget_alert_spend_basis                = optional(string, "FORECASTED_SPEND")
+    network_budget_amount            = optional(number, 1000)
+    network_alert_spent_percents     = optional(list(number), [1.2])
+    network_alert_pubsub_topic       = optional(string, null)
+    network_budget_alert_spend_basis = optional(string, "FORECASTED_SPEND")
+    secret_budget_amount             = optional(number, 1000)
+    secret_alert_spent_percents      = optional(list(number), [1.2])
+    secret_alert_pubsub_topic        = optional(string, null)
+    secret_budget_alert_spend_basis  = optional(string, "FORECASTED_SPEND")
+    kms_budget_amount                = optional(number, 1000)
+    kms_alert_spent_percents         = optional(list(number), [1.2])
+    kms_alert_pubsub_topic           = optional(string, null)
+    kms_budget_alert_spend_basis     = optional(string, "FORECASTED_SPEND")
   })
   default = {}
 }
@@ -92,4 +88,23 @@ variable "folder_deletion_protection" {
   description = "Prevent Terraform from destroying or recreating the folder."
   type        = string
   default     = true
+}
+
+variable "vpc_service_control_attach_enabled" {
+  description = "Whether the project will be attached to a VPC Service Control Perimeter in ENFORCED MODE."
+  type        = bool
+  default     = false
+}
+
+
+variable "vpc_service_control_attach_dry_run" {
+  description = "Whether the project will be attached to a VPC Service Control Perimeter with an explicit dry run spec flag, which may use different values for the dry run perimeter compared to the ENFORCED perimeter."
+  type        = bool
+  default     = false
+}
+
+variable "vpc_service_control_perimeter_name" {
+  description = "The name of a VPC Service Control Perimeter to add the created project to"
+  type        = string
+  default     = null
 }
