@@ -62,7 +62,7 @@ func TestShared(t *testing.T) {
 		vars["perimeter_additional_members"] = []string{}
 		tfdDir = "../../../3-networks-hub-and-spoke/envs/shared"
 	} else {
-		tfdDir = "../../../3-networks-dual-svpc/envs/shared"
+		tfdDir = "../../../3-networks-svpc/envs/shared"
 	}
 
 	shared := tft.NewTFBlueprintTest(t,

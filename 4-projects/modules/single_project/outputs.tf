@@ -15,7 +15,7 @@
  */
 
 output "project_id" {
-  description = "Project sample project id."
+  description = "Project sample shared vpc id."
   value       = module.project.project_id
 }
 
@@ -25,7 +25,7 @@ output "sa" {
 }
 
 output "project_number" {
-  description = "Project sample project number."
+  description = "Project sample shared vpc number."
   value       = module.project.project_number
 }
 

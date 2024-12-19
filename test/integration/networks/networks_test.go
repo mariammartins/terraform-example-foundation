@@ -48,41 +48,23 @@ func getFirewallMode(t *testing.T) string {
 
 func getNetworkResourceNames(envCode string, networkMode string, firewallMode string) map[string]map[string]string {
 	return map[string]map[string]string{
-		"base": {
-			"network_name":          fmt.Sprintf("vpc-%s-shared-base%s", envCode, networkMode),
-			"global_address":        fmt.Sprintf("ga-%s-shared-base%s-vpc-peering-internal", envCode, networkMode),
-			"dns_zone_googleapis":   fmt.Sprintf("dz-%s-shared-base-apis", envCode),
-			"dns_zone_gcr":          fmt.Sprintf("dz-%s-shared-base-gcr", envCode),
-			"dns_zone_pkg_dev":      fmt.Sprintf("dz-%s-shared-base-pkg-dev", envCode),
-			"dns_zone_peering_zone": fmt.Sprintf("dz-%s-shared-base-to-dns-hub", envCode),
-			"dns_policy_name":       fmt.Sprintf("dp-%s-shared-base-default-policy", envCode),
-			"subnet_name1":          fmt.Sprintf("sb-%s-shared-base-us-central1", envCode),
-			"subnet_name2":          fmt.Sprintf("sb-%s-shared-base-us-west1", envCode),
-			"region1_router1":       fmt.Sprintf("cr-%s-shared-base%s-us-central1-cr1", envCode, networkMode),
-			"region1_router2":       fmt.Sprintf("cr-%s-shared-base%s-us-central1-cr2", envCode, networkMode),
-			"region2_router1":       fmt.Sprintf("cr-%s-shared-base%s-us-west1-cr3", envCode, networkMode),
-			"region2_router2":       fmt.Sprintf("cr-%s-shared-base%s-us-west1-cr4", envCode, networkMode),
-			"firewall_policy":       fmt.Sprintf("fp-%s-%s-base-firewalls", envCode, firewallMode),
-			"fw_deny_all_egress":    fmt.Sprintf("fw-%s-shared-base-65530-e-d-all-all-all", envCode),
-			"fw_allow_api_egress":   fmt.Sprintf("fw-%s-shared-base-1000-e-a-allow-google-apis-all-tcp-443", envCode),
-		},
-		"restricted": {
-			"network_name":          fmt.Sprintf("vpc-%s-shared-restricted%s", envCode, networkMode),
-			"global_address":        fmt.Sprintf("ga-%s-shared-restricted%s-vpc-peering-internal", envCode, networkMode),
-			"dns_zone_googleapis":   fmt.Sprintf("dz-%s-shared-restricted-apis", envCode),
-			"dns_zone_gcr":          fmt.Sprintf("dz-%s-shared-restricted-gcr", envCode),
-			"dns_zone_pkg_dev":      fmt.Sprintf("dz-%s-shared-restricted-pkg-dev", envCode),
-			"dns_zone_peering_zone": fmt.Sprintf("dz-%s-shared-restricted-to-dns-hub", envCode),
-			"dns_policy_name":       fmt.Sprintf("dp-%s-shared-restricted-default-policy", envCode),
-			"subnet_name1":          fmt.Sprintf("sb-%s-shared-restricted-us-central1", envCode),
-			"subnet_name2":          fmt.Sprintf("sb-%s-shared-restricted-us-west1", envCode),
-			"region1_router1":       fmt.Sprintf("cr-%s-shared-restricted%s-us-central1-cr5", envCode, networkMode),
-			"region1_router2":       fmt.Sprintf("cr-%s-shared-restricted%s-us-central1-cr6", envCode, networkMode),
-			"region2_router1":       fmt.Sprintf("cr-%s-shared-restricted%s-us-west1-cr7", envCode, networkMode),
-			"region2_router2":       fmt.Sprintf("cr-%s-shared-restricted%s-us-west1-cr8", envCode, networkMode),
-			"firewall_policy":       fmt.Sprintf("fp-%s-%s-restricted-firewalls", envCode, firewallMode),
-			"fw_deny_all_egress":    fmt.Sprintf("fw-%s-shared-restricted-65530-e-d-all-all-all", envCode),
-			"fw_allow_api_egress":   fmt.Sprintf("fw-%s-shared-restricted-1000-e-a-allow-google-apis-all-tcp-443", envCode),
+		"shared_vpc": {
+			"network_name":          fmt.Sprintf("vpc-%s-svpc%s", envCode, networkMode),
+			"global_address":        fmt.Sprintf("ga-%s-svpc%s-vpc-peering-internal", envCode, networkMode),
+			"dns_zone_googleapis":   fmt.Sprintf("dz-%s-svpc-apis", envCode),
+			"dns_zone_gcr":          fmt.Sprintf("dz-%s-svpc-gcr", envCode),
+			"dns_zone_pkg_dev":      fmt.Sprintf("dz-%s-svpc-pkg-dev", envCode),
+			"dns_zone_peering_zone": fmt.Sprintf("dz-%s-svpc-to-dns-hub", envCode),
+			"dns_policy_name":       fmt.Sprintf("dp-%s-svpc-default-policy", envCode),
+			"subnet_name1":          fmt.Sprintf("sb-%s-svpc-us-central1", envCode),
+			"subnet_name2":          fmt.Sprintf("sb-%s-svpc-us-west1", envCode),
+			"region1_router1":       fmt.Sprintf("cr-%s-svpc%s-us-central1-cr5", envCode, networkMode),
+			"region1_router2":       fmt.Sprintf("cr-%s-svpc%s-us-central1-cr6", envCode, networkMode),
+			"region2_router1":       fmt.Sprintf("cr-%s-svpc%s-us-west1-cr7", envCode, networkMode),
+			"region2_router2":       fmt.Sprintf("cr-%s-svpc%s-us-west1-cr8", envCode, networkMode),
+			"firewall_policy":       fmt.Sprintf("fp-%s-%s-svpc-firewalls", envCode, firewallMode),
+			"fw_deny_all_egress":    fmt.Sprintf("fw-%s-svpc-65530-e-d-all-all-all", envCode),
+			"fw_allow_api_egress":   fmt.Sprintf("fw-%s-svpc-1000-e-a-allow-google-apis-all-tcp-443", envCode),
 		},
 	}
 }
@@ -235,31 +217,25 @@ func TestNetworks(t *testing.T) {
 
 	cidrRanges := map[string]map[string][]string{
 		"development": {
-			"base":       []string{"10.0.64.0/18", "10.1.64.0/18"},
-			"restricted": []string{"10.8.64.0/18", "10.9.64.0/18"},
+			"shared_vpc": []string{"10.8.64.0/18", "10.9.64.0/18"},
 		},
 		"nonproduction": {
-			"base":       []string{"10.0.128.0/18", "10.1.128.0/18"},
-			"restricted": []string{"10.8.128.0/18", "10.9.128.0/18"},
+			"shared_vpc": []string{"10.8.128.0/18", "10.9.128.0/18"},
 		},
 		"production": {
-			"base":       []string{"10.0.192.0/18", "10.1.192.0/18"},
-			"restricted": []string{"10.8.192.0/18", "10.9.192.0/18"},
+			"shared_vpc": []string{"10.8.192.0/18", "10.9.192.0/18"},
 		},
 	}
 
 	googleapisCIDR := map[string]map[string]string{
 		"development": {
-			"base":       "10.17.0.2",
-			"restricted": "10.17.0.6",
+			"shared_vpc": "10.17.0.6",
 		},
 		"nonproduction": {
-			"base":       "10.17.0.3",
-			"restricted": "10.17.0.7",
+			"shared_vpc": "10.17.0.7",
 		},
 		"production": {
-			"base":       "10.17.0.4",
-			"restricted": "10.17.0.8",
+			"shared_vpc": "10.17.0.8",
 		},
 	}
 
@@ -326,7 +302,7 @@ func TestNetworks(t *testing.T) {
 
 			var tfdDir string
 			if networkMode == "" {
-				tfdDir = "../../../3-networks-dual-svpc/envs/%s"
+				tfdDir = "../../../3-networks-svpc/envs/%s"
 			} else {
 				tfdDir = "../../../3-networks-hub-and-spoke/envs/%s"
 			}
@@ -348,13 +324,13 @@ func TestNetworks(t *testing.T) {
 					// Resource issue: https://github.com/hashicorp/terraform-provider-google/issues/16804
 					// networks.DefaultVerify(assert)
 
-					servicePerimeterLink := fmt.Sprintf("accessPolicies/%s/servicePerimeters/%s", policyID, networks.GetStringOutput("restricted_service_perimeter_name"))
+					servicePerimeterLink := fmt.Sprintf("accessPolicies/%s/servicePerimeters/%s", policyID, networks.GetStringOutput("service_perimeter_name"))
 					accessLevel := fmt.Sprintf("accessPolicies/%s/accessLevels/%s", policyID, networks.GetStringOutput("access_level_name_dry_run"))
 					networkNames := getNetworkResourceNames(envCode, networkMode, firewallMode)
 
 					servicePerimeter, err := gcloud.RunCmdE(t, fmt.Sprintf("access-context-manager perimeters dry-run describe %s --policy %s", servicePerimeterLink, policyID))
 					assert.NoError(err)
-					perimeterName := networks.GetStringOutput("restricted_service_perimeter_name")
+					perimeterName := networks.GetStringOutput("service_perimeter_name")
 					assert.True(strings.Contains(servicePerimeter, perimeterName), fmt.Sprintf("service perimeter %s should exist", perimeterName))
 					assert.True(strings.Contains(servicePerimeter, accessLevel), fmt.Sprintf("service perimeter %s should have access level %s", servicePerimeterLink, accessLevel))
 					for _, service := range restrictedServices {
@@ -362,8 +338,7 @@ func TestNetworks(t *testing.T) {
 					}
 
 					for _, networkType := range []string{
-						"base",
-						"restricted",
+						"shared_vpc",
 					} {
 						projectID := networks.GetStringOutput(fmt.Sprintf("%s_host_project_id", networkType))
 

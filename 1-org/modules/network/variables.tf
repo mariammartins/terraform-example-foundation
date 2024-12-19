@@ -59,14 +59,28 @@ variable "project_budget" {
   alert_pubsub_topic: The name of the Cloud Pub/Sub topic where budget related messages will be published, in the form of `projects/{project_id}/topics/{topic_id}`.
   EOT
   type = object({
-    base_network_budget_amount                  = optional(number, 1000)
-    base_network_alert_spent_percents           = optional(list(number), [1.2])
-    base_network_alert_pubsub_topic             = optional(string, null)
-    base_network_budget_alert_spend_basis       = optional(string, "FORECASTED_SPEND")
-    restricted_network_budget_amount            = optional(number, 1000)
-    restricted_network_alert_spent_percents     = optional(list(number), [1.2])
-    restricted_network_alert_pubsub_topic       = optional(string, null)
-    restricted_network_budget_alert_spend_basis = optional(string, "FORECASTED_SPEND")
+    network_budget_amount            = optional(number, 1000)
+    network_alert_spent_percents     = optional(list(number), [1.2])
+    network_alert_pubsub_topic       = optional(string, null)
+    network_budget_alert_spend_basis = optional(string, "FORECASTED_SPEND")
   })
   default = {}
+}
+
+variable "vpc_service_control_attach_enabled" {
+  description = "Whether the project will be attached to a VPC Service Control Perimeter in ENFORCED MODE."
+  type        = bool
+  default     = false
+}
+
+variable "vpc_service_control_attach_dry_run" {
+  description = "Whether the project will be attached to a VPC Service Control Perimeter with an explicit dry run spec flag, which may use different values for the dry run perimeter compared to the ENFORCED perimeter."
+  type        = bool
+  default     = false
+}
+
+variable "vpc_service_control_perimeter_name" {
+  description = "The name of a VPC Service Control Perimeter to add the created project to"
+  type        = string
+  default     = null
 }
