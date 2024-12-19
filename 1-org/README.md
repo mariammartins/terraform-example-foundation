@@ -57,7 +57,7 @@ For an overview of the architecture and the parts, see the
 
 The purpose of this step is to:
 - Set up top-level shared folders, networking projects, organization-level logging, and baseline security settings through organizational policies.
-- Set upt VPC Service Controls.
+- Set up VPC Service Controls.
 
 ## Prerequisites
 
