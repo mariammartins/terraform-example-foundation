@@ -160,10 +160,10 @@ module "service_control" {
     "serviceAccount:${local.organization_service_account}",
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
-  resources = distinct(concat([
+  resources = distinct([
     "projects/${local.cloudbuild_project_number}",
     "projects/${local.seed_project_number}"
-  ], var.resources))
+  ])
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
     "serviceAccount:${local.projects_service_account}",
