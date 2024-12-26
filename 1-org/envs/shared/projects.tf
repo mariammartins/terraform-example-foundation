@@ -27,9 +27,8 @@ locals {
     "production" : "p"
   }
 
-  enforce_vpcsc     = module.service_control.enforce_vpcsc
-  perimeter_name    = module.service_control.service_perimeter_name
-  dry_run_perimeter = module.service_control.access_level_name_dry_run
+  enforce_vpcsc  = module.service_control.enforce_vpcsc
+  perimeter_name = module.service_control.service_perimeter_name
 }
 
 /******************************************

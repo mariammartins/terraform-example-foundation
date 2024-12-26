@@ -16,7 +16,7 @@
 
 terraform {
   backend "gcs" {
-    bucket = "bkt-prj-b-seed-tfstate-7ef7"
+    bucket = "bkt-prj-b-seed-tfstate-caaa"
     prefix = "terraform/org/state"
   }
 }

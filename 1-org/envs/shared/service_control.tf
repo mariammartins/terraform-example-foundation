@@ -179,3 +179,28 @@ module "service_control" {
   egress_policies          = distinct(var.egress_policies)
   egress_policies_dry_run  = distinct(var.egress_policies_dry_run)
 }
+
+
+resource "google_access_context_manager_service_perimeter_resource" "enforced_perimeter_cloudbuild_project" {
+  count          = local.enforce_vpcsc ? 1 : 0
+  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  resource       = "projects/${local.cloudbuild_project_number}"
+}
+
+resource "google_access_context_manager_service_perimeter_resource" "enforced_perimeter_seed_project" {
+  count          = local.enforce_vpcsc ? 1 : 0
+  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  resource       = "projects/${local.seed_project_number}"
+}
+
+resource "google_access_context_manager_service_perimeter_dry_run_resource" "dry_run_perimeter_cloudbuild_project" {
+  count          = !local.enforce_vpcsc ? 1 : 0
+  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  resource       = "projects/${local.cloudbuild_project_number}"
+}
+
+resource "google_access_context_manager_service_perimeter_dry_run_resource" "dry_run_perimeter_seed_project" {
+  count          = !local.enforce_vpcsc ? 1 : 0
+  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  resource       = "projects/${local.seed_project_number}"
+}
