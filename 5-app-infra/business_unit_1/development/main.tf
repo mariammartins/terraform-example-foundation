@@ -24,7 +24,7 @@ module "shared_gce_instance" {
 
   environment         = local.environment
   business_unit       = local.business_unit
-  project_suffix      = "sample-shared"
+  project_suffix      = "sample-svpc"
   region              = coalesce(var.instance_region, local.default_region)
   remote_state_bucket = var.remote_state_bucket
 }
