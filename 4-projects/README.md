@@ -186,7 +186,7 @@ For example, to create a new business unit similar to business_unit_1, run the f
    ```
 
 1. Push your plan branch to trigger a plan for all environments. Because the
-   _plan_ branch is not a [named environment branch](../docs/FAQ.md#what-is-a-named-branch)), pushing your _plan_
+   _plan_ branch is not a [named environment branch](../docs/FAQ.md#what-is-a-named-branch), pushing your _plan_
    branch triggers _terraform plan_ but not _terraform apply_. Review the plan output in your Cloud Build project https://console.cloud.google.com/cloud-build/builds;region=DEFAULT_REGION?project=YOUR_CLOUD_BUILD_PROJECT_ID
 
    ```bash
@@ -369,17 +369,6 @@ For example, to create a new business unit similar to business_unit_1, run the f
 
    ```bash
    ./tf-wrapper.sh apply development
-   ```
-
-### Include APP Infra Pipeline terraform service account in the perimeter
-
-App Infra Pipeline terraform service account needs to be added to the VPC-SC perimeter.
-
-1. Use `terraform output` to get the APP Infra Pipeline terraform service account
-
-   ```bash
-   export APP_INFRA_PIPELINE_SERVICE_ACCOUNT=$(terraform -chdir="business_unit_1/shared/" output -json terraform_service_accounts | jq '."bu1-example-app"' --raw-output)
-   echo ${APP_INFRA_PIPELINE_SERVICE_ACCOUNT}
    ```
 
 1. Update file `1-org/envs/shared/terraform.tfvars` in the production branch adding the APP Infra Pipeline service account to the perimeter by updating the value for the variable `perimeter_additional_members`.
