@@ -67,7 +67,7 @@ module "regular_service_perimeter" {
   vpc_accessible_services_dry_run = ["RESTRICTED-SERVICES"]
   ingress_policies_dry_run        = var.ingress_policies_dry_run
   egress_policies_dry_run         = var.egress_policies_dry_run
-  resources_dry_run               = var.enforce_vpcsc ? var.resources_dry_run : []
+  resources_dry_run               = var.resources_dry_run
 }
 
 resource "time_sleep" "wait_vpc_sc_propagation" {

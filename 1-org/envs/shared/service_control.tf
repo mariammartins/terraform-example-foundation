@@ -161,8 +161,8 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
   resources = distinct([
-    "projects/${local.cloudbuild_project_number}",
-    "projects/${local.seed_project_number}"
+    local.cloudbuild_project_number,
+    local.seed_project_number
   ])
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
@@ -171,36 +171,11 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
   resources_dry_run = distinct(concat([
-    "projects/${local.cloudbuild_project_number}",
-    "projects/${local.seed_project_number}"
+    local.cloudbuild_project_number,
+    local.seed_project_number
   ]))
   ingress_policies         = var.ingress_policies
   ingress_policies_dry_run = var.ingress_policies_dry_run
   egress_policies          = distinct(var.egress_policies)
   egress_policies_dry_run  = distinct(var.egress_policies_dry_run)
-}
-
-
-resource "google_access_context_manager_service_perimeter_resource" "enforced_perimeter_cloudbuild_project" {
-  count          = local.enforce_vpcsc ? 1 : 0
-  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-  resource       = "projects/${local.cloudbuild_project_number}"
-}
-
-resource "google_access_context_manager_service_perimeter_resource" "enforced_perimeter_seed_project" {
-  count          = local.enforce_vpcsc ? 1 : 0
-  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-  resource       = "projects/${local.seed_project_number}"
-}
-
-resource "google_access_context_manager_service_perimeter_dry_run_resource" "dry_run_perimeter_cloudbuild_project" {
-  count          = !local.enforce_vpcsc ? 1 : 0
-  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-  resource       = "projects/${local.cloudbuild_project_number}"
-}
-
-resource "google_access_context_manager_service_perimeter_dry_run_resource" "dry_run_perimeter_seed_project" {
-  count          = !local.enforce_vpcsc ? 1 : 0
-  perimeter_name = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-  resource       = "projects/${local.seed_project_number}"
 }
