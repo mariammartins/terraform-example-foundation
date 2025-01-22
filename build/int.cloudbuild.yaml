@@ -167,7 +167,6 @@ options:
   - 'TF_VAR_org_id=$_ORG_ID'
   - 'TF_VAR_group_email=test-gcp-org-admins@test.blueprints.joonix.net'
   - 'TF_VAR_create_access_context_manager_access_policy=false'
-  - 'TF_VAR_audit_logs_table_delete_contents_on_destroy=true'
   - 'TF_VAR_log_export_storage_force_destroy=true'
   - 'TF_VAR_domain_to_allow=test.blueprints.joonix.net'
   - 'TF_VAR_domain=test.blueprints.joonix.net.'

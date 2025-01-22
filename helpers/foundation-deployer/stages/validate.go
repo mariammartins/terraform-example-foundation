@@ -99,9 +99,6 @@ func ValidateDestroyFlags(t testing.TB, g GlobalTFVars) {
 	if g.BucketForceDestroy == nil || !*g.BucketForceDestroy {
 		flags = append(flags, "bucket_force_destroy")
 	}
-	if g.AuditLogsTableDeleteContentsOnDestroy == nil || !*g.AuditLogsTableDeleteContentsOnDestroy {
-		flags = append(flags, "audit_logs_table_delete_contents_on_destroy")
-	}
 	if g.LogExportStorageForceDestroy == nil || !*g.LogExportStorageForceDestroy {
 		flags = append(flags, "log_export_storage_force_destroy")
 	}

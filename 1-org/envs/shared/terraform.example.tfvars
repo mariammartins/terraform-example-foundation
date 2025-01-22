@@ -32,7 +32,7 @@ log_export_storage_location = "US"
 
 billing_export_dataset_location = "US"
 
-access_context_manager_policy_id = ACCESS_CONTEXT_MANAGER_ID
+access_context_manager_policy_id = "ACCESS_CONTEXT_MANAGER_ID"
 
 //scc_notification_filter = "state=\\\"ACTIVE\\\""
 
