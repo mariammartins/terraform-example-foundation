@@ -28,6 +28,13 @@ module "shared_vpc_project" {
 
   project_deletion_policy = var.project_deletion_policy
 
+  sa_roles = {
+    "${var.business_code}-example-app" = [
+      "roles/compute.instanceAdmin.v1",
+      "roles/iam.serviceAccountUser",
+    ]
+  }
+
   activate_apis                      = ["accesscontextmanager.googleapis.com"]
   vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
   vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
