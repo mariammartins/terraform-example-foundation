@@ -193,8 +193,6 @@ Run `terraform output cloudbuild_project_id` in the `0-bootstrap` folder to get 
    sed -i'' -e "s/REMOTE_STATE_BUCKET/${backend_bucket}/" ./common.auto.tfvars
    ```
 
-   **Note:** Make sure that you update the `perimeter_additional_members` variable with your user identity in order to be able to view/access resources in the project protected by the VPC Service Controls.
-
 1. Commit changes
 
    ```bash

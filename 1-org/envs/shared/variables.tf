@@ -42,6 +42,12 @@ variable "create_access_context_manager_access_policy" {
   default     = true
 }
 
+variable "access_context_manager_policy_id" {
+  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR_ORGANIZATION_ID --format=\"value(name)\"`."
+  type        = string
+  default     = ""
+}
+
 variable "scc_notification_filter" {
   description = "Filter used to create the Security Command Center Notification, you can see more details on how to create filters in https://cloud.google.com/security-command-center/docs/how-to-api-filter-notifications#create-filter"
   type        = string
@@ -244,11 +250,6 @@ variable "egress_policies_dry_run" {
     to   = any
   }))
   default = []
-}
-
-variable "access_context_manager_policy_id" {
-  type        = number
-  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR_ORGANIZATION_ID --format=\"value(name)\"`."
 }
 
 variable "perimeter_additional_members" {

@@ -175,6 +175,6 @@ output "service_perimeter_name" {
 }
 
 output "access_context_manager_policy_id" {
-  value       = var.access_context_manager_policy_id
+  value       = local.access_context_manager_policy_id
   description = "Access Context Manager Policy ID."
 }

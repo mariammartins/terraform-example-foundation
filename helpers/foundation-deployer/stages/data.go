@@ -39,7 +39,7 @@ const (
 	OrgStep          = "1-org"
 	EnvironmentsStep = "2-environments"
 	HubAndSpokeStep  = "3-networks-hub-and-spoke"
-	SvpcStep     = "3-networks-svpc"
+	SvpcStep         = "3-networks-svpc"
 	ProjectsStep     = "4-projects"
 	AppInfraStep     = "5-app-infra"
 )
@@ -128,39 +128,38 @@ type GcpGroups struct {
 
 // GlobalTFVars contains all the configuration for the deploy
 type GlobalTFVars struct {
-	OrgID                                 string          `hcl:"org_id"`
-	BillingAccount                        string          `hcl:"billing_account"`
-	DefaultRegion                         string          `hcl:"default_region"`
-	DefaultRegion2                        string          `hcl:"default_region_2"`
-	DefaultRegionGCS                      string          `hcl:"default_region_gcs"`
-	DefaultRegionKMS                      string          `hcl:"default_region_kms"`
-	ParentFolder                          *string         `hcl:"parent_folder"`
-	Domain                                string          `hcl:"domain"`
-	DomainsToAllow                        []string        `hcl:"domains_to_allow"`
-	EssentialContactsDomains              []string        `hcl:"essential_contacts_domains_to_allow"`
-	PerimeterAdditionalMembers            []string        `hcl:"perimeter_additional_members"`
-	TargetNameServerAddresses             []ServerAddress `hcl:"target_name_server_addresses"`
-	SccNotificationName                   string          `hcl:"scc_notification_name"`
-	ProjectPrefix                         *string         `hcl:"project_prefix"`
-	FolderPrefix                          *string         `hcl:"folder_prefix"`
-	BucketForceDestroy                    *bool           `hcl:"bucket_force_destroy"`
-	BucketTfstateKmsForceDestroy          *bool           `hcl:"bucket_tfstate_kms_force_destroy"`
-	AuditLogsTableDeleteContentsOnDestroy *bool           `hcl:"audit_logs_table_delete_contents_on_destroy"`
-	LogExportStorageForceDestroy          *bool           `hcl:"log_export_storage_force_destroy"`
-	LogExportStorageLocation              string          `hcl:"log_export_storage_location"`
-	BillingExportDatasetLocation          string          `hcl:"billing_export_dataset_location"`
-	EnableHubAndSpoke                     bool            `hcl:"enable_hub_and_spoke"`
-	EnableHubAndSpokeTransitivity         bool            `hcl:"enable_hub_and_spoke_transitivity"`
-	CreateUniqueTagKey                    bool            `hcl:"create_unique_tag_key"`
-	LocationKMS                           string          `hcl:"location_kms"`
-	LocationGCS                           string          `hcl:"location_gcs"`
-	CodeCheckoutPath                      string          `hcl:"code_checkout_path"`
-	FoundationCodePath                    string          `hcl:"foundation_code_path"`
-	ValidatorProjectId                    *string         `hcl:"validator_project_id"`
-	Groups                                Groups          `hcl:"groups"`
-	InitialGroupConfig                    *string         `hcl:"initial_group_config"`
-	FolderDeletionProtection              bool            `hcl:"folder_deletion_protection"`
-	ProjectDeletionPolicy                 string          `hcl:"project_deletion_policy"`
+	OrgID                         string          `hcl:"org_id"`
+	BillingAccount                string          `hcl:"billing_account"`
+	DefaultRegion                 string          `hcl:"default_region"`
+	DefaultRegion2                string          `hcl:"default_region_2"`
+	DefaultRegionGCS              string          `hcl:"default_region_gcs"`
+	DefaultRegionKMS              string          `hcl:"default_region_kms"`
+	ParentFolder                  *string         `hcl:"parent_folder"`
+	Domain                        string          `hcl:"domain"`
+	DomainsToAllow                []string        `hcl:"domains_to_allow"`
+	EssentialContactsDomains      []string        `hcl:"essential_contacts_domains_to_allow"`
+	PerimeterAdditionalMembers    []string        `hcl:"perimeter_additional_members"`
+	TargetNameServerAddresses     []ServerAddress `hcl:"target_name_server_addresses"`
+	SccNotificationName           string          `hcl:"scc_notification_name"`
+	ProjectPrefix                 *string         `hcl:"project_prefix"`
+	FolderPrefix                  *string         `hcl:"folder_prefix"`
+	BucketForceDestroy            *bool           `hcl:"bucket_force_destroy"`
+	BucketTfstateKmsForceDestroy  *bool           `hcl:"bucket_tfstate_kms_force_destroy"`
+	LogExportStorageForceDestroy  *bool           `hcl:"log_export_storage_force_destroy"`
+	LogExportStorageLocation      string          `hcl:"log_export_storage_location"`
+	BillingExportDatasetLocation  string          `hcl:"billing_export_dataset_location"`
+	EnableHubAndSpoke             bool            `hcl:"enable_hub_and_spoke"`
+	EnableHubAndSpokeTransitivity bool            `hcl:"enable_hub_and_spoke_transitivity"`
+	CreateUniqueTagKey            bool            `hcl:"create_unique_tag_key"`
+	LocationKMS                   string          `hcl:"location_kms"`
+	LocationGCS                   string          `hcl:"location_gcs"`
+	CodeCheckoutPath              string          `hcl:"code_checkout_path"`
+	FoundationCodePath            string          `hcl:"foundation_code_path"`
+	ValidatorProjectId            *string         `hcl:"validator_project_id"`
+	Groups                        Groups          `hcl:"groups"`
+	InitialGroupConfig            *string         `hcl:"initial_group_config"`
+	FolderDeletionProtection      bool            `hcl:"folder_deletion_protection"`
+	ProjectDeletionPolicy         string          `hcl:"project_deletion_policy"`
 }
 
 // HasValidatorProj checks if a Validator Project was provided
@@ -212,20 +211,21 @@ type BootstrapTfvars struct {
 }
 
 type OrgTfvars struct {
-	DomainsToAllow                        []string  `hcl:"domains_to_allow"`
-	EssentialContactsDomains              []string  `hcl:"essential_contacts_domains_to_allow"`
-	SccNotificationName                   string    `hcl:"scc_notification_name"`
-	RemoteStateBucket                     string    `hcl:"remote_state_bucket"`
-	EnableHubAndSpoke                     bool      `hcl:"enable_hub_and_spoke"`
-	CreateACMAPolicy                      bool      `hcl:"create_access_context_manager_access_policy"`
-	CreateUniqueTagKey                    bool      `hcl:"create_unique_tag_key"`
-	AuditLogsTableDeleteContentsOnDestroy *bool     `hcl:"audit_logs_table_delete_contents_on_destroy"`
-	LogExportStorageForceDestroy          *bool     `hcl:"log_export_storage_force_destroy"`
-	LogExportStorageLocation              string    `hcl:"log_export_storage_location"`
-	BillingExportDatasetLocation          string    `hcl:"billing_export_dataset_location"`
-	GcpGroups                             GcpGroups `hcl:"gcp_groups"`
-	FolderDeletionProtection              bool      `hcl:"folder_deletion_protection"`
-	ProjectDeletionPolicy                 string    `hcl:"project_deletion_policy"`
+	DomainsToAllow               []string  `hcl:"domains_to_allow"`
+	EssentialContactsDomains     []string  `hcl:"essential_contacts_domains_to_allow"`
+	SccNotificationName          string    `hcl:"scc_notification_name"`
+	RemoteStateBucket            string    `hcl:"remote_state_bucket"`
+	EnableHubAndSpoke            bool      `hcl:"enable_hub_and_spoke"`
+	CreateACMAPolicy             bool      `hcl:"create_access_context_manager_access_policy"`
+	AccessContextManagerPolicyID *string   `hcl:"access_context_manager_policy_id"`
+	CreateUniqueTagKey           bool      `hcl:"create_unique_tag_key"`
+	LogExportStorageForceDestroy *bool     `hcl:"log_export_storage_force_destroy"`
+	LogExportStorageLocation     string    `hcl:"log_export_storage_location"`
+	BillingExportDatasetLocation string    `hcl:"billing_export_dataset_location"`
+	GcpGroups                    GcpGroups `hcl:"gcp_groups"`
+	FolderDeletionProtection     bool      `hcl:"folder_deletion_protection"`
+	ProjectDeletionPolicy        string    `hcl:"project_deletion_policy"`
+	PerimeterAdditionalMembers   []string  `hcl:"perimeter_additional_members"`
 }
 
 type EnvsTfvars struct {
@@ -235,10 +235,9 @@ type EnvsTfvars struct {
 }
 
 type NetCommonTfvars struct {
-	Domain                        string   `hcl:"domain"`
-	PerimeterAdditionalMembers    []string `hcl:"perimeter_additional_members"`
-	RemoteStateBucket             string   `hcl:"remote_state_bucket"`
-	EnableHubAndSpokeTransitivity *bool    `hcl:"enable_hub_and_spoke_transitivity"`
+	Domain                        string `hcl:"domain"`
+	RemoteStateBucket             string `hcl:"remote_state_bucket"`
+	EnableHubAndSpokeTransitivity *bool  `hcl:"enable_hub_and_spoke_transitivity"`
 }
 
 type NetSharedTfvars struct {
@@ -254,7 +253,8 @@ type ProjCommonTfvars struct {
 }
 
 type ProjSharedTfvars struct {
-	DefaultRegion string `hcl:"default_region"`
+	DefaultRegion         string `hcl:"default_region"`
+	ProjectDeletionPolicy string `hcl:"project_deletion_policy"`
 }
 
 type ProjEnvTfvars struct {

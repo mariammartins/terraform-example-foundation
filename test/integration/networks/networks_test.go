@@ -297,7 +297,6 @@ func TestNetworks(t *testing.T) {
 				"remote_state_bucket":              backend_bucket,
 				"ingress_policies":                 ingressPolicies,
 				"egress_policies":                  egressPolicies,
-				"perimeter_additional_members":     []string{},
 			}
 
 			var tfdDir string
