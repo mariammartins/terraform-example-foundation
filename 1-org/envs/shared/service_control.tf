@@ -20,6 +20,7 @@
 
 locals {
   supported_restricted_service = [
+    "essentialcontacts.googleapis.com",
     "accessapproval.googleapis.com",
     "adsdatahub.googleapis.com",
     "aiplatform.googleapis.com",
