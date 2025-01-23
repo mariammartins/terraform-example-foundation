@@ -42,7 +42,7 @@ module "shared_vpc_project" {
   vpc_service_control_sleep_duration = "60s"
 
   # Metadata
-  project_suffix    = "sample-restrict"
+  project_suffix    = "svpc"
   application_name  = "${var.business_code}-sample-application"
   billing_code      = "1234"
   primary_contact   = "example@example.com"
