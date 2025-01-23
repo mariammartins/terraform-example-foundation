@@ -17,14 +17,16 @@
 module "shared_vpc_project" {
   source = "../single_project"
 
-  org_id                     = local.org_id
-  billing_account            = local.billing_account
-  folder_id                  = google_folder.env_business_unit.name
-  environment                = var.env
-  shared_vpc_host_project_id = local.host_project_id
-  shared_vpc_subnets         = local.subnets_self_links
-  project_budget             = var.project_budget
-  project_prefix             = local.project_prefix
+  org_id                              = local.org_id
+  billing_account                     = local.billing_account
+  folder_id                           = google_folder.env_business_unit.name
+  environment                         = var.env
+  shared_vpc_host_project_id          = local.host_project_id
+  shared_vpc_subnets                  = local.subnets_self_links
+  project_budget                      = var.project_budget
+  project_prefix                      = local.project_prefix
+  enable_cloudbuild_deploy            = local.enable_cloudbuild_deploy
+  app_infra_pipeline_service_accounts = local.app_infra_pipeline_service_accounts
 
   project_deletion_policy = var.project_deletion_policy
 
