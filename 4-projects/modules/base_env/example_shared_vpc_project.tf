@@ -34,10 +34,11 @@ module "shared_vpc_project" {
     "${var.business_code}-example-app" = [
       "roles/compute.instanceAdmin.v1",
       "roles/iam.serviceAccountUser",
+      "roles/iam.serviceAccountAdmin",
     ]
   }
 
-  activate_apis                      = ["accesscontextmanager.googleapis.com"]
+  activate_apis                      = ["accesscontextmanager.googleapis.com", ""]
   vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
   vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
   vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
