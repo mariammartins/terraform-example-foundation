@@ -27,7 +27,7 @@ resource "random_id" "random_access_level_suffix" {
 
 module "access_level" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/access_level"
-  version = "~> 6.0"
+  version = "~> 6.2.1"
 
   description = "${local.prefix} Access Level for use in an enforced perimeter"
   policy      = var.access_context_manager_policy_id
@@ -37,7 +37,7 @@ module "access_level" {
 
 module "access_level_dry_run" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/access_level"
-  version = "~> 6.0"
+  version = "~> 6.2.1"
 
   description = "${local.prefix} Access Level for testing with a dry run perimeter"
   policy      = var.access_context_manager_policy_id
@@ -47,7 +47,7 @@ module "access_level_dry_run" {
 
 module "regular_service_perimeter" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/regular_service_perimeter"
-  version = "~> 6.0"
+  version = "~> 6.2.1"
 
   policy         = var.access_context_manager_policy_id
   perimeter_name = local.perimeter_name
@@ -56,7 +56,7 @@ module "regular_service_perimeter" {
   # configurations for a perimeter in enforced mode.
   access_levels           = var.enforce_vpcsc ? [module.access_level.name] : []
   restricted_services     = var.enforce_vpcsc ? var.restricted_services : []
-  vpc_accessible_services = var.enforce_vpcsc ? ["RESTRICTED-SERVICES"] : []
+  vpc_accessible_services = var.enforce_vpcsc ? ["*"] : []
   ingress_policies        = var.enforce_vpcsc ? var.ingress_policies : []
   egress_policies         = var.enforce_vpcsc ? var.egress_policies : []
   resources               = var.enforce_vpcsc ? var.resources : []
@@ -64,7 +64,7 @@ module "regular_service_perimeter" {
   # configurations for a perimeter in dry run mode.
   access_levels_dry_run           = [module.access_level_dry_run.name]
   restricted_services_dry_run     = var.restricted_services_dry_run
-  vpc_accessible_services_dry_run = ["RESTRICTED-SERVICES"]
+  vpc_accessible_services_dry_run = ["*"]
   ingress_policies_dry_run        = var.ingress_policies_dry_run
   egress_policies_dry_run         = var.egress_policies_dry_run
   resources_dry_run               = var.resources_dry_run
