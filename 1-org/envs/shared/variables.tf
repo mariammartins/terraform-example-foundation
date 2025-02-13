@@ -42,6 +42,12 @@ variable "create_access_context_manager_access_policy" {
   default     = true
 }
 
+variable "access_context_manager_policy_id" {
+  description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR_ORGANIZATION_ID --format=\"value(name)\"`."
+  type        = string
+  default     = ""
+}
+
 variable "scc_notification_filter" {
   description = "Filter used to create the Security Command Center Notification, you can see more details on how to create filters in https://cloud.google.com/security-command-center/docs/how-to-api-filter-notifications#create-filter"
   type        = string
@@ -101,22 +107,14 @@ variable "project_budget" {
     dns_hub_alert_spent_percents                = optional(list(number), [1.2])
     dns_hub_alert_pubsub_topic                  = optional(string, null)
     dns_hub_budget_alert_spend_basis            = optional(string, "FORECASTED_SPEND")
-    base_net_hub_budget_amount                  = optional(number, 1000)
-    base_net_hub_alert_spent_percents           = optional(list(number), [1.2])
-    base_net_hub_alert_pubsub_topic             = optional(string, null)
-    base_net_hub_budget_alert_spend_basis       = optional(string, "FORECASTED_SPEND")
-    base_network_budget_amount                  = optional(number, 1000)
-    base_network_alert_spent_percents           = optional(list(number), [1.2])
-    base_network_alert_pubsub_topic             = optional(string, null)
-    base_network_budget_alert_spend_basis       = optional(string, "FORECASTED_SPEND")
-    restricted_net_hub_budget_amount            = optional(number, 1000)
-    restricted_net_hub_alert_spent_percents     = optional(list(number), [1.2])
-    restricted_net_hub_alert_pubsub_topic       = optional(string, null)
-    restricted_net_hub_budget_alert_spend_basis = optional(string, "FORECASTED_SPEND")
-    restricted_network_budget_amount            = optional(number, 1000)
-    restricted_network_alert_spent_percents     = optional(list(number), [1.2])
-    restricted_network_alert_pubsub_topic       = optional(string, null)
-    restricted_network_budget_alert_spend_basis = optional(string, "FORECASTED_SPEND")
+    net_hub_budget_amount                       = optional(number, 1000)
+    net_hub_alert_spent_percents                = optional(list(number), [1.2])
+    net_hub_alert_pubsub_topic                  = optional(string, null)
+    net_hub_budget_alert_spend_basis            = optional(string, "FORECASTED_SPEND")
+    network_budget_amount                       = optional(number, 1000)
+    network_alert_spent_percents                = optional(list(number), [1.2])
+    network_alert_pubsub_topic                  = optional(string, null)
+    network_budget_alert_spend_basis            = optional(string, "FORECASTED_SPEND")
     interconnect_budget_amount                  = optional(number, 1000)
     interconnect_alert_spent_percents           = optional(list(number), [1.2])
     interconnect_alert_pubsub_topic             = optional(string, null)
@@ -204,4 +202,64 @@ variable "folder_deletion_protection" {
   description = "Prevent Terraform from destroying or recreating the folder."
   type        = string
   default     = true
+}
+
+variable "custom_restricted_services" {
+  description = "List of custom services to be protected by the VPC-SC perimeter. If empty, all supported services (https://cloud.google.com/vpc-service-controls/docs/supported-products) will be protected."
+  type        = list(string)
+  default     = []
+}
+
+variable "custom_restricted_services_dry_run" {
+  description = "List of custom services to be protected by the VPC-SC perimeter. If empty, all supported services (https://cloud.google.com/vpc-service-controls/docs/supported-products) will be protected."
+  type        = list(string)
+  default     = []
+}
+
+variable "ingress_policies" {
+  description = "A list of all [ingress policies](https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules#ingress-rules-reference) to use in an enforced perimeter. Each list object has a `from` and `to` value that describes ingress_from and ingress_to.\n\nExample: `[{ from={ sources={ resources=[], access_levels=[] }, identities=[], identity_type=\"ID_TYPE\" }, to={ resources=[], operations={ \"SRV_NAME\"={ OP_TYPE=[] }}}}]`\n\nValid Values:\n`ID_TYPE` = `null` or `IDENTITY_TYPE_UNSPECIFIED` (only allow indentities from list); `ANY_IDENTITY`; `ANY_USER_ACCOUNT`; `ANY_SERVICE_ACCOUNT`\n`SRV_NAME` = \"`*`\" (allow all services) or [Specific Services](https://cloud.google.com/vpc-service-controls/docs/supported-products#supported_products)\n`OP_TYPE` = [methods](https://cloud.google.com/vpc-service-controls/docs/supported-method-restrictions) or [permissions](https://cloud.google.com/vpc-service-controls/docs/supported-method-restrictions)"
+  type = list(object({
+    from = any
+    to   = any
+  }))
+  default = []
+}
+
+variable "ingress_policies_dry_run" {
+  description = "A list of all [ingress policies](https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules#ingress-rules-reference) to use in a dry-run perimeter. Each list object has a `from` and `to` value that describes ingress_from and ingress_to.\n\nExample: `[{ from={ sources={ resources=[], access_levels=[] }, identities=[], identity_type=\"ID_TYPE\" }, to={ resources=[], operations={ \"SRV_NAME\"={ OP_TYPE=[] }}}}]`\n\nValid Values:\n`ID_TYPE` = `null` or `IDENTITY_TYPE_UNSPECIFIED` (only allow indentities from list); `ANY_IDENTITY`; `ANY_USER_ACCOUNT`; `ANY_SERVICE_ACCOUNT`\n`SRV_NAME` = \"`*`\" (allow all services) or [Specific Services](https://cloud.google.com/vpc-service-controls/docs/supported-products#supported_products)\n`OP_TYPE` = [methods](https://cloud.google.com/vpc-service-controls/docs/supported-method-restrictions) or [permissions](https://cloud.google.com/vpc-service-controls/docs/supported-method-restrictions)"
+  type = list(object({
+    from = any
+    to   = any
+  }))
+  default = []
+}
+
+variable "egress_policies" {
+  description = "A list of all [egress policies](https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules#egress-rules-reference) to use in an enforced perimeter. Each list object has a `from` and `to` value that describes egress_from and egress_to.\n\nExample: `[{ from={ identities=[], identity_type=\"ID_TYPE\" }, to={ resources=[], operations={ \"SRV_NAME\"={ OP_TYPE=[] }}}}]`\n\nValid Values:\n`ID_TYPE` = `null` or `IDENTITY_TYPE_UNSPECIFIED` (only allow indentities from list); `ANY_IDENTITY`; `ANY_USER_ACCOUNT`; `ANY_SERVICE_ACCOUNT`\n`SRV_NAME` = \"`*`\" (allow all services) or [Specific Services](https://cloud.google.com/vpc-service-controls/docs/supported-products#supported_products)\n`OP_TYPE` = [methods](https://cloud.google.com/vpc-service-controls/docs/supported-method-restrictions) or [permissions](https://cloud.google.com/vpc-service-controls/docs/supported-method-restrictions)"
+  type = list(object({
+    from = any
+    to   = any
+  }))
+  default = []
+}
+
+variable "egress_policies_dry_run" {
+  description = "A list of all [egress policies](https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules#egress-rules-reference) to use in a dry-run perimeter. Each list object has a `from` and `to` value that describes egress_from and egress_to.\n\nExample: `[{ from={ identities=[], identity_type=\"ID_TYPE\" }, to={ resources=[], operations={ \"SRV_NAME\"={ OP_TYPE=[] }}}}]`\n\nValid Values:\n`ID_TYPE` = `null` or `IDENTITY_TYPE_UNSPECIFIED` (only allow indentities from list); `ANY_IDENTITY`; `ANY_USER_ACCOUNT`; `ANY_SERVICE_ACCOUNT`\n`SRV_NAME` = \"`*`\" (allow all services) or [Specific Services](https://cloud.google.com/vpc-service-controls/docs/supported-products#supported_products)\n`OP_TYPE` = [methods](https://cloud.google.com/vpc-service-controls/docs/supported-method-restrictions) or [permissions](https://cloud.google.com/vpc-service-controls/docs/supported-method-restrictions)"
+  type = list(object({
+    from = any
+    to   = any
+  }))
+  default = []
+}
+
+variable "perimeter_additional_members" {
+  description = "The list of additional members to be added to the enforced perimeter access level members list. To be able to see the resources protected by the VPC Service Controls in the perimeter, add your user in this list. Entries must be in the standard GCP form: `user:email@example.com` or `serviceAccount:my-service-account@example.com`."
+  type        = list(string)
+  default     = []
+}
+
+variable "perimeter_additional_members_dry_run" {
+  description = "The list of additional members to be added to the dry-run perimeter access level members list. To be able to see the resources protected by the VPC Service Controls in the perimeter, add your user in this list. Entries must be in the standard GCP form: `user:email@example.com` or `serviceAccount:my-service-account@example.com`."
+  type        = list(string)
+  default     = []
 }

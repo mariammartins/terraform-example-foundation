@@ -35,6 +35,10 @@ module "env_secrets" {
   activate_apis               = ["logging.googleapis.com", "secretmanager.googleapis.com"]
   deletion_policy             = var.project_deletion_policy
 
+  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+
   labels = {
     environment       = var.env
     application_name  = "env-secrets"
@@ -49,4 +53,5 @@ module "env_secrets" {
   budget_alert_spent_percents = var.project_budget.secret_alert_spent_percents
   budget_amount               = var.project_budget.secret_budget_amount
   budget_alert_spend_basis    = var.project_budget.secret_budget_alert_spend_basis
+
 }

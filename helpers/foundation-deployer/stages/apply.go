@@ -193,22 +193,24 @@ func DeployBootstrapStage(t testing.TB, s steps.Steps, tfvars GlobalTFVars, c Co
 
 func DeployOrgStage(t testing.TB, s steps.Steps, tfvars GlobalTFVars, outputs BootstrapOutputs, c CommonConf) error {
 
-	createACMAPolicy := testutils.GetOrgACMPolicyID(t, tfvars.OrgID) == ""
+	accessContextManagerPolicyID := testutils.GetOrgACMPolicyID(t, tfvars.OrgID)
+	createACMAPolicy := accessContextManagerPolicyID == ""
 
 	orgTfvars := OrgTfvars{
-		DomainsToAllow:                        tfvars.DomainsToAllow,
-		EssentialContactsDomains:              tfvars.EssentialContactsDomains,
-		SccNotificationName:                   tfvars.SccNotificationName,
-		RemoteStateBucket:                     outputs.RemoteStateBucket,
-		EnableHubAndSpoke:                     tfvars.EnableHubAndSpoke,
-		CreateACMAPolicy:                      createACMAPolicy,
-		CreateUniqueTagKey:                    tfvars.CreateUniqueTagKey,
-		AuditLogsTableDeleteContentsOnDestroy: tfvars.AuditLogsTableDeleteContentsOnDestroy,
-		LogExportStorageForceDestroy:          tfvars.LogExportStorageForceDestroy,
-		LogExportStorageLocation:              tfvars.LogExportStorageLocation,
-		BillingExportDatasetLocation:          tfvars.BillingExportDatasetLocation,
-		FolderDeletionProtection:              tfvars.FolderDeletionProtection,
-		ProjectDeletionPolicy:                 tfvars.ProjectDeletionPolicy,
+		DomainsToAllow:               tfvars.DomainsToAllow,
+		EssentialContactsDomains:     tfvars.EssentialContactsDomains,
+		SccNotificationName:          tfvars.SccNotificationName,
+		RemoteStateBucket:            outputs.RemoteStateBucket,
+		EnableHubAndSpoke:            tfvars.EnableHubAndSpoke,
+		CreateACMAPolicy:             createACMAPolicy,
+		AccessContextManagerPolicyID: &accessContextManagerPolicyID,
+		CreateUniqueTagKey:           tfvars.CreateUniqueTagKey,
+		LogExportStorageForceDestroy: tfvars.LogExportStorageForceDestroy,
+		LogExportStorageLocation:     tfvars.LogExportStorageLocation,
+		BillingExportDatasetLocation: tfvars.BillingExportDatasetLocation,
+		FolderDeletionProtection:     tfvars.FolderDeletionProtection,
+		ProjectDeletionPolicy:        tfvars.ProjectDeletionPolicy,
+		PerimeterAdditionalMembers:   tfvars.PerimeterAdditionalMembers,
 	}
 	orgTfvars.GcpGroups = GcpGroups{}
 	if tfvars.HasOptionalGroupsCreation() {
@@ -288,9 +290,8 @@ func DeployNetworksStage(t testing.TB, s steps.Steps, tfvars GlobalTFVars, outpu
 	}
 	// common
 	commonTfvars := NetCommonTfvars{
-		Domain:                     tfvars.Domain,
-		PerimeterAdditionalMembers: tfvars.PerimeterAdditionalMembers,
-		RemoteStateBucket:          outputs.RemoteStateBucket,
+		Domain:            tfvars.Domain,
+		RemoteStateBucket: outputs.RemoteStateBucket,
 	}
 	if tfvars.EnableHubAndSpoke {
 		commonTfvars.EnableHubAndSpokeTransitivity = &tfvars.EnableHubAndSpokeTransitivity
@@ -328,7 +329,8 @@ func DeployNetworksStage(t testing.TB, s steps.Steps, tfvars GlobalTFVars, outpu
 func DeployProjectsStage(t testing.TB, s steps.Steps, tfvars GlobalTFVars, outputs BootstrapOutputs, c CommonConf) error {
 	// shared
 	sharedTfvars := ProjSharedTfvars{
-		DefaultRegion: tfvars.DefaultRegion,
+		DefaultRegion:         tfvars.DefaultRegion,
+		ProjectDeletionPolicy: tfvars.ProjectDeletionPolicy,
 	}
 	err := utils.WriteTfvars(filepath.Join(c.FoundationPath, ProjectsStep, "shared.auto.tfvars"), sharedTfvars)
 	if err != nil {
