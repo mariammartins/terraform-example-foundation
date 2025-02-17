@@ -43,10 +43,10 @@ variable "project_budget" {
   alert_spend_basis: The type of basis used to determine if spend has passed the threshold. Possible choices are `CURRENT_SPEND` or `FORECASTED_SPEND` (default).
   EOT
   type = object({
-    restricted_network_budget_amount            = optional(number, 1000)
-    restricted_network_alert_spent_percents     = optional(list(number), [1.2])
-    restricted_network_alert_pubsub_topic       = optional(string, null)
-    restricted_network_budget_alert_spend_basis = optional(string, "FORECASTED_SPEND")
+    shared_vpc_network_budget_amount            = optional(number, 1000)
+    shared_vpc_network_alert_spent_percents     = optional(list(number), [1.2])
+    shared_vpc_network_alert_pubsub_topic       = optional(string, null)
+    shared_vpc_network_budget_alert_spend_basis = optional(string, "FORECASTED_SPEND")
     secret_budget_amount                        = optional(number, 1000)
     secret_alert_spent_percents                 = optional(list(number), [1.2])
     secret_alert_pubsub_topic                   = optional(string, null)
