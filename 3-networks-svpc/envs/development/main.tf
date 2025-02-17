@@ -18,18 +18,18 @@ locals {
   env              = "development"
   environment_code = substr(local.env, 0, 1)
   /*
-   * Restricted network ranges
+   * Network ranges
    */
-  restricted_private_service_cidr = "10.16.40.0/21"
-  restricted_subnet_primary_ranges = {
+  private_service_cidr = "10.16.40.0/21"
+  subnet_primary_ranges = {
     (local.default_region1) = "10.8.64.0/18"
     (local.default_region2) = "10.9.64.0/18"
   }
-  restricted_subnet_proxy_ranges = {
+  subnet_proxy_ranges = {
     (local.default_region1) = "10.26.2.0/23"
     (local.default_region2) = "10.27.2.0/23"
   }
-  restricted_subnet_secondary_ranges = {
+  subnet_secondary_ranges = {
     (local.default_region1) = [
       {
         range_name    = "rn-${local.environment_code}-svpc-${local.default_region1}-gke-pod"
@@ -46,24 +46,24 @@ locals {
 module "base_env" {
   source = "../../modules/base_env"
 
-  env                                   = local.env
-  environment_code                      = local.environment_code
-  access_context_manager_policy_id      = var.access_context_manager_policy_id
-  perimeter_additional_members          = var.perimeter_additional_members
-  perimeter_additional_members_dry_run  = var.perimeter_additional_members_dry_run
-  default_region1                       = local.default_region1
-  default_region2                       = local.default_region2
-  domain                                = var.domain
-  ingress_policies                      = var.ingress_policies
-  ingress_policies_dry_run              = var.ingress_policies_dry_run
-  egress_policies                       = var.egress_policies
-  egress_policies_dry_run               = var.egress_policies_dry_run
-  enable_partner_interconnect           = false
-  restricted_private_service_cidr       = local.restricted_private_service_cidr
-  restricted_subnet_primary_ranges      = local.restricted_subnet_primary_ranges
-  restricted_subnet_proxy_ranges        = local.restricted_subnet_proxy_ranges
-  restricted_subnet_secondary_ranges    = local.restricted_subnet_secondary_ranges
-  restricted_private_service_connect_ip = "10.17.0.6"
-  remote_state_bucket                   = var.remote_state_bucket
-  tfc_org_name                          = var.tfc_org_name
+  env                                  = local.env
+  environment_code                     = local.environment_code
+  access_context_manager_policy_id     = var.access_context_manager_policy_id
+  perimeter_additional_members         = var.perimeter_additional_members
+  perimeter_additional_members_dry_run = var.perimeter_additional_members_dry_run
+  default_region1                      = local.default_region1
+  default_region2                      = local.default_region2
+  domain                               = var.domain
+  ingress_policies                     = var.ingress_policies
+  ingress_policies_dry_run             = var.ingress_policies_dry_run
+  egress_policies                      = var.egress_policies
+  egress_policies_dry_run              = var.egress_policies_dry_run
+  enable_partner_interconnect          = false
+  private_service_cidr                 = local.private_service_cidr
+  subnet_primary_ranges                = local.subnet_primary_ranges
+  subnet_proxy_ranges                  = local.subnet_proxy_ranges
+  subnet_secondary_ranges              = local.subnet_secondary_ranges
+  private_service_connect_ip           = "10.17.0.6"
+  remote_state_bucket                  = var.remote_state_bucket
+  tfc_org_name                         = var.tfc_org_name
 }
