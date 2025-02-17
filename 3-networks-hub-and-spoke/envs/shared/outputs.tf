@@ -15,6 +15,6 @@
  */
 
 output "dns_hub_project_id" {
-  value       = local.dns_hub_project_id
+  value       = local.shared_vpc_dns_hub_project_id
   description = "The DNS hub project ID"
 }

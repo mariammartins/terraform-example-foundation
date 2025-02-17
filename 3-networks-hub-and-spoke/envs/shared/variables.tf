@@ -20,7 +20,7 @@ variable "remote_state_bucket" {
 }
 
 variable "perimeter_additional_members" {
-  description = "The list of additional members to be added to the perimeter access level members list. To be able to see the resources protected by the VPC Service Controls in the restricted perimeter, add your user in this list. Entries must be in the standard GCP form: `user:email@example.com` or `serviceAccount:my-service-account@example.com`."
+  description = "The list of additional members to be added to the perimeter access level members list. To be able to see the resources protected by the VPC Service Controls in the Shared perimeter, add your user in this list. Entries must be in the standard GCP form: `user:email@example.com` or `serviceAccount:my-service-account@example.com`."
   type        = list(string)
 }
 
@@ -71,55 +71,55 @@ variable "target_name_server_addresses" {
   type        = list(map(any))
 }
 
-variable "restricted_hub_windows_activation_enabled" {
+variable "shared_vpc_hub_windows_activation_enabled" {
   type        = bool
-  description = "Enable Windows license activation for Windows workloads in Restricted Hub."
+  description = "Enable Windows license activation for Windows workloads in Shared Hub."
   default     = false
 }
 
-variable "restricted_hub_dns_enable_inbound_forwarding" {
+variable "shared_vpc_hub_dns_enable_inbound_forwarding" {
   type        = bool
-  description = "Toggle inbound query forwarding for Restricted Hub VPC DNS."
+  description = "Toggle inbound query forwarding for Shared Hub VPC DNS."
   default     = true
 }
 
-variable "restricted_hub_dns_enable_logging" {
+variable "shared_vpc_hub_dns_enable_logging" {
   type        = bool
-  description = "Toggle DNS logging for Restricted Hub VPC DNS."
+  description = "Toggle DNS logging for Shared Hub VPC DNS."
   default     = true
 }
 
-variable "restricted_hub_firewall_enable_logging" {
+variable "shared_vpc_hub_firewall_enable_logging" {
   type        = bool
-  description = "Toggle firewall logging for VPC Firewalls in Restricted Hub VPC."
+  description = "Toggle firewall logging for VPC Firewalls in Shared Hub VPC."
   default     = true
 }
 
-variable "restricted_hub_nat_enabled" {
+variable "shared_vpc_hub_nat_enabled" {
   type        = bool
-  description = "Toggle creation of NAT cloud router in Restricted Hub."
+  description = "Toggle creation of NAT cloud router in Shared Hub."
   default     = false
 }
 
-variable "restricted_hub_nat_bgp_asn" {
+variable "shared_vpc_hub_nat_bgp_asn" {
   type        = number
-  description = "BGP ASN for first NAT cloud routes in Restricted Hub."
+  description = "BGP ASN for first NAT cloud routes in Shared Hub."
   default     = 64514
 }
 
-variable "restricted_hub_nat_num_addresses_region1" {
+variable "shared_vpc_hub_nat_num_addresses_region1" {
   type        = number
-  description = "Number of external IPs to reserve for first Cloud NAT in Restricted Hub."
+  description = "Number of external IPs to reserve for first Cloud NAT in Shared Hub."
   default     = 2
 }
 
-variable "restricted_hub_nat_num_addresses_region2" {
+variable "shared_vpc_hub_nat_num_addresses_region2" {
   type        = number
-  description = "Number of external IPs to reserve for second Cloud NAT in Restricted Hub."
+  description = "Number of external IPs to reserve for second Cloud NAT in Shared Hub."
   default     = 2
 }
 
-variable "restricted_vpc_flow_logs" {
+variable "shared_vpc_vpc_flow_logs" {
   description = <<EOT
   enable_logging: set to true to enable VPC flow logging for the subnetworks.
   aggregation_interval: Toggles the aggregation interval for collecting flow logs. Increasing the interval time will reduce the amount of generated flow logs for long lasting connections. Possible values are: INTERVAL_5_SEC, INTERVAL_30_SEC, INTERVAL_1_MIN, INTERVAL_5_MIN, INTERVAL_10_MIN, INTERVAL_15_MIN.

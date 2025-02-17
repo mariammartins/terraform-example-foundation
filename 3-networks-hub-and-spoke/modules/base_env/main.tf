@@ -17,11 +17,9 @@
 locals {
   bgp_asn_number      = var.enable_partner_interconnect ? "16550" : "64514"
   enable_transitivity = var.enable_hub_and_spoke_transitivity
-  /*
-   * Restricted network ranges
-   */
-  restricted_subnet_aggregates = ["10.8.0.0/18", "10.9.0.0/18", "100.72.0.0/18", "100.73.0.0/18"]
-  restricted_hub_subnet_ranges = ["10.8.0.0/24", "10.9.0.0/24"]
+
+  subnet_aggregates = ["10.8.0.0/18", "10.9.0.0/18", "100.72.0.0/18", "100.73.0.0/18"]
+  hub_subnet_ranges = ["10.8.0.0/24", "10.9.0.0/24"]
 
   supported_restricted_service = [
     "accessapproval.googleapis.com",
@@ -153,20 +151,20 @@ locals {
 }
 
 /******************************************
- Restricted shared VPC
+ Shared VPC
 *****************************************/
-module "restricted_shared_vpc" {
-  source = "../restricted_shared_vpc"
+module "shared_vpc" {
+  source = "../shared_vpc"
 
-  project_id                        = local.restricted_project_id
-  project_number                    = local.restricted_project_number
-  dns_hub_project_id                = local.dns_hub_project_id
-  restricted_net_hub_project_id     = local.restricted_net_hub_project_id
-  restricted_net_hub_project_number = local.restricted_net_hub_project_number
-  environment_code                  = var.environment_code
-  access_context_manager_policy_id  = var.access_context_manager_policy_id
-  restricted_services               = local.restricted_services
-  restricted_services_dry_run       = local.restricted_services_dry_run
+  project_id                       = local.shared_vpc_project_id
+  project_number                   = local.shared_vpc_project_number
+  dns_hub_project_id               = local.dns_hub_project_id
+  net_hub_project_id               = local.shared_vpc_net_hub_project_id
+  net_hub_project_number           = local.shared_vpc_net_hub_project_number
+  environment_code                 = var.environment_code
+  access_context_manager_policy_id = var.access_context_manager_policy_id
+  restricted_services              = local.restricted_services
+  restricted_services_dry_run      = local.restricted_services_dry_run
   members = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
     "serviceAccount:${local.projects_service_account}",
@@ -177,8 +175,8 @@ module "restricted_shared_vpc" {
     "serviceAccount:${local.projects_service_account}",
     "serviceAccount:${local.organization_service_account}",
   ], var.perimeter_additional_members))
-  private_service_cidr       = var.restricted_private_service_cidr
-  private_service_connect_ip = var.restricted_private_service_connect_ip
+  private_service_cidr       = var.private_service_cidr
+  private_service_connect_ip = var.private_service_connect_ip
   ingress_policies           = var.ingress_policies
   egress_policies            = var.egress_policies
   bgp_asn_subnet             = local.bgp_asn_number
@@ -190,33 +188,33 @@ module "restricted_shared_vpc" {
   subnets = [
     {
       subnet_name                      = "sb-${var.environment_code}-svpc-${var.default_region1}"
-      subnet_ip                        = var.restricted_subnet_primary_ranges[var.default_region1]
+      subnet_ip                        = var.subnet_primary_ranges[var.default_region1]
       subnet_region                    = var.default_region1
       subnet_private_access            = "true"
       subnet_flow_logs                 = true
-      subnet_flow_logs_interval        = var.restricted_vpc_flow_logs.aggregation_interval
-      subnet_flow_logs_sampling        = var.restricted_vpc_flow_logs.flow_sampling
-      subnet_flow_logs_metadata        = var.restricted_vpc_flow_logs.metadata
-      subnet_flow_logs_metadata_fields = var.restricted_vpc_flow_logs.metadata_fields
-      subnet_flow_logs_filter          = var.restricted_vpc_flow_logs.filter_expr
+      subnet_flow_logs_interval        = var.shared_vpc_flow_logs.aggregation_interval
+      subnet_flow_logs_sampling        = var.shared_vpc_flow_logs.flow_sampling
+      subnet_flow_logs_metadata        = var.shared_vpc_flow_logs.metadata
+      subnet_flow_logs_metadata_fields = var.shared_vpc_flow_logs.metadata_fields
+      subnet_flow_logs_filter          = var.shared_vpc_flow_logs.filter_expr
       description                      = "First ${var.env} subnet example."
     },
     {
       subnet_name                      = "sb-${var.environment_code}-svpc-${var.default_region2}"
-      subnet_ip                        = var.restricted_subnet_primary_ranges[var.default_region2]
+      subnet_ip                        = var.subnet_primary_ranges[var.default_region2]
       subnet_region                    = var.default_region2
       subnet_private_access            = "true"
       subnet_flow_logs                 = true
-      subnet_flow_logs_interval        = var.restricted_vpc_flow_logs.aggregation_interval
-      subnet_flow_logs_sampling        = var.restricted_vpc_flow_logs.flow_sampling
-      subnet_flow_logs_metadata        = var.restricted_vpc_flow_logs.metadata
-      subnet_flow_logs_metadata_fields = var.restricted_vpc_flow_logs.metadata_fields
-      subnet_flow_logs_filter          = var.restricted_vpc_flow_logs.filter_expr
+      subnet_flow_logs_interval        = var.shared_vpc_flow_logs.aggregation_interval
+      subnet_flow_logs_sampling        = var.shared_vpc_flow_logs.flow_sampling
+      subnet_flow_logs_metadata        = var.shared_vpc_flow_logs.metadata
+      subnet_flow_logs_metadata_fields = var.shared_vpc_flow_logs.metadata_fields
+      subnet_flow_logs_filter          = var.shared_vpc_flow_logs.filter_expr
       description                      = "Second ${var.env} subnet example."
     },
     {
       subnet_name      = "sb-${var.environment_code}-svpc-${var.default_region1}-proxy"
-      subnet_ip        = var.restricted_subnet_proxy_ranges[var.default_region1]
+      subnet_ip        = var.subnet_proxy_ranges[var.default_region1]
       subnet_region    = var.default_region1
       subnet_flow_logs = false
       description      = "First ${var.env} proxy-only subnet example."
@@ -225,7 +223,7 @@ module "restricted_shared_vpc" {
     },
     {
       subnet_name      = "sb-${var.environment_code}-svpc-${var.default_region2}-proxy"
-      subnet_ip        = var.restricted_subnet_proxy_ranges[var.default_region2]
+      subnet_ip        = var.subnet_proxy_ranges[var.default_region2]
       subnet_region    = var.default_region2
       subnet_flow_logs = false
       description      = "Second ${var.env} proxy-only subnet example."
@@ -234,6 +232,6 @@ module "restricted_shared_vpc" {
     }
   ]
   secondary_ranges = {
-    "sb-${var.environment_code}-svpc-${var.default_region1}" = var.restricted_subnet_secondary_ranges[var.default_region1]
+    "sb-${var.environment_code}-svpc-${var.default_region1}" = var.subnet_secondary_ranges[var.default_region1]
   }
 }

@@ -27,7 +27,7 @@ locals {
         "identities"    = ["serviceAccount:${local.networks_service_account}"]
       },
       "to" = {
-        "resources" = ["projects/${local.interconnect_project_number}"]
+        "resources" = ["projects/${local.shared_vpc_interconnect_project_number}"]
         "operations" = {
           "compute.googleapis.com" = {
             "methods" = ["*"]

@@ -21,12 +21,12 @@ variable "access_context_manager_policy_id" {
 
 variable "project_id" {
   type        = string
-  description = "Project ID for Restricted Shared VPC."
+  description = "Project ID for Shared VPC."
 }
 
 variable "project_number" {
   type        = number
-  description = "Project number for Restricted Shared VPC. It is the project INSIDE the regular service perimeter."
+  description = "Project number for Shared VPC. It is the project INSIDE the regular service perimeter."
 }
 
 variable "dns_hub_project_id" {
@@ -34,15 +34,15 @@ variable "dns_hub_project_id" {
   description = "The DNS hub project ID"
 }
 
-variable "restricted_net_hub_project_id" {
+variable "net_hub_project_id" {
   type        = string
-  description = "The restricted net hub project ID"
+  description = "The net hub project ID"
   default     = ""
 }
 
-variable "restricted_net_hub_project_number" {
+variable "net_hub_project_number" {
   type        = string
-  description = "The restricted net hub project number"
+  description = "The net hub project number"
   default     = ""
 }
 

@@ -15,14 +15,12 @@
  */
 
 locals {
-  /*
-   * Restricted network ranges
-   */
-  restricted_subnet_primary_ranges = {
+
+  subnet_primary_ranges = {
     (local.default_region1) = "10.8.0.0/18"
     (local.default_region2) = "10.9.0.0/18"
   }
-  restricted_subnet_proxy_ranges = {
+  subnet_proxy_ranges = {
     (local.default_region1) = "10.26.0.0/23"
     (local.default_region2) = "10.27.0.0/23"
   }
@@ -157,15 +155,15 @@ locals {
 }
 
 /******************************************
-  Restricted Network VPC
+  Shared Network VPC
 *****************************************/
 
-module "restricted_shared_vpc" {
-  source = "../../modules/restricted_shared_vpc"
+module "shared_vpc" {
+  source = "../../modules/shared_vpc"
 
-  project_id                       = local.restricted_net_hub_project_id
-  project_number                   = local.restricted_net_hub_project_number
-  dns_hub_project_id               = local.dns_hub_project_id
+  project_id                       = local.shared_vpc_net_hub_project_id
+  project_number                   = local.shared_vpc_net_hub_project_number
+  dns_hub_project_id               = local.shared_vpc_dns_hub_project_id
   environment_code                 = local.environment_code
   private_service_connect_ip       = "10.17.0.5"
   access_context_manager_policy_id = var.access_context_manager_policy_id
@@ -185,46 +183,46 @@ module "restricted_shared_vpc" {
   default_region1               = local.default_region1
   default_region2               = local.default_region2
   domain                        = var.domain
-  dns_enable_inbound_forwarding = var.restricted_hub_dns_enable_inbound_forwarding
-  dns_enable_logging            = var.restricted_hub_dns_enable_logging
-  firewall_enable_logging       = var.restricted_hub_firewall_enable_logging
-  nat_enabled                   = var.restricted_hub_nat_enabled
-  nat_bgp_asn                   = var.restricted_hub_nat_bgp_asn
-  nat_num_addresses_region1     = var.restricted_hub_nat_num_addresses_region1
-  nat_num_addresses_region2     = var.restricted_hub_nat_num_addresses_region2
-  windows_activation_enabled    = var.restricted_hub_windows_activation_enabled
+  dns_enable_inbound_forwarding = var.shared_vpc_hub_dns_enable_inbound_forwarding
+  dns_enable_logging            = var.shared_vpc_hub_dns_enable_logging
+  firewall_enable_logging       = var.shared_vpc_hub_firewall_enable_logging
+  nat_enabled                   = var.shared_vpc_hub_nat_enabled
+  nat_bgp_asn                   = var.shared_vpc_hub_nat_bgp_asn
+  nat_num_addresses_region1     = var.shared_vpc_hub_nat_num_addresses_region1
+  nat_num_addresses_region2     = var.shared_vpc_hub_nat_num_addresses_region2
+  windows_activation_enabled    = var.shared_vpc_hub_windows_activation_enabled
   mode                          = "hub"
 
   subnets = [
     {
       subnet_name                      = "sb-c-svpc-hub-${local.default_region1}"
-      subnet_ip                        = local.restricted_subnet_primary_ranges[local.default_region1]
+      subnet_ip                        = local.subnet_primary_ranges[local.default_region1]
       subnet_region                    = local.default_region1
       subnet_private_access            = "true"
-      subnet_flow_logs                 = var.restricted_vpc_flow_logs.enable_logging
-      subnet_flow_logs_interval        = var.restricted_vpc_flow_logs.aggregation_interval
-      subnet_flow_logs_sampling        = var.restricted_vpc_flow_logs.flow_sampling
-      subnet_flow_logs_metadata        = var.restricted_vpc_flow_logs.metadata
-      subnet_flow_logs_metadata_fields = var.restricted_vpc_flow_logs.metadata_fields
-      subnet_flow_logs_filter          = var.restricted_vpc_flow_logs.filter_expr
+      subnet_flow_logs                 = var.shared_vpc_flow_logs.enable_logging
+      subnet_flow_logs_interval        = var.shared_vpc_flow_logs.aggregation_interval
+      subnet_flow_logs_sampling        = var.shared_vpc_flow_logs.flow_sampling
+      subnet_flow_logs_metadata        = var.shared_vpc_flow_logs.metadata
+      subnet_flow_logs_metadata_fields = var.shared_vpc_flow_logs.metadata_fields
+      subnet_flow_logs_filter          = var.shared_vpc_flow_logs.filter_expr
       description                      = "Restricted network hub subnet for ${local.default_region1}"
     },
     {
       subnet_name                      = "sb-c-svpc-hub-${local.default_region2}"
-      subnet_ip                        = local.restricted_subnet_primary_ranges[local.default_region2]
+      subnet_ip                        = local.subnet_primary_ranges[local.default_region2]
       subnet_region                    = local.default_region2
       subnet_private_access            = "true"
-      subnet_flow_logs                 = var.restricted_vpc_flow_logs.enable_logging
-      subnet_flow_logs_interval        = var.restricted_vpc_flow_logs.aggregation_interval
-      subnet_flow_logs_sampling        = var.restricted_vpc_flow_logs.flow_sampling
-      subnet_flow_logs_metadata        = var.restricted_vpc_flow_logs.metadata
-      subnet_flow_logs_metadata_fields = var.restricted_vpc_flow_logs.metadata_fields
-      subnet_flow_logs_filter          = var.restricted_vpc_flow_logs.filter_expr
+      subnet_flow_logs                 = var.shared_vpc_flow_logs.enable_logging
+      subnet_flow_logs_interval        = var.shared_vpc_flow_logs.aggregation_interval
+      subnet_flow_logs_sampling        = var.shared_vpc_flow_logs.flow_sampling
+      subnet_flow_logs_metadata        = var.shared_vpc_flow_logs.metadata
+      subnet_flow_logs_metadata_fields = var.shared_vpc_flow_logs.metadata_fields
+      subnet_flow_logs_filter          = var.shared_vpc_flow_logs.filter_expr
       description                      = "Restricted network hub subnet for ${local.default_region2}"
     },
     {
       subnet_name      = "sb-c-svpc-hub-${local.default_region1}-proxy"
-      subnet_ip        = local.restricted_subnet_proxy_ranges[local.default_region1]
+      subnet_ip        = local.subnet_proxy_ranges[local.default_region1]
       subnet_region    = local.default_region1
       subnet_flow_logs = false
       description      = "Restricted network hub proxy-only subnet for ${local.default_region1}"
@@ -233,7 +231,7 @@ module "restricted_shared_vpc" {
     },
     {
       subnet_name      = "sb-c-svpc-hub-${local.default_region2}-proxy"
-      subnet_ip        = local.restricted_subnet_proxy_ranges[local.default_region2]
+      subnet_ip        = local.subnet_proxy_ranges[local.default_region2]
       subnet_region    = local.default_region2
       subnet_flow_logs = false
       description      = "Restricted network hub proxy-only subnet for ${local.default_region2}"

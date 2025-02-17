@@ -26,7 +26,7 @@ locals {
       "100.65.0.0/16"
     ]
   }
-  restricted_regional_aggregates = {
+  regional_aggregates = {
     (local.default_region1) = [
       "10.8.0.0/16",
       "100.72.0.0/16"
@@ -39,19 +39,19 @@ locals {
 }
 
 /*
- * Restricted Network Transitivity
+ * Network Transitivity
  */
 
-module "restricted_transitivity" {
+module "network_transitivity" {
   source = "../../modules/transitivity"
   count  = local.enable_transitivity ? 1 : 0
 
-  project_id          = local.restricted_net_hub_project_id
-  regions             = keys(local.restricted_subnet_primary_ranges)
-  vpc_name            = module.restricted_shared_vpc.network_name
-  gw_subnets          = { for region in keys(local.restricted_subnet_primary_ranges) : region => "sb-c-svpc-hub-${region}" }
-  regional_aggregates = local.restricted_regional_aggregates
-  firewall_policy     = module.restricted_shared_vpc.firewall_policy
+  project_id          = local.shared_vpc_net_hub_project_id
+  regions             = keys(local.subnet_primary_ranges)
+  vpc_name            = module.shared_vpc.network_name
+  gw_subnets          = { for region in keys(local.subnet_primary_ranges) : region => "sb-c-svpc-hub-${region}" }
+  regional_aggregates = local.regional_aggregates
+  firewall_policy     = module.shared_vpc.firewall_policy
   commands = [
     # Accept all ICMP (troubleshooting)
     "iptables -A INPUT -p icmp -j ACCEPT",
@@ -63,12 +63,12 @@ module "restricted_transitivity" {
     "iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT",
     # Accept all transit traffic from internal ranges
     # Replace by actual multiple source/destination/proto/ports rules for fine-grained ACLs.
-    "iptables -A FORWARD -s ${join(",", flatten(values(local.restricted_regional_aggregates)))} -d ${join(",", flatten(values(local.restricted_regional_aggregates)))} -j ACCEPT",
+    "iptables -A FORWARD -s ${join(",", flatten(values(local.regional_aggregates)))} -d ${join(",", flatten(values(local.regional_aggregates)))} -j ACCEPT",
     # Drop everything else
     "iptables -A FORWARD -j DROP",
     # SNAT traffic not to the local eth0 interface
     "iptables -t nat -A POSTROUTING ! -d $(curl -H \"Metadata-Flavor: Google\" http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip) -j MASQUERADE",
   ]
 
-  depends_on = [module.restricted_shared_vpc]
+  depends_on = [module.shared_vpc]
 }

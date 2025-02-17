@@ -22,7 +22,7 @@ module "dns_hub_vpc" {
   source  = "terraform-google-modules/network/google"
   version = "~> 9.0"
 
-  project_id                             = local.dns_hub_project_id
+  project_id                             = local.shared_vpc_dns_hub_project_id
   network_name                           = "vpc-net-dns"
   shared_vpc_host                        = "false"
   delete_default_internet_gateway_routes = "true"
@@ -67,7 +67,7 @@ module "dns_hub_vpc" {
  *****************************************/
 
 resource "google_dns_policy" "default_policy" {
-  project                   = local.dns_hub_project_id
+  project                   = local.shared_vpc_dns_hub_project_id
   name                      = "dp-dns-hub-default-policy"
   enable_inbound_forwarding = true
   enable_logging            = var.dns_enable_logging
@@ -84,7 +84,7 @@ module "dns-forwarding-zone" {
   source  = "terraform-google-modules/cloud-dns/google"
   version = "~> 5.0"
 
-  project_id = local.dns_hub_project_id
+  project_id = local.shared_vpc_dns_hub_project_id
   type       = "forwarding"
   name       = "fz-dns-hub"
   domain     = var.domain
@@ -104,7 +104,7 @@ module "dns_hub_region1_router1" {
   version = "~> 6.0"
 
   name    = "cr-net-dns-${local.default_region1}-cr1"
-  project = local.dns_hub_project_id
+  project = local.shared_vpc_dns_hub_project_id
   network = module.dns_hub_vpc.network_name
   region  = local.default_region1
   bgp = {
@@ -118,7 +118,7 @@ module "dns_hub_region1_router2" {
   version = "~> 6.0"
 
   name    = "cr-net-dns-${local.default_region1}-cr2"
-  project = local.dns_hub_project_id
+  project = local.shared_vpc_dns_hub_project_id
   network = module.dns_hub_vpc.network_name
   region  = local.default_region1
   bgp = {
@@ -132,7 +132,7 @@ module "dns_hub_region2_router1" {
   version = "~> 6.0"
 
   name    = "cr-net-dns-${local.default_region2}-cr3"
-  project = local.dns_hub_project_id
+  project = local.shared_vpc_dns_hub_project_id
   network = module.dns_hub_vpc.network_name
   region  = local.default_region2
   bgp = {
@@ -146,7 +146,7 @@ module "dns_hub_region2_router2" {
   version = "~> 6.0"
 
   name    = "cr-net-dns-${local.default_region2}-cr4"
-  project = local.dns_hub_project_id
+  project = local.shared_vpc_dns_hub_project_id
   network = module.dns_hub_vpc.network_name
   region  = local.default_region2
   bgp = {
