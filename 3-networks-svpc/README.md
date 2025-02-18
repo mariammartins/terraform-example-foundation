@@ -281,11 +281,11 @@ See `0-bootstrap` [README-GitHub.md](../0-bootstrap/README-GitHub.md#deploying-s
 
 ### Run Terraform locally
 
-1. The next instructions assume that you are at the same level of the `terraform-example-foundation` folder. Create and change into `gcp-network` folder, copy `3-networks-dual-svpc` content, the Terraform wrapper script and ensure it can be executed. Also, initialize git so you can manage versions locally.
+1. The next instructions assume that you are at the same level of the `terraform-example-foundation` folder. Create and change into `gcp-network` folder, copy `3-networks-svpc` content, the Terraform wrapper script and ensure it can be executed. Also, initialize git so you can manage versions locally.
 
    ```bash
    mkdir gcp-network
-   cp -R terraform-example-foundation/3-networks-dual-svpc/* gcp-network
+   cp -R terraform-example-foundation/3-networks-svpc/* gcp-network
    cp terraform-example-foundation/build/tf-wrapper.sh gcp-network/
    cp terraform-example-foundation/.gitignore gcp-network/
    chmod 755 ./gcp-network/tf-wrapper.sh
