@@ -156,11 +156,11 @@ locals {
 module "shared_vpc" {
   source = "../shared_vpc"
 
-  project_id                       = local.shared_vpc_project_id
-  project_number                   = local.shared_vpc_project_number
+  project_id                       = local.project_id
+  project_number                   = local.project_number
   dns_hub_project_id               = local.dns_hub_project_id
-  net_hub_project_id               = local.shared_vpc_net_hub_project_id
-  net_hub_project_number           = local.shared_vpc_net_hub_project_number
+  net_hub_project_id               = local.net_hub_project_id
+  net_hub_project_number           = local.net_hub_project_number
   environment_code                 = var.environment_code
   access_context_manager_policy_id = var.access_context_manager_policy_id
   restricted_services              = local.restricted_services
@@ -192,11 +192,11 @@ module "shared_vpc" {
       subnet_region                    = var.default_region1
       subnet_private_access            = "true"
       subnet_flow_logs                 = true
-      subnet_flow_logs_interval        = var.shared_vpc_flow_logs.aggregation_interval
-      subnet_flow_logs_sampling        = var.shared_vpc_flow_logs.flow_sampling
-      subnet_flow_logs_metadata        = var.shared_vpc_flow_logs.metadata
-      subnet_flow_logs_metadata_fields = var.shared_vpc_flow_logs.metadata_fields
-      subnet_flow_logs_filter          = var.shared_vpc_flow_logs.filter_expr
+      subnet_flow_logs_interval        = var.vpc_flow_logs.aggregation_interval
+      subnet_flow_logs_sampling        = var.vpc_flow_logs.flow_sampling
+      subnet_flow_logs_metadata        = var.vpc_flow_logs.metadata
+      subnet_flow_logs_metadata_fields = var.vpc_flow_logs.metadata_fields
+      subnet_flow_logs_filter          = var.vpc_flow_logs.filter_expr
       description                      = "First ${var.env} subnet example."
     },
     {
@@ -205,11 +205,11 @@ module "shared_vpc" {
       subnet_region                    = var.default_region2
       subnet_private_access            = "true"
       subnet_flow_logs                 = true
-      subnet_flow_logs_interval        = var.shared_vpc_flow_logs.aggregation_interval
-      subnet_flow_logs_sampling        = var.shared_vpc_flow_logs.flow_sampling
-      subnet_flow_logs_metadata        = var.shared_vpc_flow_logs.metadata
-      subnet_flow_logs_metadata_fields = var.shared_vpc_flow_logs.metadata_fields
-      subnet_flow_logs_filter          = var.shared_vpc_flow_logs.filter_expr
+      subnet_flow_logs_interval        = var.vpc_flow_logs.aggregation_interval
+      subnet_flow_logs_sampling        = var.vpc_flow_logs.flow_sampling
+      subnet_flow_logs_metadata        = var.vpc_flow_logs.metadata
+      subnet_flow_logs_metadata_fields = var.vpc_flow_logs.metadata_fields
+      subnet_flow_logs_filter          = var.vpc_flow_logs.filter_expr
       description                      = "Second ${var.env} subnet example."
     },
     {

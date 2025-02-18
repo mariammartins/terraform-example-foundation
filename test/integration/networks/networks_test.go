@@ -62,7 +62,7 @@ func getNetworkResourceNames(envCode string, networkMode string, firewallMode st
 			"region1_router2":       fmt.Sprintf("cr-%s-svpc%s-us-central1-cr6", envCode, networkMode),
 			"region2_router1":       fmt.Sprintf("cr-%s-svpc%s-us-west1-cr7", envCode, networkMode),
 			"region2_router2":       fmt.Sprintf("cr-%s-svpc%s-us-west1-cr8", envCode, networkMode),
-			"firewall_policy":       fmt.Sprintf("fp-%s-%s-restricted-firewalls", envCode, firewallMode),
+			"firewall_policy":       fmt.Sprintf("fp-%s-%s-firewalls", envCode, firewallMode),
 			"fw_deny_all_egress":    fmt.Sprintf("fw-%s-svpc-65530-e-d-all-all-all", envCode),
 			"fw_allow_api_egress":   fmt.Sprintf("fw-%s-svpc-1000-e-a-allow-google-apis-all-tcp-443", envCode),
 		},

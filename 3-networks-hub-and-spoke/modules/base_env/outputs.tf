@@ -14,52 +14,48 @@
  * limitations under the License.
  */
 
-/*********************
- Restricted Outputs
-*********************/
-
-output "shared_host_project_id" {
-  value       = local.shared_vpc_project_id
+output "host_project_id" {
+  value       = local.project_id
   description = "The host project ID"
 }
 
-output "restricted_shared_vpc_network_name" {
-  value       = module.shared_vpc.restricted_network_name
+output "network_name" {
+  value       = module.shared_vpc.network_name
   description = "The name of the VPC being created"
 }
 
-output "restricted_network_self_link" {
-  value       = module.shared_vpc.restricted_network_self_link
+output "network_self_link" {
+  value       = module.shared_vpc.network_self_link
   description = "The URI of the VPC being created"
 }
 
-output "restricted_subnets_names" {
-  value       = module.shared_vpc.restricted_subnets_names
+output "subnets_names" {
+  value       = module.shared_vpc.subnets_names
   description = "The names of the subnets being created"
 }
 
-output "restricted_subnets_ips" {
-  value       = module.shared_vpc.restricted_subnets_ips
+output "subnets_ips" {
+  value       = module.shared_vpc.subnets_ips
   description = "The IPs and CIDRs of the subnets being created"
 }
 
-output "restricted_subnets_self_links" {
-  value       = module.shared_vpc.restricted_subnets_self_links
+output "subnets_self_links" {
+  value       = module.shared_vpc.subnets_self_links
   description = "The self-links of subnets being created"
 }
 
-output "restricted_subnets_secondary_ranges" {
-  value       = module.shared_vpc.restricted_subnets_secondary_ranges
+output "subnets_secondary_ranges" {
+  value       = module.shared_vpc.subnets_secondary_ranges
   description = "The secondary ranges associated with these subnets"
 }
 
-output "restricted_access_level_name" {
-  value       = module.shared_vpc.restricted_access_level_name
+output "access_level_name" {
+  value       = module.shared_vpc.access_level_name
   description = "Access context manager access level name for the enforced perimeter"
 }
 
-output "restricted_access_level_name_dry_run" {
-  value       = module.shared_vpc.restricted_access_level_name_dry_run
+output "access_level_name_dry_run" {
+  value       = module.shared_vpc.access_level_name_dry_run
   description = "Access context manager access level name for the dry-run perimeter"
 }
 
@@ -69,6 +65,6 @@ output "enforce_vpcsc" {
 }
 
 output "service_perimeter_name" {
-  value       = module.shared_vpc.restricted_service_perimeter_name
+  value       = module.shared_vpc.service_perimeter_name
   description = "Access context manager service perimeter name for the enforced perimeter"
 }

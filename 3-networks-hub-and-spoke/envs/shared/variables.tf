@@ -71,55 +71,55 @@ variable "target_name_server_addresses" {
   type        = list(map(any))
 }
 
-variable "shared_vpc_hub_windows_activation_enabled" {
+variable "hub_windows_activation_enabled" {
   type        = bool
   description = "Enable Windows license activation for Windows workloads in Shared Hub."
   default     = false
 }
 
-variable "shared_vpc_hub_dns_enable_inbound_forwarding" {
+variable "hub_dns_enable_inbound_forwarding" {
   type        = bool
   description = "Toggle inbound query forwarding for Shared Hub VPC DNS."
   default     = true
 }
 
-variable "shared_vpc_hub_dns_enable_logging" {
+variable "hub_dns_enable_logging" {
   type        = bool
   description = "Toggle DNS logging for Shared Hub VPC DNS."
   default     = true
 }
 
-variable "shared_vpc_hub_firewall_enable_logging" {
+variable "hub_firewall_enable_logging" {
   type        = bool
   description = "Toggle firewall logging for VPC Firewalls in Shared Hub VPC."
   default     = true
 }
 
-variable "shared_vpc_hub_nat_enabled" {
+variable "hub_nat_enabled" {
   type        = bool
   description = "Toggle creation of NAT cloud router in Shared Hub."
   default     = false
 }
 
-variable "shared_vpc_hub_nat_bgp_asn" {
+variable "hub_nat_bgp_asn" {
   type        = number
   description = "BGP ASN for first NAT cloud routes in Shared Hub."
   default     = 64514
 }
 
-variable "shared_vpc_hub_nat_num_addresses_region1" {
+variable "hub_nat_num_addresses_region1" {
   type        = number
   description = "Number of external IPs to reserve for first Cloud NAT in Shared Hub."
   default     = 2
 }
 
-variable "shared_vpc_hub_nat_num_addresses_region2" {
+variable "hub_nat_num_addresses_region2" {
   type        = number
   description = "Number of external IPs to reserve for second Cloud NAT in Shared Hub."
   default     = 2
 }
 
-variable "shared_vpc_vpc_flow_logs" {
+variable "vpc_flow_logs" {
   description = <<EOT
   enable_logging: set to true to enable VPC flow logging for the subnetworks.
   aggregation_interval: Toggles the aggregation interval for collecting flow logs. Increasing the interval time will reduce the amount of generated flow logs for long lasting connections. Possible values are: INTERVAL_5_SEC, INTERVAL_30_SEC, INTERVAL_1_MIN, INTERVAL_5_MIN, INTERVAL_10_MIN, INTERVAL_15_MIN.

@@ -15,7 +15,7 @@
  */
 
 locals {
-  prefix                    = "${var.environment_code}_shared_restricted"
+  prefix                    = "${var.environment_code}_shared_vpc"
   access_level_name         = "alp_${local.prefix}_members_${random_id.random_access_level_suffix.hex}"
   access_level_name_dry_run = "alp_${local.prefix}_members_dry_run_${random_id.random_access_level_suffix.hex}"
   perimeter_name            = "sp_${local.prefix}_default_perimeter_${random_id.random_access_level_suffix.hex}"
