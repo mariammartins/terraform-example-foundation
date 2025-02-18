@@ -276,10 +276,10 @@ module "dns_hub" {
 }
 
 /******************************************
-  Project for Restricted Network Hub
+  Project for Network Hub
 *****************************************/
 
-module "restricted_network_hub" {
+module "network_hub" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 17.0"
   count   = var.enable_hub_and_spoke ? 1 : 0
@@ -287,7 +287,7 @@ module "restricted_network_hub" {
   random_project_id        = true
   random_project_id_length = 4
   default_service_account  = "deprivilege"
-  name                     = "${local.project_prefix}-net-hub-restricted"
+  name                     = "${local.project_prefix}-net-hub"
   org_id                   = local.org_id
   billing_account          = local.billing_account
   folder_id                = google_folder.network.id
@@ -304,25 +304,24 @@ module "restricted_network_hub" {
 
   labels = {
     environment       = "network"
-    application_name  = "org-net-hub-restricted"
+    application_name  = "org-net-hub"
     billing_code      = "1234"
     primary_contact   = "example1"
     secondary_contact = "example2"
     business_code     = "shared"
     env_code          = "net"
-    vpc               = "restricted"
   }
-  budget_alert_pubsub_topic   = var.project_budget.restricted_net_hub_alert_pubsub_topic
-  budget_alert_spent_percents = var.project_budget.restricted_net_hub_alert_spent_percents
-  budget_amount               = var.project_budget.restricted_net_hub_budget_amount
-  budget_alert_spend_basis    = var.project_budget.restricted_net_hub_budget_alert_spend_basis
+  budget_alert_pubsub_topic   = var.project_budget.net_hub_alert_pubsub_topic
+  budget_alert_spent_percents = var.project_budget.net_hub_alert_spent_percents
+  budget_amount               = var.project_budget.net_hub_budget_amount
+  budget_alert_spend_basis    = var.project_budget.net_hub_budget_alert_spend_basis
 }
 
 /************************************************************
-Restricted Network Project for each Environment
+Network Project for each Environment
 ************************************************************/
 
-module "restricted_environment_network" {
+module "environment_network" {
   source   = "../../modules/network"
   for_each = local.environments
 
@@ -337,10 +336,10 @@ module "restricted_environment_network" {
   env_code = each.value
 
   project_budget = {
-    restricted_network_budget_amount            = var.project_budget.restricted_network_budget_amount
-    restricted_network_alert_spent_percents     = var.project_budget.restricted_network_alert_spent_percents
-    restricted_network_alert_pubsub_topic       = var.project_budget.restricted_network_alert_pubsub_topic
-    restricted_network_budget_alert_spend_basis = var.project_budget.restricted_network_budget_alert_spend_basis
+    network_budget_amount            = var.project_budget.network_budget_amount
+    network_alert_spent_percents     = var.project_budget.network_alert_spent_percents
+    network_alert_pubsub_topic       = var.project_budget.network_alert_pubsub_topic
+    network_budget_alert_spend_basis = var.project_budget.network_budget_alert_spend_basis
   }
 }
 
@@ -348,10 +347,10 @@ module "restricted_environment_network" {
   Roles granted to the networks SA for Hub and Spoke network topology
 *********************************************************************/
 
-resource "google_project_iam_member" "network_sa_restricted" {
+resource "google_project_iam_member" "network_sa" {
   for_each = toset(var.enable_hub_and_spoke ? local.hub_and_spoke_roles : [])
 
-  project = module.restricted_network_hub[0].project_id
+  project = module.network_hub[0].project_id
   role    = each.key
   member  = "serviceAccount:${local.networks_step_terraform_service_account_email}"
 }
