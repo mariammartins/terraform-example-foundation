@@ -48,7 +48,7 @@ func getFirewallMode(t *testing.T) string {
 
 func getNetworkResourceNames(envCode string, networkMode string, firewallMode string) map[string]map[string]string {
 	return map[string]map[string]string{
-		"restricted": {
+		"svpc": {
 			"network_name":          fmt.Sprintf("vpc-%s-svpc%s", envCode, networkMode),
 			"global_address":        fmt.Sprintf("ga-%s-svpc%s-vpc-peering-internal", envCode, networkMode),
 			"dns_zone_googleapis":   fmt.Sprintf("dz-%s-svpc-apis", envCode),
@@ -217,25 +217,25 @@ func TestNetworks(t *testing.T) {
 
 	cidrRanges := map[string]map[string][]string{
 		"development": {
-			"restricted": []string{"10.8.64.0/18", "10.9.64.0/18"},
+			"svpc": []string{"10.8.64.0/18", "10.9.64.0/18"},
 		},
 		"nonproduction": {
-			"restricted": []string{"10.8.128.0/18", "10.9.128.0/18"},
+			"svpc": []string{"10.8.128.0/18", "10.9.128.0/18"},
 		},
 		"production": {
-			"restricted": []string{"10.8.192.0/18", "10.9.192.0/18"},
+			"svpc": []string{"10.8.192.0/18", "10.9.192.0/18"},
 		},
 	}
 
 	googleapisCIDR := map[string]map[string]string{
 		"development": {
-			"restricted": "10.17.0.6",
+			"svpc": "10.17.0.6",
 		},
 		"nonproduction": {
-			"restricted": "10.17.0.7",
+			"svpc": "10.17.0.7",
 		},
 		"production": {
-			"restricted": "10.17.0.8",
+			"svpc": "10.17.0.8",
 		},
 	}
 
@@ -338,7 +338,7 @@ func TestNetworks(t *testing.T) {
 					}
 
 					for _, networkType := range []string{
-						"restricted",
+						"svpc",
 					} {
 						projectID := networks.GetStringOutput(fmt.Sprintf("%s_host_project_id", networkType))
 
