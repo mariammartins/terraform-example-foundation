@@ -63,27 +63,27 @@ variable "enable_partner_interconnect" {
 
 variable "private_service_cidr" {
   type        = string
-  description = "CIDR range for private service networking. Used for Cloud SQL and other managed services in the Restricted Shared Vpc."
+  description = "CIDR range for private service networking. Used for Cloud SQL and other managed services in the Shared Vpc."
 }
 
 variable "subnet_primary_ranges" {
   type        = map(string)
-  description = "The base subnet primary IPTs ranges to the Restricted Shared Vpc."
+  description = "The base subnet primary IPTs ranges to the Shared Vpc."
 }
 
 variable "subnet_proxy_ranges" {
   type        = map(string)
-  description = "The base proxy-only subnet primary IPTs ranges to the Restricted Shared Vpc."
+  description = "The base proxy-only subnet primary IPTs ranges to the Shared Vpc."
 }
 
 variable "subnet_secondary_ranges" {
   type        = map(list(map(string)))
-  description = "The base subnet secondary IPTs ranges to the Restricted Shared Vpc"
+  description = "The base subnet secondary IPTs ranges to the Shared Vpc"
 }
 
 variable "private_service_connect_ip" {
   type        = string
-  description = "The base subnet internal IP to be used as the private service connect endpoint in the Restricted Shared VPC"
+  description = "The base subnet internal IP to be used as the private service connect endpoint in the Shared VPC"
 }
 
 variable "vpc_flow_logs" {

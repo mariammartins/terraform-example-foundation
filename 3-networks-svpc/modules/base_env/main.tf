@@ -213,11 +213,11 @@ module "shared_vpc" {
       subnet_region                    = var.default_region1
       subnet_private_access            = "true"
       subnet_flow_logs                 = true
-      subnet_flow_logs_interval        = var.shared_vpc_flow_logs.aggregation_interval
-      subnet_flow_logs_sampling        = var.shared_vpc_flow_logs.flow_sampling
-      subnet_flow_logs_metadata        = var.shared_vpc_flow_logs.metadata
-      subnet_flow_logs_metadata_fields = var.shared_vpc_flow_logs.metadata_fields
-      subnet_flow_logs_filter          = var.shared_vpc_flow_logs.filter_expr
+      subnet_flow_logs_interval        = var.vpc_flow_logs.aggregation_interval
+      subnet_flow_logs_sampling        = var.vpc_flow_logs.flow_sampling
+      subnet_flow_logs_metadata        = var.vpc_flow_logs.metadata
+      subnet_flow_logs_metadata_fields = var.vpc_flow_logs.metadata_fields
+      subnet_flow_logs_filter          = var.vpc_flow_logs.filter_expr
       description                      = "First ${var.env} subnet example."
     },
     {
@@ -226,11 +226,11 @@ module "shared_vpc" {
       subnet_region                    = var.default_region2
       subnet_private_access            = "true"
       subnet_flow_logs                 = true
-      subnet_flow_logs_interval        = var.shared_vpc_flow_logs.aggregation_interval
-      subnet_flow_logs_sampling        = var.shared_vpc_flow_logs.flow_sampling
-      subnet_flow_logs_metadata        = var.shared_vpc_flow_logs.metadata
-      subnet_flow_logs_metadata_fields = var.shared_vpc_flow_logs.metadata_fields
-      subnet_flow_logs_filter          = var.shared_vpc_flow_logs.filter_expr
+      subnet_flow_logs_interval        = var.vpc_flow_logs.aggregation_interval
+      subnet_flow_logs_sampling        = var.vpc_flow_logs.flow_sampling
+      subnet_flow_logs_metadata        = var.vpc_flow_logs.metadata
+      subnet_flow_logs_metadata_fields = var.vpc_flow_logs.metadata_fields
+      subnet_flow_logs_filter          = var.vpc_flow_logs.filter_expr
       description                      = "Second ${var.env} subnet example."
     },
     {
