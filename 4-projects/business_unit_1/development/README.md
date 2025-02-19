@@ -29,9 +29,9 @@
 | peering\_project | Project sample peering project id. |
 | peering\_subnetwork\_self\_link | The subnetwork self link of the peering network. |
 | restricted\_enabled\_apis | Activated APIs. |
-| restricted\_shared\_vpc\_project | Project sample restricted project id. |
-| restricted\_shared\_vpc\_project\_number | Project sample restricted project. |
-| restricted\_subnets\_self\_links | The self-links of subnets from restricted environment. |
+| shared\_vpc\_project | Project sample shared vpc project id. |
+| shared\_vpc\_project\_number | Project sample shared vpc project. |
+| subnets\_self\_links | The self-links of subnets from environment. |
 | vpc\_service\_control\_perimeter\_name | VPC Service Control name. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

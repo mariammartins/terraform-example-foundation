@@ -29,18 +29,18 @@ output "peering_network" {
   value       = module.peering.peer_network_peering
 }
 
-output "restricted_shared_vpc_project" {
+output "shared_vpc_project" {
   description = "Project sample restricted project id."
-  value       = module.restricted_shared_vpc_project.project_id
+  value       = module.shared_vpc_project.project_id
 }
 
-output "restricted_shared_vpc_project_number" {
-  description = "Project sample restricted project."
-  value       = module.restricted_shared_vpc_project.project_number
+output "shared_vpc_project_number" {
+  description = "Project sample shared vpc project."
+  value       = module.shared_vpc_project.project_number
 }
 
-output "restricted_subnets_self_links" {
-  value       = local.restricted_subnets_self_links
+output "subnets_self_links" {
+  value       = local.subnets_self_links
   description = "The self-links of subnets from restricted environment."
 }
 
@@ -56,7 +56,7 @@ output "access_context_manager_policy_id" {
 
 output "restricted_enabled_apis" {
   description = "Activated APIs."
-  value       = module.restricted_shared_vpc_project.enabled_apis
+  value       = module.shared_vpc_project.enabled_apis
 }
 
 output "peering_complete" {
