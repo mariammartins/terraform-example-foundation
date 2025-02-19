@@ -74,22 +74,22 @@ variable "private_service_cidr" {
 
 variable "subnet_primary_ranges" {
   type        = map(string)
-  description = "The base subnet primary IPTs ranges to the Shared Vpc."
+  description = "The subnet primary IPTs ranges to the Shared Vpc."
 }
 
 variable "subnet_proxy_ranges" {
   type        = map(string)
-  description = "The base proxy-only subnet primary IPTs ranges to the Shared Vpc."
+  description = "The proxy-only subnet primary IPTs ranges to the Shared Vpc."
 }
 
 variable "subnet_secondary_ranges" {
   type        = map(list(map(string)))
-  description = "The base subnet secondary IPTs ranges to the Shared Vpc"
+  description = "The subnet secondary IPTs ranges to the Shared Vpc"
 }
 
 variable "private_service_connect_ip" {
   type        = string
-  description = "The base subnet internal IP to be used as the private service connect endpoint in the Shared VPC"
+  description = "The subnet internal IP to be used as the private service connect endpoint in the Shared VPC"
 }
 
 variable "vpc_flow_logs" {

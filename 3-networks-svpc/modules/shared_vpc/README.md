@@ -27,8 +27,8 @@
 | nat\_num\_addresses\_region2 | Number of external IPs to reserve for region 2 Cloud NAT. | `number` | `2` | no |
 | private\_service\_cidr | CIDR range for private service networking. Used for Cloud SQL and other managed services. | `string` | `null` | no |
 | private\_service\_connect\_ip | Internal IP to be used as the private service connect endpoint. | `string` | n/a | yes |
-| project\_id | Project ID for Restricted Shared VPC. | `string` | n/a | yes |
-| project\_number | Project number for Restricted Shared VPC. It is the project INSIDE the regular service perimeter. | `number` | n/a | yes |
+| project\_id | Project ID for Shared VPC. | `string` | n/a | yes |
+| project\_number | Project number for Shared VPC. It is the project INSIDE the regular service perimeter. | `number` | n/a | yes |
 | restricted\_services | List of services to restrict in an enforced perimeter. | `list(string)` | n/a | yes |
 | restricted\_services\_dry\_run | List of services to restrict in a dry-run perimeter. | `list(string)` | n/a | yes |
 | secondary\_ranges | Secondary ranges that will be used in some of the subnets | `map(list(object({ range_name = string, ip_cidr_range = string })))` | `{}` | no |

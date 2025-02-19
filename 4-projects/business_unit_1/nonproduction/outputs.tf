@@ -30,7 +30,7 @@ output "peering_network" {
 }
 
 output "shared_vpc_project" {
-  description = "Project sample restricted project id."
+  description = "Project sample project id."
   value       = module.env.shared_vpc_project
 }
 
@@ -41,7 +41,7 @@ output "shared_vpc_project_number" {
 
 output "subnets_self_links" {
   value       = module.env.subnets_self_links
-  description = "The self-links of subnets from restricted environment."
+  description = "The self-links of subnets from environment."
 }
 
 output "vpc_service_control_perimeter_name" {

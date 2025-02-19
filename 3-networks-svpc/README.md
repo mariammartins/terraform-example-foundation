@@ -26,14 +26,14 @@ Google Cloud organization that you've created.</td>
 </tr>
 <tr>
 <td><a>3-networks-svpc (this file)</a></td>
-<td>Sets up restricted shared VPCs with default DNS, NAT (optional),
+<td>Sets up shared VPCs with default DNS, NAT (optional),
 Private Service networking, VPC service controls, on-premises Dedicated
 Interconnect, and baseline firewall rules for each environment. It also sets
 up the global DNS hub.</td>
 </tr>
 <tr>
 <td><a href="../3-networks-hub-and-spoke">3-networks-hub-and-spoke</a></td>
-<td>Sets up restricted shared VPCs with all the default configuration
+<td>Sets up shared VPCs with all the default configuration
 found on step 3-networks-svpc, but here the architecture will be based on the
 Hub and Spoke network model. It also sets up the global DNS hub</td>
 </tr>
@@ -58,7 +58,7 @@ For an overview of the architecture and the parts, see the
 The purpose of this step is to:
 
 - Set up the global [DNS Hub](https://cloud.google.com/blog/products/networking/cloud-forwarding-peering-and-zones).
-- Set up restricted shared VPCs with default DNS, NAT (optional), Private Service networking, VPC Service Controls (optional), on-premises Dedicated or Partner Interconnect, and baseline firewall rules for each environment.
+- Shared VPCs with default DNS, NAT (optional), Private Service networking, VPC Service Controls (optional), on-premises Dedicated or Partner Interconnect, and baseline firewall rules for each environment.
 
 ## Prerequisites
 

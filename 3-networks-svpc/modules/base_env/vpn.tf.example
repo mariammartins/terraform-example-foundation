@@ -27,7 +27,7 @@ data "terraform_remote_state" "environments_env" {
   }
 }
 
-module "shared_restricted_vpn" {
+module "shared_vpn" {
   source = "../vpn-ha"
 
   project_id            = local.shared_vpc_project_id
@@ -39,7 +39,7 @@ module "shared_restricted_vpn" {
   region1_router2_name  = module.shared_vpc.region1_router2.router.name
   region2_router1_name  = module.shared_vpc.region2_router1.router.name
   region2_router2_name  = module.shared_vpc.region2_router2.router.name
-  vpn_psk_secret_name   = "<VPN_RESTRICTED_PSK_SECRET_NAME>"
+  vpn_psk_secret_name   = "<VPN_PSK_SECRET_NAME>"
 
   on_prem_router_ip_address1 = "<8.8.8.8>" # on-prem router ip address 1
   on_prem_router_ip_address2 = "<8.8.8.8>" # on-prem router ip address 2
