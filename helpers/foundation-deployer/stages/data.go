@@ -39,7 +39,7 @@ const (
 	OrgStep          = "1-org"
 	EnvironmentsStep = "2-environments"
 	HubAndSpokeStep  = "3-networks-hub-and-spoke"
-	DualSvpcStep     = "3-networks-svpc"
+	SvpcStep         = "3-networks-svpc"
 	ProjectsStep     = "4-projects"
 	AppInfraStep     = "5-app-infra"
 )
@@ -324,5 +324,5 @@ func GetNetworkStep(enableHubAndSpoke bool) string {
 	if enableHubAndSpoke {
 		return HubAndSpokeStep
 	}
-	return DualSvpcStep
+	return SvpcStep
 }
