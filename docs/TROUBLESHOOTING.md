@@ -246,7 +246,7 @@ Details:
 
 **Cause:**
 
-In a deploy using the [Hub and Spoke](https://cloud.google.com/architecture/security-foundations/networking#hub-and-spoke) network mode, an error occurs when adding the network peering between the Hub network and the Spoke network or the Hub network and the Spoke network due to too many peering operations.
+In a deploy using the [Hub and Spoke](https://cloud.google.com/architecture/security-foundations/networking#hub-and-spoke) network mode, an error occurs when adding the network peering between the Hub network and the Spoke network due to too many peering operations.
 
 **Solution:**
 

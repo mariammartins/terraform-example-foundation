@@ -43,7 +43,7 @@ func getFirewallMode(t *testing.T) string {
 	if mode == "HubAndSpoke" {
 		return "hub-and-spoke"
 	}
-	return "dual-svpc"
+	return "svpc"
 }
 
 func getNetworkResourceNames(envCode string, networkMode string, firewallMode string) map[string]map[string]string {
@@ -215,17 +215,16 @@ func TestNetworks(t *testing.T) {
 		"workstations.googleapis.com",
 	}
 
-	cidrRanges := map[string]map[string][]string{
+	cidrRanges := map[string][]string
 		"development": {
-			"svpc": []string{"10.8.64.0/18", "10.9.64.0/18"},
+			"10.8.64.0/18", "10.9.64.0/18",
 		},
 		"nonproduction": {
-			"svpc": []string{"10.8.128.0/18", "10.9.128.0/18"},
+			"10.8.128.0/18", "10.9.128.0/18",
 		},
 		"production": {
-			"svpc": []string{"10.8.192.0/18", "10.9.192.0/18"},
+			"10.8.192.0/18", "10.9.192.0/18",
 		},
-	}
 
 	googleapisCIDR := map[string]map[string]string{
 		"development": {
@@ -337,98 +336,96 @@ func TestNetworks(t *testing.T) {
 						assert.True(strings.Contains(servicePerimeter, service), fmt.Sprintf("service perimeter %s should restrict all supported services", servicePerimeterLink))
 					}
 
-					for _, networkType := range []string{
-						"svpc",
+					networkType := "svpc"
+
+					projectID := networks.GetStringOutput(fmt.Sprintf("%s_host_project_id", networkType))
+
+					for _, dnsType := range []string{
+						"dns_zone_googleapis",
+						"dns_zone_gcr",
+						"dns_zone_pkg_dev",
+						"dns_zone_peering_zone",
 					} {
-						projectID := networks.GetStringOutput(fmt.Sprintf("%s_host_project_id", networkType))
+						dnsName := networkNames[networkType][dnsType]
+						dnsZone := gcloud.Runf(t, "dns managed-zones describe %s --project %s --impersonate-service-account %s", dnsName, projectID, terraformSA)
+						assert.Equal(dnsName, dnsZone.Get("name").String(), fmt.Sprintf("dnsZone %s should exist", dnsName))
+					}
 
-						for _, dnsType := range []string{
-							"dns_zone_googleapis",
-							"dns_zone_gcr",
-							"dns_zone_pkg_dev",
-							"dns_zone_peering_zone",
+					networkName := networkNames[networkType]["network_name"]
+					networkUrl := fmt.Sprintf("https://www.googleapis.com/compute/v1/projects/%s/global/networks/%s", projectID, networkName)
+					dnsPolicyName := networkNames[networkType]["dns_policy_name"]
+					dnsPolicy := gcloud.Runf(t, "dns policies describe %s --project %s --impersonate-service-account %s", dnsPolicyName, projectID, terraformSA)
+					assert.True(dnsPolicy.Get("enableInboundForwarding").Bool(), fmt.Sprintf("dns policy %s should have inbound forwarding enabled", dnsPolicyName))
+					assert.Equal(networkUrl, dnsPolicy.Get("networks.0.networkUrl").String(), fmt.Sprintf("dns policy %s should be on network %s", dnsPolicyName, networkName))
+
+					//compute networks describe %s --project %s
+					projectNetwork := gcloud.Runf(t, "compute networks describe %s --project %s --impersonate-service-account %s", networkName, projectID, terraformSA)
+					assert.Equal(networkName, projectNetwork.Get("name").String(), fmt.Sprintf("network %s should exist", networkName))
+
+					//gcloud compute addresses describe NAME --global
+					globalAddressName := networkNames[networkType]["global_address"]
+					globalAddress := gcloud.Runf(t, "compute addresses describe %s --global --project %s --impersonate-service-account %s", globalAddressName, projectID, terraformSA)
+					assert.Equal(globalAddressName, globalAddress.Get("name").String(), fmt.Sprintf("global address %s should exist", globalAddressName))
+
+					subnetName1 := networkNames[networkType]["subnet_name1"]
+					usCentral1Range := cidrRanges[envName][0]
+					subnet1 := gcloud.Runf(t, "compute networks subnets describe %s --region us-central1 --project %s --impersonate-service-account %s", subnetName1, projectID, terraformSA)
+					assert.Equal(subnetName1, subnet1.Get("name").String(), fmt.Sprintf("subnet %s should exist", subnetName1))
+					assert.Equal(usCentral1Range, subnet1.Get("ipCidrRange").String(), fmt.Sprintf("IP CIDR range %s should be", usCentral1Range))
+
+					subnetName2 := networkNames[networkType]["subnet_name2"]
+					usWest1Range := cidrRanges[envName][1]
+					subnet2 := gcloud.Runf(t, "compute networks subnets describe %s --region us-west1 --project %s --impersonate-service-account %s", subnetName2, projectID, terraformSA)
+					assert.Equal(subnetName2, subnet2.Get("name").String(), fmt.Sprintf("subnet %s should exist", subnetName2))
+					assert.Equal(usWest1Range, subnet2.Get("ipCidrRange").String(), fmt.Sprintf("IP CIDR range %s should be", usWest1Range))
+
+					denyAllEgressName := networkNames[networkType]["fw_deny_all_egress"]
+					denyAllEgressRule := gcloud.Runf(t, "compute network-firewall-policies rules describe 65530 --firewall-policy %s --global-firewall-policy --project %s --impersonate-service-account %s", networkNames[networkType]["firewall_policy"], projectID, terraformSA).Array()[0]
+					assert.Equal(denyAllEgressName, denyAllEgressRule.Get("ruleName").String(), fmt.Sprintf("firewall rule %s should exist", denyAllEgressName))
+					assert.Equal("EGRESS", denyAllEgressRule.Get("direction").String(), fmt.Sprintf("firewall rule %s direction should be EGRESS", denyAllEgressName))
+					assert.Equal("deny", denyAllEgressRule.Get("action").String(), fmt.Sprintf("firewall rule %s action should be deny", denyAllEgressName))
+					assert.True(denyAllEgressRule.Get("enableLogging").Bool(), fmt.Sprintf("firewall rule %s should have log configuration enabled", denyAllEgressName))
+					assert.Equal("0.0.0.0/0", denyAllEgressRule.Get("match.destIpRanges").Array()[0].String(), fmt.Sprintf("firewall rule %s destination ranges should be 0.0.0.0/0", denyAllEgressName))
+
+					allowApiEgressName := networkNames[networkType]["fw_allow_api_egress"]
+					allowApiEgressRule := gcloud.Runf(t, "compute network-firewall-policies rules describe 1000 --firewall-policy %s --global-firewall-policy --project %s --impersonate-service-account %s", networkNames[networkType]["firewall_policy"], projectID, terraformSA).Array()[0]
+					assert.Equal(allowApiEgressName, allowApiEgressRule.Get("ruleName").String(), fmt.Sprintf("firewall rule %s should exist", allowApiEgressName))
+					assert.Equal("EGRESS", allowApiEgressRule.Get("direction").String(), fmt.Sprintf("firewall rule %s direction should be EGRESS", allowApiEgressName))
+					assert.Equal("allow", allowApiEgressRule.Get("action").String(), fmt.Sprintf("firewall rule %s action should be allow", allowApiEgressName))
+					assert.True(allowApiEgressRule.Get("enableLogging").Bool(), fmt.Sprintf("firewall rule %s should have log configuration enabled", allowApiEgressName))
+					assert.Equal(googleapisCIDR[envName][networkType], allowApiEgressRule.Get("match.destIpRanges").Array()[0].String(), fmt.Sprintf("firewall rule %s destination ranges should be %s", allowApiEgressName, googleapisCIDR[envName][networkType]))
+
+					if networkMode == "" {
+						for _, router := range []struct {
+							router string
+							region string
+						}{
+							{
+								router: "region1_router1",
+								region: "us-central1",
+							},
+							{
+								router: "region1_router2",
+								region: "us-central1",
+							},
+							{
+								router: "region2_router1",
+								region: "us-west1",
+							},
+							{
+								router: "region2_router2",
+								region: "us-west1",
+							},
 						} {
-							dnsName := networkNames[networkType][dnsType]
-							dnsZone := gcloud.Runf(t, "dns managed-zones describe %s --project %s --impersonate-service-account %s", dnsName, projectID, terraformSA)
-							assert.Equal(dnsName, dnsZone.Get("name").String(), fmt.Sprintf("dnsZone %s should exist", dnsName))
-						}
 
-						networkName := networkNames[networkType]["network_name"]
-						networkUrl := fmt.Sprintf("https://www.googleapis.com/compute/v1/projects/%s/global/networks/%s", projectID, networkName)
-						dnsPolicyName := networkNames[networkType]["dns_policy_name"]
-						dnsPolicy := gcloud.Runf(t, "dns policies describe %s --project %s --impersonate-service-account %s", dnsPolicyName, projectID, terraformSA)
-						assert.True(dnsPolicy.Get("enableInboundForwarding").Bool(), fmt.Sprintf("dns policy %s should have inbound forwarding enabled", dnsPolicyName))
-						assert.Equal(networkUrl, dnsPolicy.Get("networks.0.networkUrl").String(), fmt.Sprintf("dns policy %s should be on network %s", dnsPolicyName, networkName))
-
-						//compute networks describe %s --project %s
-						projectNetwork := gcloud.Runf(t, "compute networks describe %s --project %s --impersonate-service-account %s", networkName, projectID, terraformSA)
-						assert.Equal(networkName, projectNetwork.Get("name").String(), fmt.Sprintf("network %s should exist", networkName))
-
-						//gcloud compute addresses describe NAME --global
-						globalAddressName := networkNames[networkType]["global_address"]
-						globalAddress := gcloud.Runf(t, "compute addresses describe %s --global --project %s --impersonate-service-account %s", globalAddressName, projectID, terraformSA)
-						assert.Equal(globalAddressName, globalAddress.Get("name").String(), fmt.Sprintf("global address %s should exist", globalAddressName))
-
-						subnetName1 := networkNames[networkType]["subnet_name1"]
-						usCentral1Range := cidrRanges[envName][networkType][0]
-						subnet1 := gcloud.Runf(t, "compute networks subnets describe %s --region us-central1 --project %s --impersonate-service-account %s", subnetName1, projectID, terraformSA)
-						assert.Equal(subnetName1, subnet1.Get("name").String(), fmt.Sprintf("subnet %s should exist", subnetName1))
-						assert.Equal(usCentral1Range, subnet1.Get("ipCidrRange").String(), fmt.Sprintf("IP CIDR range %s should be", usCentral1Range))
-
-						subnetName2 := networkNames[networkType]["subnet_name2"]
-						usWest1Range := cidrRanges[envName][networkType][1]
-						subnet2 := gcloud.Runf(t, "compute networks subnets describe %s --region us-west1 --project %s --impersonate-service-account %s", subnetName2, projectID, terraformSA)
-						assert.Equal(subnetName2, subnet2.Get("name").String(), fmt.Sprintf("subnet %s should exist", subnetName2))
-						assert.Equal(usWest1Range, subnet2.Get("ipCidrRange").String(), fmt.Sprintf("IP CIDR range %s should be", usWest1Range))
-
-						denyAllEgressName := networkNames[networkType]["fw_deny_all_egress"]
-						denyAllEgressRule := gcloud.Runf(t, "compute network-firewall-policies rules describe 65530 --firewall-policy %s --global-firewall-policy --project %s --impersonate-service-account %s", networkNames[networkType]["firewall_policy"], projectID, terraformSA).Array()[0]
-						assert.Equal(denyAllEgressName, denyAllEgressRule.Get("ruleName").String(), fmt.Sprintf("firewall rule %s should exist", denyAllEgressName))
-						assert.Equal("EGRESS", denyAllEgressRule.Get("direction").String(), fmt.Sprintf("firewall rule %s direction should be EGRESS", denyAllEgressName))
-						assert.Equal("deny", denyAllEgressRule.Get("action").String(), fmt.Sprintf("firewall rule %s action should be deny", denyAllEgressName))
-						assert.True(denyAllEgressRule.Get("enableLogging").Bool(), fmt.Sprintf("firewall rule %s should have log configuration enabled", denyAllEgressName))
-						assert.Equal("0.0.0.0/0", denyAllEgressRule.Get("match.destIpRanges").Array()[0].String(), fmt.Sprintf("firewall rule %s destination ranges should be 0.0.0.0/0", denyAllEgressName))
-
-						allowApiEgressName := networkNames[networkType]["fw_allow_api_egress"]
-						allowApiEgressRule := gcloud.Runf(t, "compute network-firewall-policies rules describe 1000 --firewall-policy %s --global-firewall-policy --project %s --impersonate-service-account %s", networkNames[networkType]["firewall_policy"], projectID, terraformSA).Array()[0]
-						assert.Equal(allowApiEgressName, allowApiEgressRule.Get("ruleName").String(), fmt.Sprintf("firewall rule %s should exist", allowApiEgressName))
-						assert.Equal("EGRESS", allowApiEgressRule.Get("direction").String(), fmt.Sprintf("firewall rule %s direction should be EGRESS", allowApiEgressName))
-						assert.Equal("allow", allowApiEgressRule.Get("action").String(), fmt.Sprintf("firewall rule %s action should be allow", allowApiEgressName))
-						assert.True(allowApiEgressRule.Get("enableLogging").Bool(), fmt.Sprintf("firewall rule %s should have log configuration enabled", allowApiEgressName))
-						assert.Equal(googleapisCIDR[envName][networkType], allowApiEgressRule.Get("match.destIpRanges").Array()[0].String(), fmt.Sprintf("firewall rule %s destination ranges should be %s", allowApiEgressName, googleapisCIDR[envName][networkType]))
-
-						if networkMode == "" {
-							for _, router := range []struct {
-								router string
-								region string
-							}{
-								{
-									router: "region1_router1",
-									region: "us-central1",
-								},
-								{
-									router: "region1_router2",
-									region: "us-central1",
-								},
-								{
-									router: "region2_router1",
-									region: "us-west1",
-								},
-								{
-									router: "region2_router2",
-									region: "us-west1",
-								},
-							} {
-
-								routerName := networkNames[networkType][router.router]
-								computeRouter := gcloud.Runf(t, "compute routers describe %s --region %s --project %s --impersonate-service-account %s", routerName, router.region, projectID, terraformSA)
-								networkSelfLink := fmt.Sprintf("https://www.googleapis.com/compute/v1/projects/%s/global/networks/%s", projectID, networkNames[networkType]["network_name"])
-								assert.Equal(routerName, computeRouter.Get("name").String(), fmt.Sprintf("router %s should exist", routerName))
-								assert.Equal("64514", computeRouter.Get("bgp.asn").String(), fmt.Sprintf("router %s should have bgp asm 64514", routerName))
-								assert.Equal(1, len(computeRouter.Get("bgp.advertisedIpRanges").Array()), fmt.Sprintf("router %s should have only one advertised IP range", routerName))
-								assert.Equal(googleapisCIDR[envName][networkType], computeRouter.Get("bgp.advertisedIpRanges.0.range").String(), fmt.Sprintf("router %s should have only range %s", routerName, googleapisCIDR[envName][networkType]))
-								assert.Equal(networkSelfLink, computeRouter.Get("network").String(), fmt.Sprintf("router %s should have be from network %s", routerName, networkNames[networkType]["network_name"]))
-							}
+							routerName := networkNames[networkType][router.router]
+							computeRouter := gcloud.Runf(t, "compute routers describe %s --region %s --project %s --impersonate-service-account %s", routerName, router.region, projectID, terraformSA)
+							networkSelfLink := fmt.Sprintf("https://www.googleapis.com/compute/v1/projects/%s/global/networks/%s", projectID, networkNames[networkType]["network_name"])
+							assert.Equal(routerName, computeRouter.Get("name").String(), fmt.Sprintf("router %s should exist", routerName))
+							assert.Equal("64514", computeRouter.Get("bgp.asn").String(), fmt.Sprintf("router %s should have bgp asm 64514", routerName))
+							assert.Equal(1, len(computeRouter.Get("bgp.advertisedIpRanges").Array()), fmt.Sprintf("router %s should have only one advertised IP range", routerName))
+							assert.Equal(googleapisCIDR[envName][networkType], computeRouter.Get("bgp.advertisedIpRanges.0.range").String(), fmt.Sprintf("router %s should have only range %s", routerName, googleapisCIDR[envName][networkType]))
+							assert.Equal(networkSelfLink, computeRouter.Get("network").String(), fmt.Sprintf("router %s should have be from network %s", routerName, networkNames[networkType]["network_name"]))
 						}
 					}
 				})

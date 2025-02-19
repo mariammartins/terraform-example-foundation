@@ -155,7 +155,7 @@ func TestProjects(t *testing.T) {
 							listApis := testutils.GetResultFieldStrSlice(enabledAPIS, "config.name")
 							assert.Subset(listApis, restrictedApisEnabled, "APIs should have been enabled")
 
-							sharedProjectNumber := projects.GetStringOutput("shared_vpc_project_number")
+							sharedVpcProjectNumber := projects.GetStringOutput("shared_vpc_project_number")
 							perimeter, err := gcloud.RunCmdE(t, fmt.Sprintf("access-context-manager perimeters dry-run describe %s --policy %s", perimeterName, policyID))
 							assert.NoError(err)
 							assert.True(strings.Contains(perimeter, sharedProjectNumber), fmt.Sprintf("dry-run service perimeter %s should contain project %s", perimeterName, sharedProjectNumber))
