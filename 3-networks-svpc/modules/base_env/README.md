@@ -20,7 +20,7 @@
 | perimeter\_additional\_members | The list of additional members to be added to the enforced perimeter access level members list. To be able to see the resources protected by the VPC Service Controls in the restricted perimeter, add your user in this list. Entries must be in the standard GCP form: `user:email@example.com` or `serviceAccount:my-service-account@example.com`. | `list(string)` | `[]` | no |
 | perimeter\_additional\_members\_dry\_run | The list of additional members to be added to the dry-run perimeter access level members list. To be able to see the resources protected by the VPC Service Controls in the restricted perimeter, add your user in this list. Entries must be in the standard GCP form: `user:email@example.com` or `serviceAccount:my-service-account@example.com`. | `list(string)` | `[]` | no |
 | private\_service\_cidr | CIDR range for private service networking. Used for Cloud SQL and other managed services in the Shared Vpc. | `string` | n/a | yes |
-| private\_service\_connect\_ip | The base subnet internal IP to be used as the private service connect endpoint in the Restricted Shared VPC | `string` | n/a | yes |
+| private\_service\_connect\_ip | The base subnet internal IP to be used as the private service connect endpoint in the Shared VPC | `string` | n/a | yes |
 | remote\_state\_bucket | Backend bucket to load Terraform Remote State Data from previous steps. | `string` | n/a | yes |
 | subnet\_primary\_ranges | The base subnet primary IPTs ranges to the Shared Vpc. | `map(string)` | n/a | yes |
 | subnet\_proxy\_ranges | The base proxy-only subnet primary IPTs ranges to the Shared Vpc. | `map(string)` | n/a | yes |
