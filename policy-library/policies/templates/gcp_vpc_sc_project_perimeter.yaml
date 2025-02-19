@@ -87,7 +87,7 @@ spec:
         	perimeter_is_forbidden(mode, asset.service_perimeter.title, service_perimeters)
 
         	message := sprintf("Project %v not allowed in service perimeter %v.", [project_number, asset.service_perimeter.name])
-        	metadata := {"resource": asset.name, "service_perimeter_name": asset.service_perimeter.name, "project_number": project_number}
+        	metadata := {"resource": asset.name, "restricted_service_perimeter_name": asset.service_perimeter.name, "project_number": project_number}
         }
 
         perimeter_is_forbidden(mode, evaluating_service_perimeter, specified_service_perimeters) {
