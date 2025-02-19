@@ -73,7 +73,7 @@ Usage instructions are available in the 0-bootstrap [README](./0-bootstrap/READM
 ### [1. org](./1-org/)
 
 The purpose of this stage is to set up the common folder used to house projects that contain shared resources such as Security Command Center notification, Cloud Key Management Service (KMS), org level secrets, and org level logging.
-This stage also sets up the network folder used to house network related projects such as DNS Hub, Interconnect, network hub, and restricted projects for each environment  (`development`, `nonproduction` or `production`).
+This stage also sets up the network folder used to house network related projects such as DNS Hub, Interconnect, network hub and projects for each environment  (`development`, `nonproduction` or `production`).
 This will create the following folder and project structure:
 
 ```
@@ -85,8 +85,7 @@ example-organization
     ├── prj-c-kms
     └── prj-c-secrets
 └── fldr-network
-    ├── prj-net-hub-base
-    ├── prj-net-hub-restricted
+    ├── prj-net-hub-svpc
     ├── prj-net-dns
     ├── prj-net-interconnect
     ├── prj-d-svpc
@@ -134,7 +133,7 @@ Another project created under the network folder. This project will host the Ded
 
 #### Networking
 
-Under the network folder, one project for restricted network, are created per environment (`development`, `nonproduction`, and `production`) which is intended to be used as a [Shared VPC host project](https://cloud.google.com/vpc/docs/shared-vpc) for all projects in that environment.
+Under the network folder, one project for shared vpc network, are created per environment (`development`, `nonproduction`, and `production`) which is intended to be used as a [Shared VPC host project](https://cloud.google.com/vpc/docs/shared-vpc) for all projects in that environment.
 This stage only creates the projects and enables the correct APIs, the following networks stages, [3-networks-svpc](./3-networks-svpc/) and [3-networks-hub-and-spoke](./3-networks-hub-and-spoke/), create the actual Shared VPC networks.
 
 ### [2. environments](./2-environments/)
@@ -176,7 +175,7 @@ This step focuses on creating a [Shared VPC](https://cloud.google.com/architectu
 - Hierarchical firewall policy created to allow for [load balancing health checks](https://cloud.google.com/load-balancing/docs/health-checks#firewall_rules).
 - Hierarchical firewall policy created to allow [Windows KMS activation](https://cloud.google.com/compute/docs/instances/windows/creating-managing-windows-instances#kms-server).
 - [Private service networking](https://cloud.google.com/vpc/docs/configure-private-services-access) configured to enable workload dependant resources like Cloud SQL.
-- Restricted Shared VPC with [restricted.googleapis.com](https://cloud.google.com/vpc-service-controls/docs/supported-products) configured for restricted access to googleapis.com and gcr.io. Route added for VIP so no internet access is required to access APIs.
+- Shared VPC with [restricted.googleapis.com](https://cloud.google.com/vpc-service-controls/docs/supported-products) configured for restricted access to googleapis.com and gcr.io. Route added for VIP so no internet access is required to access APIs.
 - Default routes to internet removed, with tag based route `egress-internet` required on VMs in order to reach the internet.
 - (Optional) Cloud NAT configured for all subnets with logging and static outbound IPs.
 - Default Cloud DNS policy applied, with DNS logging and [inbound query forwarding](https://cloud.google.com/dns/docs/overview#dns-server-policy-in) turned on.
@@ -199,29 +198,29 @@ example-organization/
 └── fldr-development
     └── fldr-development-bu1
         ├── prj-d-bu1-sample-floating
-        ├── prj-d-bu1-sample-restrict
+        ├── prj-d-bu1-svpc
         ├── prj-d-bu1-sample-peering
     └── fldr-development-bu2
         ├── prj-d-bu2-sample-floating
-        ├── prj-d-bu2-sample-restrict
+        ├── prj-d-bu2-svpc
         └── prj-d-bu2-sample-peering
 └── fldr-nonproduction
     └── fldr-nonproduction-bu1
         ├── prj-n-bu1-sample-floating
-        ├── prj-n-bu1-sample-restrict
+        ├── prj-n-bu1-svpc
         ├── prj-n-bu1-sample-peering
     └── fldr-nonproduction-bu2
         ├── prj-n-bu2-sample-floating
-        ├── prj-n-bu2-sample-restrict
+        ├── prj-n-bu2-svpc
         └── prj-n-bu2-sample-peering
 └── fldr-production
     └── fldr-production-bu1
         ├── prj-p-bu1-sample-floating
-        ├── prj-p-bu1-sample-restrict
+        ├── prj-p-bu1-svpc
         ├── prj-p-bu1-sample-peering
     └── fldr-production-bu2
         ├── prj-p-bu2-sample-floating
-        ├── prj-p-bu2-sample-restrict
+        ├── prj-p-bu2-svpc
         └── prj-p-bu2-sample-peering
 └── fldr-common
     ├── prj-c-bu1-infra-pipeline
@@ -255,8 +254,7 @@ example-organization
     ├── prj-c-bu1-infra-pipeline
     └── prj-c-bu2-infra-pipeline
 └── fldr-network
-    ├── prj-net-hub-base
-    ├── prj-net-hub-restricted
+    ├── prj-net-hub-svpc
     ├── prj-net-dns
     ├── prj-net-interconnect
     ├── prj-d-svpc
@@ -268,12 +266,12 @@ example-organization
     └── fldr-development-bu1
 
         ├── prj-d-bu1-sample-floating
-        ├── prj-d-bu1-sample-restrict
+        ├── prj-d-bu1-svpc
         ├── prj-d-bu1-sample-peering
     └── fldr-development-bu2
 
         ├── prj-d-bu2-sample-floating
-        ├── prj-d-bu2-sample-restrict
+        ├── prj-d-bu2-svpc
         └── prj-d-bu2-sample-peering
 └── fldr-nonproduction
     ├── prj-n-kms
@@ -281,12 +279,12 @@ example-organization
     └── fldr-nonproduction-bu1
 
         ├── prj-n-bu1-sample-floating
-        ├── prj-n-bu1-sample-restrict
+        ├── prj-n-bu1-svpc
         ├── prj-n-bu1-sample-peering
     └── fldr-nonproduction-bu2
 
         ├── prj-n-bu2-sample-floating
-        ├── prj-n-bu2-sample-restrict
+        ├── prj-n-bu2-svpc
         └── prj-n-bu2-sample-peering
 └── fldr-production
     ├── prj-p-kms
@@ -294,12 +292,12 @@ example-organization
     └── fldr-production-bu1
 
         ├── prj-p-bu1-sample-floating
-        ├── prj-p-bu1-sample-restrict
+        ├── prj-p-bu1-svpc
         ├── prj-p-bu1-sample-peering
     └── fldr-production-bu2
 
         ├── prj-p-bu2-sample-floating
-        ├── prj-p-bu2-sample-restrict
+        ├── prj-p-bu2-svpc
         └── prj-p-bu2-sample-peering
 └── fldr-bootstrap
     ├── prj-b-cicd
