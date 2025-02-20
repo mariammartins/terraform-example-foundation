@@ -337,10 +337,10 @@ module "environment_network" {
   env_code = each.value
 
   project_budget = {
-    network_budget_amount            = var.project_budget.network_budget_amount
-    network_alert_spent_percents     = var.project_budget.network_alert_spent_percents
-    network_alert_pubsub_topic       = var.project_budget.network_alert_pubsub_topic
-    network_budget_alert_spend_basis = var.project_budget.network_budget_alert_spend_basis
+    network_budget_amount            = var.project_budget.shared_network_budget_amount
+    network_alert_spent_percents     = var.project_budget.shared_network_alert_spent_percents
+    network_alert_pubsub_topic       = var.project_budget.shared_network_alert_pubsub_topic
+    network_budget_alert_spend_basis = var.project_budget.shared_network_budget_alert_spend_basis
   }
 }
 

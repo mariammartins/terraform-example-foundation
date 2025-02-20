@@ -292,6 +292,17 @@ See `0-bootstrap` [README-GitHub.md](../0-bootstrap/README-GitHub.md#deploying-s
    ```
 
 1. Navigate to `gcp-network` and initialize a local Git repository to manage versions locally. Then, create the environment branches.
+
+   ```bash
+   cd gcp-network
+   git init
+   git commit -m "initialize empty directory" --allow-empty
+   git checkout -b shared
+   git checkout -b development
+   git checkout -b nonproduction
+   git checkout -b production
+   ```
+
 1. The next instructions assume that you are at the same level of the `terraform-example-foundation` folder. Change into `3-networks-svpc` folder, copy the Terraform wrapper script and ensure it can be executed.
 
    ```bash
