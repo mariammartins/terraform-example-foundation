@@ -57,7 +57,7 @@ module "project" {
   folder_id                = var.folder_id
   deletion_policy          = var.project_deletion_policy
 
-  svpc_host_project_id = var.host_project_id
+  svpc_host_project_id = var.shared_vpc_host_project_id
   shared_vpc_subnets   = var.shared_vpc_subnets # Optional: To enable subnetting, replace to "module.networking_project.subnetwork_self_link"
 
   vpc_service_control_attach_enabled = var.vpc_service_control_attach_enabled
@@ -105,6 +105,6 @@ resource "google_compute_subnetwork_iam_member" "service_account_role_to_vpc_sub
   subnetwork = each.value.subnet
   role       = "roles/compute.networkUser"
   region     = each.value.region
-  project    = var.host_project_id
+  project    = var.shared_vpc_host_project_id
   member     = "serviceAccount:${each.value.sa}"
 }

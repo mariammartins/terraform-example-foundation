@@ -39,7 +39,7 @@
 | host\_project\_id | The host project ID |
 | network\_name | The name of the VPC being created |
 | network\_self\_link | The URI of the VPC being created |
-| restricted\_service\_perimeter\_name | Access context manager service perimeter name for the enforced perimeter |
+| service\_perimeter\_name | Access context manager service perimeter name for the enforced perimeter |
 | subnets\_ips | The IPs and CIDRs of the subnets being created |
 | subnets\_names | The names of the subnets being created |
 | subnets\_secondary\_ranges | The secondary ranges associated with these subnets |

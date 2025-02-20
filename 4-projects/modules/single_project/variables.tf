@@ -83,7 +83,7 @@ variable "vpc" {
   }
 }
 
-variable "host_project_id" {
+variable "shared_vpc_host_project_id" {
   description = "Shared VPC host project ID"
   type        = string
   default     = ""

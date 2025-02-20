@@ -19,9 +19,9 @@ output "access_context_manager_policy_id" {
   value       = var.access_context_manager_policy_id
 }
 
-output "host_project_id" {
+output "shared_vpc_host_project_id" {
   value       = module.base_env.host_project_id
-  description = "The host project ID"
+  description = "The shared vpc host project ID"
 }
 
 output "network_name" {
@@ -69,7 +69,7 @@ output "enforce_vpcsc" {
   description = "Enable the enforced mode for VPC Service Controls. It is not recommended to enable VPC-SC on the first run deploying your foundation. Review [best practices for enabling VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/enable), then only enforce the perimeter after you have analyzed the access patterns in your dry-run perimeter and created the necessary exceptions for your use cases."
 }
 
-output "restricted_service_perimeter_name" {
-  value       = module.base_env.restricted_service_perimeter_name
+output "service_perimeter_name" {
+  value       = module.base_env.service_perimeter_name
   description = "Access context manager service perimeter name"
 }

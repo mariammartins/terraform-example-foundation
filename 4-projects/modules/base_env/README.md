@@ -48,7 +48,7 @@
 | restricted\_enabled\_apis | Activated APIs. |
 | shared\_vpc\_project | Project sample restricted project id. |
 | shared\_vpc\_project\_number | Project sample shared vpc project. |
-| subnets\_self\_links | The self-links of subnets from restricted environment. |
+| subnets\_self\_links | The self-links of subnets. |
 | vpc\_service\_control\_perimeter\_name | VPC Service Control name. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

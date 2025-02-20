@@ -116,7 +116,7 @@ func TestProjects(t *testing.T) {
 				tft.WithTFDir(fmt.Sprintf(networkTFDir, env)),
 				tft.WithVars(netVars),
 			)
-			perimeterName := networks.GetStringOutput("restricted_service_perimeter_name")
+			perimeterName := networks.GetStringOutput("service_perimeter_name")
 
 			shared := tft.NewTFBlueprintTest(t,
 				tft.WithTFDir(fmt.Sprintf(tt.baseDir, "shared")),

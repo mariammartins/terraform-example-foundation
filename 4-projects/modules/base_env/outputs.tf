@@ -41,7 +41,7 @@ output "shared_vpc_project_number" {
 
 output "subnets_self_links" {
   value       = local.subnets_self_links
-  description = "The self-links of subnets from restricted environment."
+  description = "The self-links of subnets."
 }
 
 output "vpc_service_control_perimeter_name" {
