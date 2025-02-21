@@ -46,26 +46,24 @@ func getFirewallMode(t *testing.T) string {
 	return "svpc"
 }
 
-func getNetworkResourceNames(envCode string, networkMode string, firewallMode string) map[string]map[string]string {
-	return map[string]map[string]string{
-		"svpc": {
-			"network_name":          fmt.Sprintf("vpc-%s-svpc%s", envCode, networkMode),
-			"global_address":        fmt.Sprintf("ga-%s-svpc%s-vpc-peering-internal", envCode, networkMode),
-			"dns_zone_googleapis":   fmt.Sprintf("dz-%s-svpc-apis", envCode),
-			"dns_zone_gcr":          fmt.Sprintf("dz-%s-svpc-gcr", envCode),
-			"dns_zone_pkg_dev":      fmt.Sprintf("dz-%s-svpc-pkg-dev", envCode),
-			"dns_zone_peering_zone": fmt.Sprintf("dz-%s-svpc-to-dns-hub", envCode),
-			"dns_policy_name":       fmt.Sprintf("dp-%s-svpc-default-policy", envCode),
-			"subnet_name1":          fmt.Sprintf("sb-%s-svpc-us-central1", envCode),
-			"subnet_name2":          fmt.Sprintf("sb-%s-svpc-us-west1", envCode),
-			"region1_router1":       fmt.Sprintf("cr-%s-svpc%s-us-central1-cr5", envCode, networkMode),
-			"region1_router2":       fmt.Sprintf("cr-%s-svpc%s-us-central1-cr6", envCode, networkMode),
-			"region2_router1":       fmt.Sprintf("cr-%s-svpc%s-us-west1-cr7", envCode, networkMode),
-			"region2_router2":       fmt.Sprintf("cr-%s-svpc%s-us-west1-cr8", envCode, networkMode),
-			"firewall_policy":       fmt.Sprintf("fp-%s-%s-firewalls", envCode, firewallMode),
-			"fw_deny_all_egress":    fmt.Sprintf("fw-%s-svpc-65530-e-d-all-all-all", envCode),
-			"fw_allow_api_egress":   fmt.Sprintf("fw-%s-svpc-1000-e-a-allow-google-apis-all-tcp-443", envCode),
-		},
+func getNetworkResourceNames(envCode string, networkMode string, firewallMode string) map[string]string {
+	return map[string]string{
+		"network_name":          fmt.Sprintf("vpc-%s-svpc%s", envCode, networkMode),
+		"global_address":        fmt.Sprintf("ga-%s-svpc%s-vpc-peering-internal", envCode, networkMode),
+		"dns_zone_googleapis":   fmt.Sprintf("dz-%s-svpc-apis", envCode),
+		"dns_zone_gcr":          fmt.Sprintf("dz-%s-svpc-gcr", envCode),
+		"dns_zone_pkg_dev":      fmt.Sprintf("dz-%s-svpc-pkg-dev", envCode),
+		"dns_zone_peering_zone": fmt.Sprintf("dz-%s-svpc-to-dns-hub", envCode),
+		"dns_policy_name":       fmt.Sprintf("dp-%s-svpc-default-policy", envCode),
+		"subnet_name1":          fmt.Sprintf("sb-%s-svpc-us-central1", envCode),
+		"subnet_name2":          fmt.Sprintf("sb-%s-svpc-us-west1", envCode),
+		"region1_router1":       fmt.Sprintf("cr-%s-svpc%s-us-central1-cr5", envCode, networkMode),
+		"region1_router2":       fmt.Sprintf("cr-%s-svpc%s-us-central1-cr6", envCode, networkMode),
+		"region2_router1":       fmt.Sprintf("cr-%s-svpc%s-us-west1-cr7", envCode, networkMode),
+		"region2_router2":       fmt.Sprintf("cr-%s-svpc%s-us-west1-cr8", envCode, networkMode),
+		"firewall_policy":       fmt.Sprintf("fp-%s-%s-firewalls", envCode, firewallMode),
+		"fw_deny_all_egress":    fmt.Sprintf("fw-%s-svpc-65530-e-d-all-all-all", envCode),
+		"fw_allow_api_egress":   fmt.Sprintf("fw-%s-svpc-1000-e-a-allow-google-apis-all-tcp-443", envCode),
 	}
 }
 
@@ -226,15 +224,15 @@ func TestNetworks(t *testing.T) {
 			"10.8.192.0/18", "10.9.192.0/18",
 		},
 
-	googleapisCIDR := map[string]map[string]string{
+	googleapisCIDR := map[string]string{
 		"development": {
-			"svpc": "10.17.0.6",
+			"10.17.0.6",
 		},
 		"nonproduction": {
-			"svpc": "10.17.0.7",
+			"10.17.0.7",
 		},
 		"production": {
-			"svpc": "10.17.0.8",
+			"10.17.0.8",
 		},
 	}
 
@@ -336,9 +334,7 @@ func TestNetworks(t *testing.T) {
 						assert.True(strings.Contains(servicePerimeter, service), fmt.Sprintf("service perimeter %s should restrict all supported services", servicePerimeterLink))
 					}
 
-					networkType := "svpc"
-
-					projectID := networks.GetStringOutput(fmt.Sprintf("%s_host_project_id", networkType))
+					projectID := networks.GetStringOutput(fmt.Sprintf("%s_host_project_id", "svpc"))
 
 					for _, dnsType := range []string{
 						"dns_zone_googleapis",
@@ -346,14 +342,14 @@ func TestNetworks(t *testing.T) {
 						"dns_zone_pkg_dev",
 						"dns_zone_peering_zone",
 					} {
-						dnsName := networkNames[networkType][dnsType]
+						dnsName := networkNames["svpc"][dnsType]
 						dnsZone := gcloud.Runf(t, "dns managed-zones describe %s --project %s --impersonate-service-account %s", dnsName, projectID, terraformSA)
 						assert.Equal(dnsName, dnsZone.Get("name").String(), fmt.Sprintf("dnsZone %s should exist", dnsName))
 					}
 
-					networkName := networkNames[networkType]["network_name"]
+					networkName := networkNames["svpc"]["network_name"]
 					networkUrl := fmt.Sprintf("https://www.googleapis.com/compute/v1/projects/%s/global/networks/%s", projectID, networkName)
-					dnsPolicyName := networkNames[networkType]["dns_policy_name"]
+					dnsPolicyName := networkNames["svpc"]["dns_policy_name"]
 					dnsPolicy := gcloud.Runf(t, "dns policies describe %s --project %s --impersonate-service-account %s", dnsPolicyName, projectID, terraformSA)
 					assert.True(dnsPolicy.Get("enableInboundForwarding").Bool(), fmt.Sprintf("dns policy %s should have inbound forwarding enabled", dnsPolicyName))
 					assert.Equal(networkUrl, dnsPolicy.Get("networks.0.networkUrl").String(), fmt.Sprintf("dns policy %s should be on network %s", dnsPolicyName, networkName))
@@ -363,37 +359,37 @@ func TestNetworks(t *testing.T) {
 					assert.Equal(networkName, projectNetwork.Get("name").String(), fmt.Sprintf("network %s should exist", networkName))
 
 					//gcloud compute addresses describe NAME --global
-					globalAddressName := networkNames[networkType]["global_address"]
+					globalAddressName := networkNames["svpc"]["global_address"]
 					globalAddress := gcloud.Runf(t, "compute addresses describe %s --global --project %s --impersonate-service-account %s", globalAddressName, projectID, terraformSA)
 					assert.Equal(globalAddressName, globalAddress.Get("name").String(), fmt.Sprintf("global address %s should exist", globalAddressName))
 
-					subnetName1 := networkNames[networkType]["subnet_name1"]
+					subnetName1 := networkNames["svpc"]["subnet_name1"]
 					usCentral1Range := cidrRanges[envName][0]
 					subnet1 := gcloud.Runf(t, "compute networks subnets describe %s --region us-central1 --project %s --impersonate-service-account %s", subnetName1, projectID, terraformSA)
 					assert.Equal(subnetName1, subnet1.Get("name").String(), fmt.Sprintf("subnet %s should exist", subnetName1))
 					assert.Equal(usCentral1Range, subnet1.Get("ipCidrRange").String(), fmt.Sprintf("IP CIDR range %s should be", usCentral1Range))
 
-					subnetName2 := networkNames[networkType]["subnet_name2"]
+					subnetName2 := networkNames["svpc"]["subnet_name2"]
 					usWest1Range := cidrRanges[envName][1]
 					subnet2 := gcloud.Runf(t, "compute networks subnets describe %s --region us-west1 --project %s --impersonate-service-account %s", subnetName2, projectID, terraformSA)
 					assert.Equal(subnetName2, subnet2.Get("name").String(), fmt.Sprintf("subnet %s should exist", subnetName2))
 					assert.Equal(usWest1Range, subnet2.Get("ipCidrRange").String(), fmt.Sprintf("IP CIDR range %s should be", usWest1Range))
 
-					denyAllEgressName := networkNames[networkType]["fw_deny_all_egress"]
-					denyAllEgressRule := gcloud.Runf(t, "compute network-firewall-policies rules describe 65530 --firewall-policy %s --global-firewall-policy --project %s --impersonate-service-account %s", networkNames[networkType]["firewall_policy"], projectID, terraformSA).Array()[0]
+					denyAllEgressName := networkNames["svpc"]["fw_deny_all_egress"]
+					denyAllEgressRule := gcloud.Runf(t, "compute network-firewall-policies rules describe 65530 --firewall-policy %s --global-firewall-policy --project %s --impersonate-service-account %s", networkNames["svpc"]["firewall_policy"], projectID, terraformSA).Array()[0]
 					assert.Equal(denyAllEgressName, denyAllEgressRule.Get("ruleName").String(), fmt.Sprintf("firewall rule %s should exist", denyAllEgressName))
 					assert.Equal("EGRESS", denyAllEgressRule.Get("direction").String(), fmt.Sprintf("firewall rule %s direction should be EGRESS", denyAllEgressName))
 					assert.Equal("deny", denyAllEgressRule.Get("action").String(), fmt.Sprintf("firewall rule %s action should be deny", denyAllEgressName))
 					assert.True(denyAllEgressRule.Get("enableLogging").Bool(), fmt.Sprintf("firewall rule %s should have log configuration enabled", denyAllEgressName))
 					assert.Equal("0.0.0.0/0", denyAllEgressRule.Get("match.destIpRanges").Array()[0].String(), fmt.Sprintf("firewall rule %s destination ranges should be 0.0.0.0/0", denyAllEgressName))
 
-					allowApiEgressName := networkNames[networkType]["fw_allow_api_egress"]
-					allowApiEgressRule := gcloud.Runf(t, "compute network-firewall-policies rules describe 1000 --firewall-policy %s --global-firewall-policy --project %s --impersonate-service-account %s", networkNames[networkType]["firewall_policy"], projectID, terraformSA).Array()[0]
+					allowApiEgressName := networkNames["svpc"]["fw_allow_api_egress"]
+					allowApiEgressRule := gcloud.Runf(t, "compute network-firewall-policies rules describe 1000 --firewall-policy %s --global-firewall-policy --project %s --impersonate-service-account %s", networkNames["svpc"]["firewall_policy"], projectID, terraformSA).Array()[0]
 					assert.Equal(allowApiEgressName, allowApiEgressRule.Get("ruleName").String(), fmt.Sprintf("firewall rule %s should exist", allowApiEgressName))
 					assert.Equal("EGRESS", allowApiEgressRule.Get("direction").String(), fmt.Sprintf("firewall rule %s direction should be EGRESS", allowApiEgressName))
 					assert.Equal("allow", allowApiEgressRule.Get("action").String(), fmt.Sprintf("firewall rule %s action should be allow", allowApiEgressName))
 					assert.True(allowApiEgressRule.Get("enableLogging").Bool(), fmt.Sprintf("firewall rule %s should have log configuration enabled", allowApiEgressName))
-					assert.Equal(googleapisCIDR[envName][networkType], allowApiEgressRule.Get("match.destIpRanges").Array()[0].String(), fmt.Sprintf("firewall rule %s destination ranges should be %s", allowApiEgressName, googleapisCIDR[envName][networkType]))
+					assert.Equal(googleapisCIDR[envName]["svpc"], allowApiEgressRule.Get("match.destIpRanges").Array()[0].String(), fmt.Sprintf("firewall rule %s destination ranges should be %s", allowApiEgressName, googleapisCIDR[envName]["svpc"]))
 
 					if networkMode == "" {
 						for _, router := range []struct {
@@ -418,14 +414,14 @@ func TestNetworks(t *testing.T) {
 							},
 						} {
 
-							routerName := networkNames[networkType][router.router]
+							routerName := networkNames["svpc"][router.router]
 							computeRouter := gcloud.Runf(t, "compute routers describe %s --region %s --project %s --impersonate-service-account %s", routerName, router.region, projectID, terraformSA)
-							networkSelfLink := fmt.Sprintf("https://www.googleapis.com/compute/v1/projects/%s/global/networks/%s", projectID, networkNames[networkType]["network_name"])
+							networkSelfLink := fmt.Sprintf("https://www.googleapis.com/compute/v1/projects/%s/global/networks/%s", projectID, networkNames["svpc"]["network_name"])
 							assert.Equal(routerName, computeRouter.Get("name").String(), fmt.Sprintf("router %s should exist", routerName))
 							assert.Equal("64514", computeRouter.Get("bgp.asn").String(), fmt.Sprintf("router %s should have bgp asm 64514", routerName))
 							assert.Equal(1, len(computeRouter.Get("bgp.advertisedIpRanges").Array()), fmt.Sprintf("router %s should have only one advertised IP range", routerName))
-							assert.Equal(googleapisCIDR[envName][networkType], computeRouter.Get("bgp.advertisedIpRanges.0.range").String(), fmt.Sprintf("router %s should have only range %s", routerName, googleapisCIDR[envName][networkType]))
-							assert.Equal(networkSelfLink, computeRouter.Get("network").String(), fmt.Sprintf("router %s should have be from network %s", routerName, networkNames[networkType]["network_name"]))
+							assert.Equal(googleapisCIDR[envName]["svpc"], computeRouter.Get("bgp.advertisedIpRanges.0.range").String(), fmt.Sprintf("router %s should have only range %s", routerName, googleapisCIDR[envName]["svpc"]))
+							assert.Equal(networkSelfLink, computeRouter.Get("network").String(), fmt.Sprintf("router %s should have be from network %s", routerName, networkNames["svpc"]["network_name"]))
 						}
 					}
 				})
