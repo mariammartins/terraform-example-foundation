@@ -155,7 +155,7 @@ func TestProjects(t *testing.T) {
 							listApis := testutils.GetResultFieldStrSlice(enabledAPIS, "config.name")
 							assert.Subset(listApis, restrictedApisEnabled, "APIs should have been enabled")
 
-							sharedVpcProjectNumber := projects.GetStringOutput("shared_vpc_project_number")
+							sharedProjectNumber := projects.GetStringOutput("shared_vpc_project_number")
 							perimeter, err := gcloud.RunCmdE(t, fmt.Sprintf("access-context-manager perimeters dry-run describe %s --policy %s", perimeterName, policyID))
 							assert.NoError(err)
 							assert.True(strings.Contains(perimeter, sharedProjectNumber), fmt.Sprintf("dry-run service perimeter %s should contain project %s", perimeterName, sharedProjectNumber))
@@ -188,7 +188,7 @@ func TestProjects(t *testing.T) {
 							assert.Subset(listRoles, peeringProjectSaRoles, fmt.Sprintf("service account %s should have project level roles", sharedCloudBuildSA))
 
 							peering := gcloud.Runf(t, "compute networks peerings list --project %s", projectID).Array()[0]
-							assert.Contains(peering.Get("peerings.0.network").String(), tt.baseNetwork, "should have a peering network")
+							assert.Contains(peering.Get("peerings.0.network").String(), tt.sharedNetwork, "should have a peering network")
 
 							instanceRegion := terraform.OutputMap(t, bootstrap.GetTFOptions(), "common_config")["default_region"]
 							peeringSubnetworkSelfLink := projects.GetStringOutput("peering_subnetwork_self_link")
