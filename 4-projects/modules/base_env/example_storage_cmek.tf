@@ -56,5 +56,5 @@ module "gcs_buckets" {
     default_kms_key_name = module.kms.keys[var.key_name]
   }
 
-  depends_on = [module.kms]
+  depends_on = [module.shared_vpc_project]
 }
