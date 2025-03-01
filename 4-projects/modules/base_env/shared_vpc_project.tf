@@ -45,7 +45,7 @@ module "shared_vpc_project" {
 }
 
 resource "google_access_context_manager_service_perimeter_egress_policy" "egress_rule_svpc_kms" {
-  count = local.enforce_vpcsc ? 1 : 0
+  count     = local.enforce_vpcsc ? 1 : 0
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
   egress_from {
@@ -69,7 +69,7 @@ resource "google_access_context_manager_service_perimeter_egress_policy" "egress
 
 
 resource "google_access_context_manager_service_perimeter_egress_policy" "egress_rule_svpc_kms_dry_run" {
-  count = !local.enforce_vpcsc ? 1 : 0
+  count     = !local.enforce_vpcsc ? 1 : 0
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
   egress_from {
