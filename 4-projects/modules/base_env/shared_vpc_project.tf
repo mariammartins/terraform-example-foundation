@@ -26,8 +26,18 @@ module "shared_vpc_project" {
   shared_vpc_subnets         = local.subnets_self_links
   project_budget             = var.project_budget
   project_prefix             = local.project_prefix
+  project_deletion_policy    = var.project_deletion_policy
 
-  project_deletion_policy = var.project_deletion_policy
+  enable_cloudbuild_deploy            = local.enable_cloudbuild_deploy
+  app_infra_pipeline_service_accounts = local.app_infra_pipeline_service_accounts
+
+  sa_roles = {
+    "${var.business_code}-example-app" = [
+      "roles/compute.instanceAdmin.v1",
+      "roles/iam.serviceAccountUser",
+      "roles/iam.serviceAccountAdmin",
+    ]
+  }
 
   activate_apis                      = ["accesscontextmanager.googleapis.com"]
   vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
@@ -67,9 +77,8 @@ resource "google_access_context_manager_service_perimeter_egress_policy" "egress
   depends_on = [module.shared_vpc_project]
 }
 
-
-resource "google_access_context_manager_service_perimeter_egress_policy" "egress_rule_svpc_kms_dry_run" {
-  count     = !local.enforce_vpcsc ? 1 : 0
+resource "google_access_context_manager_service_perimeter_dry_run_egress_policy" "egress_rule_svpc_kms_dry_run" {
+  count     = local.enforce_vpcsc ? 0 : 1
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
   egress_from {
