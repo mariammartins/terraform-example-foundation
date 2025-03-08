@@ -26,6 +26,12 @@ module "floating_project" {
 
   project_deletion_policy = var.project_deletion_policy
 
+  activate_apis = [
+    "iam.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "storage.googleapis.com"
+  ]
+
   # Metadata
   project_suffix    = "sample-floating"
   application_name  = "${var.business_code}-sample-application"
