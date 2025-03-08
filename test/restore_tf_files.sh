@@ -34,7 +34,7 @@ function networks(){
     if [ "$TF_VAR_example_foundations_mode" == "HubAndSpoke" ]; then
         network_dir="3-networks-hub-and-spoke"
     else
-        network_dir="3-networks-dual-svpc"
+        network_dir="3-networks-svpc"
     fi
 
     # restore backend configs in main module
@@ -58,7 +58,7 @@ function shared(){
     if [ "$TF_VAR_example_foundations_mode" == "HubAndSpoke" ]; then
         network_dir="3-networks-hub-and-spoke"
     else
-        network_dir="3-networks-dual-svpc"
+        network_dir="3-networks-svpc"
     fi
 
     # restore backend configs in main module
