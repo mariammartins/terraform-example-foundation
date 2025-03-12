@@ -73,7 +73,7 @@ Other Workspaces can also be created to isolate deployments if needed.
 1. 3-networks executed successfully.
 
 1. For the manual step described in this document, you need to use the same [Terraform](https://www.terraform.io/downloads.html) version used on the build pipeline.
-Otherwise, you might experience Terraform state snapshot lock errors.
+   Otherwise, you might experience Terraform state snapshot lock errors.
 
    **Note:** As mentioned in 0-bootstrap [README note 2](../0-bootstrap/README.md#deploying-with-cloud-build) at the end of Cloud Build deploy section, make sure that you have requested at least 50 additional projects for the **projects step service account**, otherwise you may face a project quota exceeded error message during the following steps and you will need to apply the fix from [this entry](../docs/TROUBLESHOOTING.md#attempt-to-run-4-projects-step-without-enough-project-quota) of the Troubleshooting guide in order to continue.
 
@@ -89,8 +89,8 @@ commands. The `-T` flag is needed for Linux, but causes problems for MacOS.
 ### Deploying with Cloud Build
 
 1. Clone the `gcp-projects` repo based on the Terraform output from the `0-bootstrap` step.
-Clone the repo at the same level of the `terraform-example-foundation` folder, the following instructions assume this layout.
-Run `terraform output cloudbuild_project_id` in the `0-bootstrap` folder to get the Cloud Build Project ID.
+   Clone the repo at the same level of the `terraform-example-foundation` folder, the following instructions assume this layout.
+   Run `terraform output cloudbuild_project_id` in the `0-bootstrap` folder to get the Cloud Build Project ID.
 
    ```bash
    export CLOUD_BUILD_PROJECT_ID=$(terraform -chdir="terraform-example-foundation/0-bootstrap/" output -raw cloudbuild_project_id)
@@ -137,16 +137,16 @@ Run `terraform output cloudbuild_project_id` in the `0-bootstrap` folder to get 
 
 For example, to create a new business unit similar to business_unit_1, run the following:
 
-   ```bash
-   #copy the business_unit_1 folder and it's contents to a new folder business_unit_2
-   cp -r  business_unit_1 business_unit_2
+```bash
+#copy the business_unit_1 folder and it's contents to a new folder business_unit_2
+cp -r  business_unit_1 business_unit_2
 
-   # search all files under the folder `business_unit_2` and replace strings for business_unit_1 with strings for business_unit_2
-   grep -rl bu1 business_unit_2/ | xargs sed -i 's/bu1/bu2/g'
-   grep -rl business_unit_1 business_unit_2/ | xargs sed -i 's/business_unit_1/business_unit_2/g'
-   # search subnet_ip_range 10.3.64.0 and replace for the new range 10.4.64.0
-   grep -rl 10.3.64.0 business_unit_2/ | xargs sed -i 's/10.3.64.0/10.4.64.0/g'
-   ```
+# search all files under the folder `business_unit_2` and replace strings for business_unit_1 with strings for business_unit_2
+grep -rl bu1 business_unit_2/ | xargs sed -i 's/bu1/bu2/g'
+grep -rl business_unit_1 business_unit_2/ | xargs sed -i 's/business_unit_1/business_unit_2/g'
+# search subnet_ip_range 10.3.64.0 and replace for the new range 10.4.64.0
+grep -rl 10.3.64.0 business_unit_2/ | xargs sed -i 's/10.3.64.0/10.4.64.0/g'
+```
 
 1. Commit changes.
 
@@ -184,6 +184,19 @@ For example, to create a new business unit similar to business_unit_1, run the f
 
    ```bash
    ./tf-wrapper.sh apply shared
+   ```
+
+1. Run `terraform output` to get the email address of infra pipeline service account that will be used to run step `5-app-infra`.
+
+   ```bash
+   export app_infra_step_sa=$(terraform -chdir="business_unit_1/shared" output -json terraform_service_accounts | jq -r '."bu1-example-app"')
+   echo "app-infra service account = ${app_infra_step_sa}"
+   ```
+
+1. Update the perimeter list created previously in the networks step adding the infra pipeline service account in the variable [perimeter_additional_members](../../gcp-networks/common.auto.tfvars), in all your environments ( `production`, `development`, `nonproduction`).
+
+   ```
+   perimeter_additional_members = ["user:YOUR-USER-EMAIL@example.com", "serviceAccount:sa-tf-cb-bu1-example-app@INFRA_PIPELINE_PROJECT_ID.iam.gserviceaccount.com]
    ```
 
 1. Push your plan branch to trigger a plan for all environments. Because the
@@ -295,21 +308,20 @@ To use the `validate` option of the `tf-wrapper.sh` script, please follow the [i
    echo ${GOOGLE_IMPERSONATE_SERVICE_ACCOUNT}
    ```
 
-
 1. (Optional) If you want additional subfolders for separate business units or entities, make additional copies of the folder `business_unit_1` and modify any values that vary across business unit like `business_code`, `business_unit`, or `subnet_ip_range`.
 
 For example, to create a new business unit similar to business_unit_1, run the following:
 
-   ```bash
-   #copy the business_unit_1 folder and it's contents to a new folder business_unit_2
-   cp -r  business_unit_1 business_unit_2
+```bash
+#copy the business_unit_1 folder and it's contents to a new folder business_unit_2
+cp -r  business_unit_1 business_unit_2
 
-   # search all files under the folder `business_unit_2` and replace strings for business_unit_1 with strings for business_unit_2
-   grep -rl bu1 business_unit_2/ | xargs sed -i 's/bu1/bu2/g'
-   grep -rl business_unit_1 business_unit_2/ | xargs sed -i 's/business_unit_1/business_unit_2/g'
-   # search subnet_ip_range 10.3.64.0 and replace for the new range 10.4.64.0
-   grep -rl 10.3.64.0 business_unit_2/ | xargs sed -i 's/10.3.64.0/10.4.64.0/g'
-   ```
+# search all files under the folder `business_unit_2` and replace strings for business_unit_1 with strings for business_unit_2
+grep -rl bu1 business_unit_2/ | xargs sed -i 's/bu1/bu2/g'
+grep -rl business_unit_1 business_unit_2/ | xargs sed -i 's/business_unit_1/business_unit_2/g'
+# search subnet_ip_range 10.3.64.0 and replace for the new range 10.4.64.0
+grep -rl 10.3.64.0 business_unit_2/ | xargs sed -i 's/10.3.64.0/10.4.64.0/g'
+```
 
 1. Checkout `shared` branch. Run `init` and `plan` and review output for environment shared.
 
@@ -354,6 +366,19 @@ For example, to create a new business unit similar to business_unit_1, run the f
    ./tf-wrapper.sh apply development
    git add .
    git commit -m "Initial development commit."
+   ```
+
+1. Run `terraform output` to get the email address of infra pipeline service account that will be used to run step `5-app-infra`.
+
+   ```bash
+   export app_infra_step_sa=$(terraform -chdir="business_unit_1/shared" output -json terraform_service_accounts | jq -r '."bu1-example-app"')
+   echo "app-infra service account = ${app_infra_step_sa}"
+   ```
+
+1. Update the perimeter list created previously in the networks step adding the infra pipeline service account in the variable [perimeter_additional_members](../../3-networks-svpc/common.auto.tfvars), in all your environments ( `production`, `development`, `nonproduction`).
+
+   ```
+   perimeter_additional_members = ["user:YOUR-USER-EMAIL@example.com", "serviceAccount:sa-tf-cb-bu1-example-app@INFRA_PIPELINE_PROJECT_ID.iam.gserviceaccount.com]
    ```
 
 1. Checkout `nonproduction` and merge `development` into it. Run `init` and `plan` and review output for environment nonproduction.
