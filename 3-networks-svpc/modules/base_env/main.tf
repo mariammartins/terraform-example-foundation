@@ -170,7 +170,6 @@ module "shared_vpc" {
   source = "../shared_vpc"
 
   project_id                       = local.shared_vpc_project_id
-  dns_hub_project_id               = local.dns_hub_project_id
   project_number                   = local.shared_vpc_project_number
   environment_code                 = var.environment_code
   access_context_manager_policy_id = var.access_context_manager_policy_id
@@ -202,6 +201,8 @@ module "shared_vpc" {
     local.dedicated_interconnect_egress_policy,
     var.egress_policies_dry_run
   ))
+  target_name_server_addresses = var.target_name_server_addresses
+
 
 
   subnets = [
@@ -254,3 +255,4 @@ module "shared_vpc" {
     "sb-${var.environment_code}-svpc-${var.default_region1}" = var.subnet_secondary_ranges[var.default_region1]
   }
 }
+

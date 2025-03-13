@@ -15,19 +15,13 @@
  */
 
 locals {
-<<<<<<< HEAD:3-networks-hub-and-spoke/modules/shared_vpc/main.tf
-  mode                       = var.mode == null ? "" : var.mode == "hub" ? "-hub" : "-spoke"
-  vpc_name                   = "${var.environment_code}-svpc${local.mode}"
-  network_name               = "vpc-${local.vpc_name}"
-  restricted_googleapis_cidr = module.private_service_connect.private_service_connect_ip
-=======
   mode                        = var.mode == null ? "" : var.mode == "hub" ? "-hub" : "-spoke"
-  vpc_name                    = "${var.environment_code}-shared-restricted${local.mode}"
+  vpc_name                    = "${var.environment_code}-shared-base${local.mode}"
   network_name                = "vpc-${local.vpc_name}"
-  restricted_googleapis_cidr  = module.private_service_connect.private_service_connect_ip
+  private_googleapis_cidr     = module.private_service_connect.private_service_connect_ip
   google_forward_source_range = "35.199.192.0/19"
-  advertised_ip               = var.environment_code == "c" ? [{ range = local.google_forward_source_range }, { range = local.restricted_googleapis_cidr }] : [{ range = local.restricted_googleapis_cidr }]
->>>>>>> master:3-networks-hub-and-spoke/modules/restricted_shared_vpc/main.tf
+  advertised_ip               = var.environment_code == "c" ? [{ range = local.google_forward_source_range }, { range = local.private_googleapis_cidr }] : [{ range = local.private_googleapis_cidr }]
+
 }
 
 /******************************************
@@ -60,13 +54,12 @@ module "main" {
     ]
     : [],
     var.windows_activation_enabled ?
-    [
-      {
-        name              = "rt-${local.vpc_name}-1000-all-default-windows-kms"
-        description       = "Route through IGW to allow Windows KMS activation for GCP."
-        destination_range = "35.190.247.13/32"
-        next_hop_internet = "true"
-        priority          = "1000"
+    [{
+      name              = "rt-${local.vpc_name}-1000-all-default-windows-kms"
+      description       = "Route through IGW to allow Windows KMS activation for GCP."
+      destination_range = "35.190.247.13/32"
+      next_hop_internet = "true"
+      priority          = "1000"
       }
     ]
     : []
@@ -76,11 +69,10 @@ module "main" {
 /***************************************************************
   VPC Peering Configuration
  **************************************************************/
-data "google_compute_network" "vpc_net_hub" {
-  count = var.mode == "spoke" ? 1 : 0
-
-  name    = "vpc-c-svpc-hub"
-  project = var.net_hub_project_id
+data "google_compute_network" "vpc_base_net_hub" {
+  count   = var.mode == "spoke" ? 1 : 0
+  name    = "vpc-c-shared-base-hub"
+  project = var.base_net_hub_project_id
 }
 
 module "peering" {
@@ -90,7 +82,7 @@ module "peering" {
 
   prefix                    = "np"
   local_network             = module.main.network_self_link
-  peer_network              = data.google_compute_network.vpc_net_hub[0].self_link
+  peer_network              = data.google_compute_network.vpc_base_net_hub[0].self_link
   export_peer_custom_routes = true
 }
 
@@ -99,8 +91,7 @@ module "peering" {
  **************************************************************/
 
 resource "google_compute_global_address" "private_service_access_address" {
-  count = var.private_service_cidr != null ? 1 : 0
-
+  count         = var.private_service_cidr != null ? 1 : 0
   name          = "ga-${local.vpc_name}-vpc-peering-internal"
   project       = var.project_id
   purpose       = "VPC_PEERING"
@@ -113,8 +104,7 @@ resource "google_compute_global_address" "private_service_access_address" {
 }
 
 resource "google_service_networking_connection" "private_vpc_connection" {
-  count = var.private_service_cidr != null ? 1 : 0
-
+  count                   = var.private_service_cidr != null ? 1 : 0
   network                 = module.main.network_self_link
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_service_access_address[0].name]
@@ -124,7 +114,7 @@ resource "google_service_networking_connection" "private_vpc_connection" {
 
 /************************************
   Router to advertise shared VPC
-  subnetworks and Google Restricted API
+  subnetworks and Google Private API
 ************************************/
 
 module "region1_router1" {
@@ -132,7 +122,7 @@ module "region1_router1" {
   version = "~> 6.0"
   count   = var.mode != "spoke" ? 1 : 0
 
-  name    = "cr-${local.vpc_name}-${var.default_region1}-cr5"
+  name    = "cr-${local.vpc_name}-${var.default_region1}-cr1"
   project = var.project_id
   network = module.main.network_name
   region  = var.default_region1
@@ -148,7 +138,7 @@ module "region1_router2" {
   version = "~> 6.0"
   count   = var.mode != "spoke" ? 1 : 0
 
-  name    = "cr-${local.vpc_name}-${var.default_region1}-cr6"
+  name    = "cr-${local.vpc_name}-${var.default_region1}-cr2"
   project = var.project_id
   network = module.main.network_name
   region  = var.default_region1
@@ -164,7 +154,7 @@ module "region2_router1" {
   version = "~> 6.0"
   count   = var.mode != "spoke" ? 1 : 0
 
-  name    = "cr-${local.vpc_name}-${var.default_region2}-cr7"
+  name    = "cr-${local.vpc_name}-${var.default_region2}-cr3"
   project = var.project_id
   network = module.main.network_name
   region  = var.default_region2
@@ -180,7 +170,7 @@ module "region2_router2" {
   version = "~> 6.0"
   count   = var.mode != "spoke" ? 1 : 0
 
-  name    = "cr-${local.vpc_name}-${var.default_region2}-cr8"
+  name    = "cr-${local.vpc_name}-${var.default_region2}-cr4"
   project = var.project_id
   network = module.main.network_name
   region  = var.default_region2

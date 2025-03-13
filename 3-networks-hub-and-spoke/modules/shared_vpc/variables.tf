@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+variable "target_name_server_addresses" {
+  description = "List of IPv4 address of target name servers for the forwarding zone configuration. See https://cloud.google.com/dns/docs/overview#dns-forwarding-zones for details on target name servers in the context of Cloud DNS forwarding zones."
+  type        = list(map(any))
+}
+
 variable "access_context_manager_policy_id" {
   type        = number
   description = "The id of the default Access Context Manager policy. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR_ORGANIZATION_ID --format=\"value(name)\"`."
@@ -29,12 +34,16 @@ variable "project_number" {
   description = "Project number for Shared VPC. It is the project INSIDE the regular service perimeter."
 }
 
+<<<<<<< HEAD:3-networks-hub-and-spoke/modules/shared_vpc/variables.tf
 variable "dns_hub_project_id" {
   type        = string
   description = "The DNS hub project ID"
 }
 
 variable "net_hub_project_id" {
+=======
+variable "restricted_net_hub_project_id" {
+>>>>>>> master:3-networks-hub-and-spoke/modules/restricted_shared_vpc/variables.tf
   type        = string
   description = "The net hub project ID"
   default     = ""

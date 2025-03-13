@@ -15,6 +15,7 @@
  */
 
 
+<<<<<<< HEAD
 module "dns_hub_interconnect" {
   source = "../../modules/partner_interconnect"
 
@@ -47,6 +48,9 @@ module "dns_hub_interconnect" {
 }
 
 module "shared_vpc_interconnect" {
+=======
+module "shared_restricted_interconnect" {
+>>>>>>> master
   source = "../../modules/partner_interconnect"
 
   attachment_project_id = local.net_hub_project_id

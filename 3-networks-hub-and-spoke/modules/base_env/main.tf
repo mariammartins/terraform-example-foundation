@@ -156,6 +156,7 @@ locals {
 module "shared_vpc" {
   source = "../shared_vpc"
 
+<<<<<<< HEAD
   project_id                       = local.project_id
   project_number                   = local.project_number
   dns_hub_project_id               = local.dns_hub_project_id
@@ -165,6 +166,16 @@ module "shared_vpc" {
   access_context_manager_policy_id = var.access_context_manager_policy_id
   restricted_services              = local.restricted_services
   restricted_services_dry_run      = local.restricted_services_dry_run
+=======
+  project_id                        = local.restricted_project_id
+  project_number                    = local.restricted_project_number
+  restricted_net_hub_project_id     = local.restricted_net_hub_project_id
+  restricted_net_hub_project_number = local.restricted_net_hub_project_number
+  environment_code                  = var.environment_code
+  access_context_manager_policy_id  = var.access_context_manager_policy_id
+  restricted_services               = local.restricted_services
+  restricted_services_dry_run       = local.restricted_services_dry_run
+>>>>>>> master
   members = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
     "serviceAccount:${local.projects_service_account}",
@@ -175,6 +186,7 @@ module "shared_vpc" {
     "serviceAccount:${local.projects_service_account}",
     "serviceAccount:${local.organization_service_account}",
   ], var.perimeter_additional_members))
+<<<<<<< HEAD
   private_service_cidr       = var.private_service_cidr
   private_service_connect_ip = var.private_service_connect_ip
   ingress_policies           = var.ingress_policies
@@ -184,6 +196,18 @@ module "shared_vpc" {
   default_region2            = var.default_region2
   domain                     = var.domain
   mode                       = "spoke"
+=======
+  private_service_cidr         = var.restricted_private_service_cidr
+  private_service_connect_ip   = var.restricted_private_service_connect_ip
+  ingress_policies             = var.ingress_policies
+  egress_policies              = var.egress_policies
+  bgp_asn_subnet               = local.bgp_asn_number
+  default_region1              = var.default_region1
+  default_region2              = var.default_region2
+  domain                       = var.domain
+  mode                         = "spoke"
+  target_name_server_addresses = var.target_name_server_addresses
+>>>>>>> master
 
   subnets = [
     {
@@ -232,6 +256,80 @@ module "shared_vpc" {
     }
   ]
   secondary_ranges = {
+<<<<<<< HEAD
     "sb-${var.environment_code}-svpc-${var.default_region1}" = var.subnet_secondary_ranges[var.default_region1]
+=======
+    "sb-${var.environment_code}-shared-restricted-${var.default_region1}" = var.restricted_subnet_secondary_ranges[var.default_region1]
+  }
+}
+
+/******************************************
+ Base shared VPC
+*****************************************/
+
+module "base_shared_vpc" {
+  source = "../base_shared_vpc"
+
+  project_id                   = local.base_project_id
+  base_net_hub_project_id      = local.base_net_hub_project_id
+  environment_code             = var.environment_code
+  private_service_cidr         = var.base_private_service_cidr
+  private_service_connect_ip   = var.base_private_service_connect_ip
+  default_region1              = var.default_region1
+  default_region2              = var.default_region2
+  domain                       = var.domain
+  bgp_asn_subnet               = local.bgp_asn_number
+  mode                         = "spoke"
+  target_name_server_addresses = var.target_name_server_addresses
+
+  subnets = [
+    {
+      subnet_name                      = "sb-${var.environment_code}-shared-base-${var.default_region1}"
+      subnet_ip                        = var.base_subnet_primary_ranges[var.default_region1]
+      subnet_region                    = var.default_region1
+      subnet_private_access            = "true"
+      subnet_flow_logs                 = true
+      subnet_flow_logs_interval        = var.base_vpc_flow_logs.aggregation_interval
+      subnet_flow_logs_sampling        = var.base_vpc_flow_logs.flow_sampling
+      subnet_flow_logs_metadata        = var.base_vpc_flow_logs.metadata
+      subnet_flow_logs_metadata_fields = var.base_vpc_flow_logs.metadata_fields
+      subnet_flow_logs_filter          = var.base_vpc_flow_logs.filter_expr
+      description                      = "First ${var.env} subnet example."
+    },
+    {
+      subnet_name                      = "sb-${var.environment_code}-shared-base-${var.default_region2}"
+      subnet_ip                        = var.base_subnet_primary_ranges[var.default_region2]
+      subnet_region                    = var.default_region2
+      subnet_private_access            = "true"
+      subnet_flow_logs                 = true
+      subnet_flow_logs_interval        = var.base_vpc_flow_logs.aggregation_interval
+      subnet_flow_logs_sampling        = var.base_vpc_flow_logs.flow_sampling
+      subnet_flow_logs_metadata        = var.base_vpc_flow_logs.metadata
+      subnet_flow_logs_metadata_fields = var.base_vpc_flow_logs.metadata_fields
+      subnet_flow_logs_filter          = var.base_vpc_flow_logs.filter_expr
+      description                      = "Second ${var.env} subnet example."
+    },
+    {
+      subnet_name      = "sb-${var.environment_code}-shared-base-${var.default_region1}-proxy"
+      subnet_ip        = var.base_subnet_proxy_ranges[var.default_region1]
+      subnet_region    = var.default_region1
+      description      = "First ${var.env} proxy-only subnet example."
+      subnet_flow_logs = false
+      role             = "ACTIVE"
+      purpose          = "REGIONAL_MANAGED_PROXY"
+    },
+    {
+      subnet_name      = "sb-${var.environment_code}-shared-base-${var.default_region2}-proxy"
+      subnet_ip        = var.base_subnet_proxy_ranges[var.default_region2]
+      subnet_region    = var.default_region2
+      description      = "Second ${var.env} proxy-only subnet example."
+      subnet_flow_logs = false
+      role             = "ACTIVE"
+      purpose          = "REGIONAL_MANAGED_PROXY"
+    }
+  ]
+  secondary_ranges = {
+    "sb-${var.environment_code}-shared-base-${var.default_region1}" = var.base_subnet_secondary_ranges[var.default_region1]
+>>>>>>> master
   }
 }

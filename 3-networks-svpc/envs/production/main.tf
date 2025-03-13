@@ -64,4 +64,5 @@ module "base_env" {
   private_service_connect_ip           = "10.17.0.8"
   remote_state_bucket                  = var.remote_state_bucket
   tfc_org_name                         = var.tfc_org_name
+  target_name_server_addresses         = var.target_name_server_addresses
 }

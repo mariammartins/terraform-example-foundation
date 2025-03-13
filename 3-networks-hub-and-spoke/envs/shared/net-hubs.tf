@@ -161,9 +161,89 @@ locals {
 module "shared_vpc" {
   source = "../../modules/shared_vpc"
 
+<<<<<<< HEAD
   project_id                       = local.net_hub_project_id
   project_number                   = local.net_hub_project_number
   dns_hub_project_id               = local.dns_hub_project_id
+=======
+  project_id                    = local.base_net_hub_project_id
+  environment_code              = local.environment_code
+  private_service_connect_ip    = "10.17.0.1"
+  bgp_asn_subnet                = local.bgp_asn_number
+  default_region1               = local.default_region1
+  default_region2               = local.default_region2
+  domain                        = var.domain
+  dns_enable_inbound_forwarding = var.base_hub_dns_enable_inbound_forwarding
+  dns_enable_logging            = var.base_hub_dns_enable_logging
+  firewall_enable_logging       = var.base_hub_firewall_enable_logging
+  nat_enabled                   = var.base_hub_nat_enabled
+  nat_bgp_asn                   = var.base_hub_nat_bgp_asn
+  nat_num_addresses_region1     = var.base_hub_nat_num_addresses_region1
+  nat_num_addresses_region2     = var.base_hub_nat_num_addresses_region2
+  windows_activation_enabled    = var.base_hub_windows_activation_enabled
+  target_name_server_addresses  = var.target_name_server_addresses
+  mode                          = "hub"
+
+  subnets = [
+    {
+      subnet_name                      = "sb-c-shared-base-hub-${local.default_region1}"
+      subnet_ip                        = local.base_subnet_primary_ranges[local.default_region1]
+      subnet_region                    = local.default_region1
+      subnet_private_access            = "true"
+      subnet_flow_logs                 = var.base_vpc_flow_logs.enable_logging
+      subnet_flow_logs_interval        = var.base_vpc_flow_logs.aggregation_interval
+      subnet_flow_logs_sampling        = var.base_vpc_flow_logs.flow_sampling
+      subnet_flow_logs_metadata        = var.base_vpc_flow_logs.metadata
+      subnet_flow_logs_metadata_fields = var.base_vpc_flow_logs.metadata_fields
+      subnet_flow_logs_filter          = var.base_vpc_flow_logs.filter_expr
+      description                      = "Base network hub subnet for ${local.default_region1}"
+    },
+    {
+      subnet_name                      = "sb-c-shared-base-hub-${local.default_region2}"
+      subnet_ip                        = local.base_subnet_primary_ranges[local.default_region2]
+      subnet_region                    = local.default_region2
+      subnet_private_access            = "true"
+      subnet_flow_logs                 = var.base_vpc_flow_logs.enable_logging
+      subnet_flow_logs_interval        = var.base_vpc_flow_logs.aggregation_interval
+      subnet_flow_logs_sampling        = var.base_vpc_flow_logs.flow_sampling
+      subnet_flow_logs_metadata        = var.base_vpc_flow_logs.metadata
+      subnet_flow_logs_metadata_fields = var.base_vpc_flow_logs.metadata_fields
+      subnet_flow_logs_filter          = var.base_vpc_flow_logs.filter_expr
+      description                      = "Base network hub subnet for ${local.default_region2}"
+    },
+    {
+      subnet_name      = "sb-c-shared-base-hub-${local.default_region1}-proxy"
+      subnet_ip        = local.base_subnet_proxy_ranges[local.default_region1]
+      subnet_region    = local.default_region1
+      subnet_flow_logs = false
+      description      = "Base network hub proxy-only subnet for ${local.default_region1}"
+      role             = "ACTIVE"
+      purpose          = "REGIONAL_MANAGED_PROXY"
+    },
+    {
+      subnet_name      = "sb-c-shared-base-hub-${local.default_region2}-proxy"
+      subnet_ip        = local.base_subnet_proxy_ranges[local.default_region2]
+      subnet_region    = local.default_region2
+      subnet_flow_logs = false
+      description      = "Base network hub proxy-only subnet for ${local.default_region2}"
+      role             = "ACTIVE"
+      purpose          = "REGIONAL_MANAGED_PROXY"
+    }
+  ]
+  secondary_ranges = {}
+
+}
+
+/******************************************
+  Restricted Network VPC
+*****************************************/
+
+module "restricted_shared_vpc" {
+  source = "../../modules/restricted_shared_vpc"
+
+  project_id                       = local.restricted_net_hub_project_id
+  project_number                   = local.restricted_net_hub_project_number
+>>>>>>> master
   environment_code                 = local.environment_code
   private_service_connect_ip       = "10.17.0.5"
   access_context_manager_policy_id = var.access_context_manager_policy_id
@@ -183,6 +263,7 @@ module "shared_vpc" {
   default_region1               = local.default_region1
   default_region2               = local.default_region2
   domain                        = var.domain
+<<<<<<< HEAD
   dns_enable_inbound_forwarding = var.hub_dns_enable_inbound_forwarding
   dns_enable_logging            = var.hub_dns_enable_logging
   firewall_enable_logging       = var.hub_firewall_enable_logging
@@ -191,6 +272,17 @@ module "shared_vpc" {
   nat_num_addresses_region1     = var.hub_nat_num_addresses_region1
   nat_num_addresses_region2     = var.hub_nat_num_addresses_region2
   windows_activation_enabled    = var.hub_windows_activation_enabled
+=======
+  dns_enable_inbound_forwarding = var.restricted_hub_dns_enable_inbound_forwarding
+  dns_enable_logging            = var.restricted_hub_dns_enable_logging
+  firewall_enable_logging       = var.restricted_hub_firewall_enable_logging
+  nat_enabled                   = var.restricted_hub_nat_enabled
+  nat_bgp_asn                   = var.restricted_hub_nat_bgp_asn
+  nat_num_addresses_region1     = var.restricted_hub_nat_num_addresses_region1
+  nat_num_addresses_region2     = var.restricted_hub_nat_num_addresses_region2
+  windows_activation_enabled    = var.restricted_hub_windows_activation_enabled
+  target_name_server_addresses  = var.target_name_server_addresses
+>>>>>>> master
   mode                          = "hub"
 
   subnets = [
@@ -248,5 +340,4 @@ module "shared_vpc" {
 
   ingress_policies = var.ingress_policies
 
-  depends_on = [module.dns_hub_vpc]
 }

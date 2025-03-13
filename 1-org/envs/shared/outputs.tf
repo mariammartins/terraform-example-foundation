@@ -79,11 +79,6 @@ output "scc_notifications_project_id" {
   description = "The SCC notifications project ID"
 }
 
-output "dns_hub_project_id" {
-  value       = module.dns_hub.project_id
-  description = "The DNS hub project ID"
-}
-
 output "net_hub_project_id" {
   value       = try(module.network_hub[0].project_id, null)
   description = "The Network hub project ID"
