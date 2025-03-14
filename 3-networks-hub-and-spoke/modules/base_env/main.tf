@@ -174,15 +174,15 @@ module "shared_vpc" {
     "serviceAccount:${local.projects_service_account}",
     "serviceAccount:${local.organization_service_account}",
   ], var.perimeter_additional_members))
-  private_service_cidr       = var.private_service_cidr
-  private_service_connect_ip = var.private_service_connect_ip
-  ingress_policies           = var.ingress_policies
-  egress_policies            = var.egress_policies
-  bgp_asn_subnet             = local.bgp_asn_number
-  default_region1            = var.default_region1
-  default_region2            = var.default_region2
-  domain                     = var.domain
-  mode                       = "spoke"
+  private_service_cidr         = var.private_service_cidr
+  private_service_connect_ip   = var.private_service_connect_ip
+  ingress_policies             = var.ingress_policies
+  egress_policies              = var.egress_policies
+  bgp_asn_subnet               = local.bgp_asn_number
+  default_region1              = var.default_region1
+  default_region2              = var.default_region2
+  domain                       = var.domain
+  mode                         = "spoke"
   target_name_server_addresses = var.target_name_server_addresses
 
   subnets = [
