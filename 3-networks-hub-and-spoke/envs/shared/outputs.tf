@@ -19,7 +19,7 @@ output "host_project_id" {
   description = "The host project ID"
 }
 
-output "shared_network_name" {
+output "network_name" {
   value       = module.shared_vpc.network_name
   description = "The name of the Shared VPC being created"
 }
