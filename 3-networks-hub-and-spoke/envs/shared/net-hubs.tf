@@ -190,6 +190,7 @@ module "shared_vpc" {
   nat_num_addresses_region1     = var.hub_nat_num_addresses_region1
   nat_num_addresses_region2     = var.hub_nat_num_addresses_region2
   windows_activation_enabled    = var.hub_windows_activation_enabled
+  target_name_server_addresses  = var.target_name_server_addresses
   mode                          = "hub"
 
   subnets = [

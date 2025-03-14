@@ -19,7 +19,7 @@ output "network_name" {
   description = "The name of the VPC being created"
 }
 
-output "restricted_dns_policy" {
+output "dns_policy" {
   value       = google_dns_policy.default_policy.name
   description = "The name of the DNS policy being created"
 }

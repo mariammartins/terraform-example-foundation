@@ -45,6 +45,7 @@
 |------|-------------|
 | access\_level\_name | Access context manager access level name for the enforced perimeter |
 | access\_level\_name\_dry\_run | Access context manager access level name for the dry-run perimeter |
+| dns\_policy | The name of the DNS policy being created |
 | enforce\_vpcsc | Enable the enforced mode for VPC Service Controls. It is not recommended to enable VPC-SC on the first run deploying your foundation. Review [best practices for enabling VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/enable), then only enforce the perimeter after you have analyzed the access patterns in your dry-run perimeter and created the necessary exceptions for your use cases. |
 | firewall\_policy | Policy created for firewall policy rules. |
 | network\_name | The name of the VPC being created |
@@ -53,7 +54,6 @@
 | region1\_router2 | Router 2 for Region 1 |
 | region2\_router1 | Router 1 for Region 2 |
 | region2\_router2 | Router 2 for Region 2 |
-| restricted\_dns\_policy | The name of the DNS policy being created |
 | service\_perimeter\_name | Access context manager service perimeter name for the enforced perimeter |
 | subnets\_ips | The IPs and CIDRs of the subnets being created |
 | subnets\_names | The names of the subnets being created |

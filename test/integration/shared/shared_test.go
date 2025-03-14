@@ -153,9 +153,9 @@ func TestShared(t *testing.T) {
 					assert.Equal(baseDNSHubNetworkUrl, baseComputeRouter.Get("network").String(), fmt.Sprintf("router %s should be on network vpc-c-shared-base-hub", router.name))
 				}
 
-				restrictedProjectID := shared.GetStringOutput("restricted_host_project_id")
-				restrictedNetworkName := shared.GetStringOutput("restricted_network_name")
-				restrictedDNSPolicyName := shared.GetStringOutput("restricted_dns_policy")
+				restrictedProjectID := shared.GetStringOutput("host_project_id")
+				restrictedNetworkName := shared.GetStringOutput("shared_network_name")
+				restrictedDNSPolicyName := shared.GetStringOutput("dns_policy")
 				restrictedDNSHubNetworkUrl := fmt.Sprintf("https://www.googleapis.com/compute/v1/projects/%s/global/networks/%s", restrictedProjectID, restrictedNetworkName)
 
 				restrictedDNSPolicy := gcloud.Runf(t, "dns policies describe %s --project %s", restrictedDNSPolicyName, restrictedProjectID)
