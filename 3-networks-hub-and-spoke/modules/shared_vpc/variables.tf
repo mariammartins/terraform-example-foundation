@@ -34,16 +34,7 @@ variable "project_number" {
   description = "Project number for Shared VPC. It is the project INSIDE the regular service perimeter."
 }
 
-<<<<<<< HEAD:3-networks-hub-and-spoke/modules/shared_vpc/variables.tf
-variable "dns_hub_project_id" {
-  type        = string
-  description = "The DNS hub project ID"
-}
-
 variable "net_hub_project_id" {
-=======
-variable "restricted_net_hub_project_id" {
->>>>>>> master:3-networks-hub-and-spoke/modules/restricted_shared_vpc/variables.tf
   type        = string
   description = "The net hub project ID"
   default     = ""

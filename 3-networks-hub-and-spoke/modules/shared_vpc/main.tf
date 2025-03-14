@@ -15,19 +15,12 @@
  */
 
 locals {
-<<<<<<< HEAD:3-networks-hub-and-spoke/modules/shared_vpc/main.tf
-  mode                       = var.mode == null ? "" : var.mode == "hub" ? "-hub" : "-spoke"
-  vpc_name                   = "${var.environment_code}-svpc${local.mode}"
-  network_name               = "vpc-${local.vpc_name}"
-  restricted_googleapis_cidr = module.private_service_connect.private_service_connect_ip
-=======
   mode                        = var.mode == null ? "" : var.mode == "hub" ? "-hub" : "-spoke"
-  vpc_name                    = "${var.environment_code}-shared-restricted${local.mode}"
+  vpc_name                    = "${var.environment_code}-svpc${local.mode}"
   network_name                = "vpc-${local.vpc_name}"
   restricted_googleapis_cidr  = module.private_service_connect.private_service_connect_ip
   google_forward_source_range = "35.199.192.0/19"
   advertised_ip               = var.environment_code == "c" ? [{ range = local.google_forward_source_range }, { range = local.restricted_googleapis_cidr }] : [{ range = local.restricted_googleapis_cidr }]
->>>>>>> master:3-networks-hub-and-spoke/modules/restricted_shared_vpc/main.tf
 }
 
 /******************************************
