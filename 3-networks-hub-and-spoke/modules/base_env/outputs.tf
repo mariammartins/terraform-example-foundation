@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-<<<<<<< HEAD
-output "host_project_id" {
-  value       = local.project_id
-  description = "The host project ID"
-=======
 output "target_name_server_addresses" {
   value       = var.target_name_server_addresses
   description = "List of IPv4 address of target name servers for the forwarding zone configuration"
 }
 
-/*********************
- Restricted Outputs
-*********************/
-
-output "restricted_host_project_id" {
-  value       = local.restricted_project_id
-  description = "The restricted host project ID"
->>>>>>> master
+output "host_project_id" {
+  value       = local.project_id
+  description = "The host project ID"
 }
 
 output "network_name" {
