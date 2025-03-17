@@ -171,6 +171,7 @@ module "shared_vpc" {
 
   project_id                       = local.shared_vpc_project_id
   project_number                   = local.shared_vpc_project_number
+  dns_project_id                   =  local.dns_project_id
   environment_code                 = var.environment_code
   access_context_manager_policy_id = var.access_context_manager_policy_id
   restricted_services              = local.restricted_services
