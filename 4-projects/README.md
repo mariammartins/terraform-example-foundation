@@ -186,19 +186,6 @@ grep -rl 10.3.64.0 business_unit_2/ | xargs sed -i 's/10.3.64.0/10.4.64.0/g'
    ./tf-wrapper.sh apply shared
    ```
 
-1. Run `terraform output` to get the email address of infra pipeline service account that will be used to run step `5-app-infra`.
-
-   ```bash
-   export app_infra_step_sa=$(terraform -chdir="business_unit_1/shared" output -json terraform_service_accounts | jq -r '."bu1-example-app"')
-   echo "app-infra service account = ${app_infra_step_sa}"
-   ```
-
-1. Update the perimeter list created previously in the networks step adding the infra pipeline service account in the variable [perimeter_additional_members](../../gcp-networks/common.auto.tfvars), in all your environments ( `production`, `development`, `nonproduction`).
-
-   ```
-   perimeter_additional_members = ["user:YOUR-USER-EMAIL@example.com", "serviceAccount:sa-tf-cb-bu1-example-app@INFRA_PIPELINE_PROJECT_ID.iam.gserviceaccount.com]
-   ```
-
 1. Push your plan branch to trigger a plan for all environments. Because the
    _plan_ branch is not a [named environment branch](../docs/FAQ.md#what-is-a-named-branch)), pushing your _plan_
    branch triggers _terraform plan_ but not _terraform apply_. Review the plan output in your Cloud Build project https://console.cloud.google.com/cloud-build/builds;region=DEFAULT_REGION?project=YOUR_CLOUD_BUILD_PROJECT_ID
@@ -366,19 +353,6 @@ grep -rl 10.3.64.0 business_unit_2/ | xargs sed -i 's/10.3.64.0/10.4.64.0/g'
    ./tf-wrapper.sh apply development
    git add .
    git commit -m "Initial development commit."
-   ```
-
-1. Run `terraform output` to get the email address of infra pipeline service account that will be used to run step `5-app-infra`.
-
-   ```bash
-   export app_infra_step_sa=$(terraform -chdir="business_unit_1/shared" output -json terraform_service_accounts | jq -r '."bu1-example-app"')
-   echo "app-infra service account = ${app_infra_step_sa}"
-   ```
-
-1. Update the perimeter list created previously in the networks step adding the infra pipeline service account in the variable [perimeter_additional_members](../../3-networks-svpc/common.auto.tfvars), in all your environments ( `production`, `development`, `nonproduction`).
-
-   ```
-   perimeter_additional_members = ["user:YOUR-USER-EMAIL@example.com", "serviceAccount:sa-tf-cb-bu1-example-app@INFRA_PIPELINE_PROJECT_ID.iam.gserviceaccount.com]
    ```
 
 1. Checkout `nonproduction` and merge `development` into it. Run `init` and `plan` and review output for environment nonproduction.

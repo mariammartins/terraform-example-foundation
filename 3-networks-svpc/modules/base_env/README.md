@@ -44,5 +44,6 @@
 | subnets\_names | The names of the subnets being created |
 | subnets\_secondary\_ranges | The secondary ranges associated with these subnets |
 | subnets\_self\_links | The self-links of subnets being created |
+| target\_name\_server\_addresses | List of IPv4 addresses of the target name servers for the forwarding zone configuration. These IP addresses should point to the name server responsible for replying to DNS queries. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
