@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-variable "restricted_dns_project_id" {
+variable "dns_project_id" {
   description = "Project ID for DNS Restricted Shared."
   type        = string
   default     = ""
