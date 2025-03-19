@@ -21,7 +21,7 @@ locals {
   projects_backend_bucket             = data.terraform_remote_state.bootstrap.outputs.projects_gcs_bucket_tfstate
   perimeter_name                      = data.terraform_remote_state.network_env.outputs.service_perimeter_name
   network_self_link                   = data.terraform_remote_state.network_env.outputs.network_self_link
-  shared_vpc_host_project_id          = data.terraform_remote_state.network_env.outputs.shared_vpc_host_project_id
+  shared_vpc_host_project_id          = data.terraform_remote_state.network_env.outputs.host_project_id
   subnets_self_links                  = data.terraform_remote_state.network_env.outputs.subnets_self_links
   access_context_manager_policy_id    = data.terraform_remote_state.network_env.outputs.access_context_manager_policy_id
   enforce_vpcsc                       = data.terraform_remote_state.network_env.outputs.enforce_vpcsc
