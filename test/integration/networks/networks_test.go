@@ -340,7 +340,7 @@ func TestNetworks(t *testing.T) {
 						assert.True(strings.Contains(servicePerimeter, service), fmt.Sprintf("service perimeter %s should restrict all supported services", servicePerimeterLink))
 					}
 
-					projectID := networks.GetStringOutput("svpc_host_project_id")
+					projectID := networks.GetStringOutput("shared_vpc_host_project_id")
 
 					if strings.Contains(projectID, "-p-") && networkMode != "-spoke" {
 						for _, dnsType := range []string{

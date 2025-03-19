@@ -23,7 +23,7 @@ module "firewall_rules" {
   version = "~> 10.0"
 
   project_id  = var.project_id
-  policy_name = "fp-${var.environment_code}-shared-vpc-firewalls"
+  policy_name = "fp-${var.environment_code}-svpc-firewalls"
   description = "Firewall rules for shared vpc: ${module.main.network_name}."
   target_vpcs = ["projects/${var.project_id}/global/networks/${module.main.network_name}"]
 
