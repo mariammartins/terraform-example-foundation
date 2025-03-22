@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-output "host_project_id" {
+output "shared_vpc_host_project_id" {
   value       = local.net_hub_project_id
   description = "The host project ID"
 }

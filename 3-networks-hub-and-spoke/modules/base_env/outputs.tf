@@ -19,8 +19,8 @@ output "target_name_server_addresses" {
   description = "List of IPv4 address of target name servers for the forwarding zone configuration"
 }
 
-output "host_project_id" {
-  value       = local.project_id
+output "shared_vpc_host_project_id" {
+  value       = local.shared_vpc_project_id
   description = "The host project ID"
 }
 

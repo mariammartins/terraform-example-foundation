@@ -89,7 +89,7 @@ func TestShared(t *testing.T) {
 				dnsFwZoneName := "fz-dns-hub"
 				bgpAdvertisedIpRange := "35.199.192.0/19"
 
-				projectID := shared.GetStringOutput("host_project_id")
+				projectID := shared.GetStringOutput("shared_vpc_host_project_id")
 				networkName := shared.GetStringOutput("network_name")
 				DNSPolicyName := shared.GetStringOutput("dns_policy")
 				sharedDNSHubNetworkUrl := fmt.Sprintf("https://www.googleapis.com/compute/v1/projects/%s/global/networks/%s", projectID, networkName)

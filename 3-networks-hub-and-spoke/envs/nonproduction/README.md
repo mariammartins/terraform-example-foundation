@@ -35,10 +35,10 @@ The purpose of this step is to set up shared VPCs with default DNS, NAT (optiona
 | access\_level\_name | Access context manager access level name |
 | access\_level\_name\_dry\_run | Access context manager access level name for the dry-run perimeter |
 | enforce\_vpcsc | Enable the enforced mode for VPC Service Controls. It is not recommended to enable VPC-SC on the first run deploying your foundation. Review [best practices for enabling VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/enable), then only enforce the perimeter after you have analyzed the access patterns in your dry-run perimeter and created the necessary exceptions for your use cases. |
-| host\_project\_id | The shared vpc host project ID |
 | network\_name | The name of the VPC being created |
 | network\_self\_link | The URI of the VPC being created |
 | service\_perimeter\_name | Access context manager service perimeter name |
+| shared\_vpc\_host\_project\_id | The shared vpc host project ID |
 | subnets\_ips | The IPs and CIDRs of the subnets being created |
 | subnets\_names | The names of the subnets being created |
 | subnets\_secondary\_ranges | The secondary ranges associated with these subnets |
