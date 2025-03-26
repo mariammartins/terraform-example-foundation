@@ -359,6 +359,7 @@ module "network_hub" {
     secondary_contact = "example2"
     business_code     = "shared"
     env_code          = "net"
+    vpc               = "svpc"
   }
   budget_alert_pubsub_topic   = var.project_budget.net_hub_alert_pubsub_topic
   budget_alert_spent_percents = var.project_budget.net_hub_alert_spent_percents

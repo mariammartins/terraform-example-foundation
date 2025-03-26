@@ -152,7 +152,7 @@ locals {
 module "service_control" {
   source = "../../modules/service_control"
 
-  access_context_manager_policy_id = local.access_context_manager_policy_id
+  access_context_manager_policy_id = var.access_context_manager_policy_id
   restricted_services              = local.restricted_services
   restricted_services_dry_run      = local.restricted_services_dry_run
   members = distinct(concat([
