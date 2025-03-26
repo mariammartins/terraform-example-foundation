@@ -48,7 +48,6 @@
 | cai\_monitoring\_topic | CAI Monitoring Cloud Function Pub/Sub Topic name. |
 | common\_folder\_name | The common folder name |
 | common\_kms\_project\_id | The org Cloud Key Management Service (KMS) project ID |
-| dns\_hub\_project\_id | The DNS hub project ID |
 | domains\_to\_allow | The list of domains to allow users from in IAM. |
 | enforce\_vpcsc | Enable the enforced mode for VPC Service Controls. It is not recommended to enable VPC-SC on the first run deploying your foundation. Review [best practices for enabling VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/enable), then only enforce the perimeter after you have analyzed the access patterns in your dry-run perimeter and created the necessary exceptions for your use cases. |
 | interconnect\_project\_id | The Dedicated Interconnect project ID |
