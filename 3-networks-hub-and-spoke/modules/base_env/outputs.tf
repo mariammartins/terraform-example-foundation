@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-output "host_project_id" {
+output "target_name_server_addresses" {
+  value       = var.target_name_server_addresses
+  description = "List of IPv4 address of target name servers for the forwarding zone configuration"
+}
+
+output "shared_vpc_host_project_id" {
   value       = local.shared_vpc_project_id
   description = "The host project ID"
 }

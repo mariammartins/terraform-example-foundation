@@ -26,9 +26,9 @@ The purpose of this step is to set up shared VPCs with default DNS, NAT (optiona
 | Name | Description |
 |------|-------------|
 | access\_context\_manager\_policy\_id | Access Context Manager Policy ID. |
-| host\_project\_id | The host project ID |
 | network\_name | The name of the VPC being created |
 | network\_self\_link | The URI of the VPC being created |
+| shared\_vpc\_host\_project\_id | The host project ID |
 | subnets\_ips | The IPs and CIDRs of the subnets being created |
 | subnets\_names | The names of the subnets being created |
 | subnets\_secondary\_ranges | The secondary ranges associated with these subnets |

@@ -19,8 +19,8 @@ output "access_context_manager_policy_id" {
   value       = var.access_context_manager_policy_id
 }
 
-output "host_project_id" {
-  value       = module.base_env.host_project_id
+output "shared_vpc_host_project_id" {
+  value       = module.base_env.shared_vpc_host_project_id
   description = "The host project ID"
 }
 

@@ -39,6 +39,8 @@ The purpose of this step is to set up the global [DNS Hub](https://cloud.google.
 
 | Name | Description |
 |------|-------------|
-| dns\_hub\_project\_id | The DNS hub project ID |
+| dns\_policy | The name of the DNS policy being created |
+| network\_name | The name of the Shared VPC being created |
+| shared\_vpc\_host\_project\_id | The host project ID |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

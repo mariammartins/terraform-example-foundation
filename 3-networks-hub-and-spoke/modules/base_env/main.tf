@@ -31,7 +31,6 @@ module "shared_vpc" {
 
   project_id                       = local.shared_vpc_project_id
   project_number                   = local.shared_vpc_project_number
-  dns_hub_project_id               = local.dns_hub_project_id
   net_hub_project_id               = local.net_hub_project_id
   net_hub_project_number           = local.net_hub_project_number
   environment_code                 = var.environment_code
@@ -43,6 +42,7 @@ module "shared_vpc" {
   default_region2                  = var.default_region2
   domain                           = var.domain
   mode                             = "spoke"
+  target_name_server_addresses     = var.target_name_server_addresses
 
   subnets = [
     {

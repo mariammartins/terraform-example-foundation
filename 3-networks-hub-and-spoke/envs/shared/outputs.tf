@@ -14,7 +14,17 @@
  * limitations under the License.
  */
 
-output "dns_hub_project_id" {
-  value       = local.dns_hub_project_id
-  description = "The DNS hub project ID"
+output "shared_vpc_host_project_id" {
+  value       = local.net_hub_project_id
+  description = "The host project ID"
+}
+
+output "network_name" {
+  value       = module.shared_vpc.network_name
+  description = "The name of the Shared VPC being created"
+}
+
+output "dns_policy" {
+  value       = module.shared_vpc.dns_policy
+  description = "The name of the DNS policy being created"
 }
