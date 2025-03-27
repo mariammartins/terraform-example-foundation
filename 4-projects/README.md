@@ -220,6 +220,14 @@ grep -rl 10.3.64.0 business_unit_2/ | xargs sed -i 's/10.3.64.0/10.4.64.0/g'
    git push origin nonproduction
    ```
 
+1. Update file `1-org/envs/shared/terraform.tfvars` in the production branch adding the APP Infra Pipeline service account to the perimeter by updating the value for the variable `perimeter_additional_members`.
+
+   ```hcl
+   perimeter_additional_members = ["user:YOUR-USER-EMAIL@example.com", "serviceAccount:APP-INFRA-PIPELINE-SERVICE_ACCOUNT@example.com"]
+   ```
+
+If you received any errors or made any changes to the Terraform config or any `.tfvars`, you must re-run `./tf-wrapper.sh plan <env>` before running `./tf-wrapper.sh apply <env>`.
+
 1. Before executing the next step, unset the `GOOGLE_IMPERSONATE_SERVICE_ACCOUNT` environment variable.
 
    ```bash

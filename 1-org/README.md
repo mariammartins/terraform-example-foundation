@@ -55,7 +55,8 @@ For an overview of the architecture and the parts, see the
 
 ## Purpose
 
-The purpose of this step is to set up top-level shared folders, networking projects, organization-level logging, and baseline security settings through organizational policies.
+- Set up top-level shared folders, networking projects, organization-level logging, and baseline security settings through organizational policies.
+- Set up VPC Service Controls.
 
 ## Prerequisites
 
@@ -155,6 +156,12 @@ If required, run `terraform output cloudbuild_project_id` in the `0-bootstrap` f
    echo "access_context_manager_policy_id = ${ACCESS_CONTEXT_MANAGER_ID}"
    ```
 
+1. Update `envs/shared/terraform.tfvars` file with the `access_context_manager_policy_id`.
+
+   ```bash
+   sed -i'' -e "s/ACCESS_CONTEXT_MANAGER_ID/${ACCESS_CONTEXT_MANAGER_ID}/" ./envs/shared/terraform.tfvars
+   ```
+
 1. Update the `envs/shared/terraform.tfvars` file with values from your environment and 0-bootstrap step. If the previous step showed a numeric value, un-comment the variable `create_access_context_manager_access_policy = false`. See the shared folder [README.md](./envs/shared/README.md) for additional information on the values in the `terraform.tfvars` file.
 
    ```bash
@@ -249,6 +256,12 @@ Create `gcp-org` folder, copy `1-org` content and Terraform wrapper script; ensu
    echo "access_context_manager_policy_id = ${ACCESS_CONTEXT_MANAGER_ID}"
    ```
 
+1. Update `envs/shared/terraform.tfvars` file with the `access_context_manager_policy_id`.
+
+   ```bash
+   sed -i'' -e "s/ACCESS_CONTEXT_MANAGER_ID/${ACCESS_CONTEXT_MANAGER_ID}/" ./envs/shared/terraform.tfvars
+   ```
+
 1. Update the `envs/shared/terraform.tfvars` file with values from your environment and `gcp-bootstrap` step. If the previous step showed a numeric value, un-comment the variable `create_access_context_manager_access_policy = false`. See the shared folder [README.md](./envs/shared/README.md) for additional information on the values in the `terraform.tfvars` file.
 
    ```bash
@@ -259,6 +272,8 @@ Create `gcp-org` folder, copy `1-org` content and Terraform wrapper script; ensu
 
    if [ ! -z "${ACCESS_CONTEXT_MANAGER_ID}" ]; then sed -i'' -e "s=//create_access_context_manager_access_policy=create_access_context_manager_access_policy=" ./envs/shared/terraform.tfvars; fi
    ```
+
+**Note:** Make sure that you update the `perimeter_additional_members` variable with your user identity in order to be able to view/access resources in the project protected by the VPC Service Controls.
 
 You can now deploy your environment (production) using this script.
 
@@ -310,3 +325,11 @@ Before executing the next stages, unset the `GOOGLE_IMPERSONATE_SERVICE_ACCOUNT`
 ```bash
 unset GOOGLE_IMPERSONATE_SERVICE_ACCOUNT
 ```
+
+### (Optional) Enforce VPC Service Controls
+
+Because enabling VPC Service Controls can be a disruptive process, this repo configures VPC Service Controls perimeters in dry run mode by default. This configuration will service traffic that crosses the security perimeter (API requests that originate from inside your perimeter communicating with external resources, or API requests from external resources communicating with resources inside your perimeter) but still allow service traffic normally.
+
+When you are ready to enforce VPC Service Controls, we recommend that you review the guidance at [Best practices for enabling VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/enable). After you have added the necessary exceptions and are confident that VPC Service Controls will not disrupt your intended operations, set the variable `enforce_vpcsc` under the module `service_control` to `true` and re-apply this stage. Then re-apply the 2-environments and 4-projects stage, which will inherit the new setting and include those projects inside the enforced perimeter.
+
+When you need to make changes to an existing enforced perimeter, you can test safely by modifying the configuration of the [dry run perimeter](https://cloud.google.com/vpc-service-controls/docs/dry-run-mode). This will log traffic denied by the dry run perimeter without impacting whether the enforced perimeter allows or denies traffic.

@@ -26,6 +26,9 @@ locals {
     "nonproduction" : "n",
     "production" : "p"
   }
+
+  enforce_vpcsc  = module.service_control.enforce_vpcsc
+  perimeter_name = module.service_control.service_perimeter_name
 }
 
 /******************************************
@@ -46,6 +49,10 @@ module "org_audit_logs" {
   deletion_policy          = var.project_deletion_policy
   activate_apis            = ["logging.googleapis.com", "bigquery.googleapis.com", "billingbudgets.googleapis.com"]
 
+  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+
   labels = {
     environment       = "common"
     application_name  = "org-logging"
@@ -60,6 +67,8 @@ module "org_audit_logs" {
   budget_alert_spent_percents = var.project_budget.org_audit_logs_alert_spent_percents
   budget_amount               = var.project_budget.org_audit_logs_budget_amount
   budget_alert_spend_basis    = var.project_budget.org_audit_logs_budget_alert_spend_basis
+
+  depends_on = [module.service_control]
 }
 
 /******************************************
@@ -80,6 +89,10 @@ module "org_billing_export" {
   deletion_policy          = var.project_deletion_policy
   activate_apis            = ["logging.googleapis.com", "bigquery.googleapis.com", "billingbudgets.googleapis.com"]
 
+  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+
   labels = {
     environment       = "common"
     application_name  = "org-billing-export"
@@ -90,10 +103,13 @@ module "org_billing_export" {
     env_code          = "c"
     vpc               = "none"
   }
+
   budget_alert_pubsub_topic   = var.project_budget.org_billing_export_alert_pubsub_topic
   budget_alert_spent_percents = var.project_budget.org_billing_export_alert_spent_percents
   budget_amount               = var.project_budget.org_billing_export_budget_amount
   budget_alert_spend_basis    = var.project_budget.org_billing_export_budget_alert_spend_basis
+
+  depends_on = [module.service_control]
 }
 
 /******************************************
@@ -114,6 +130,10 @@ module "common_kms" {
   deletion_policy          = var.project_deletion_policy
   activate_apis            = ["logging.googleapis.com", "cloudkms.googleapis.com", "billingbudgets.googleapis.com"]
 
+  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+
   labels = {
     environment       = "common"
     application_name  = "org-kms"
@@ -129,6 +149,8 @@ module "common_kms" {
   budget_alert_spent_percents = var.project_budget.common_kms_alert_spent_percents
   budget_amount               = var.project_budget.common_kms_budget_amount
   budget_alert_spend_basis    = var.project_budget.common_kms_budget_alert_spend_basis
+
+  depends_on = [module.service_control]
 }
 
 /******************************************
@@ -149,6 +171,10 @@ module "org_secrets" {
   deletion_policy          = var.project_deletion_policy
   activate_apis            = ["logging.googleapis.com", "secretmanager.googleapis.com", "billingbudgets.googleapis.com"]
 
+  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+
   labels = {
     environment       = "common"
     application_name  = "org-secrets"
@@ -163,6 +189,8 @@ module "org_secrets" {
   budget_alert_spent_percents = var.project_budget.org_secrets_alert_spent_percents
   budget_amount               = var.project_budget.org_secrets_budget_amount
   budget_alert_spend_basis    = var.project_budget.org_secrets_budget_alert_spend_basis
+
+  depends_on = [module.service_control]
 }
 
 /******************************************
@@ -183,6 +211,10 @@ module "interconnect" {
   deletion_policy          = var.project_deletion_policy
   activate_apis            = ["billingbudgets.googleapis.com", "compute.googleapis.com"]
 
+  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+
   labels = {
     environment       = "network"
     application_name  = "org-interconnect"
@@ -193,10 +225,13 @@ module "interconnect" {
     env_code          = "net"
     vpc               = "none"
   }
+
   budget_alert_pubsub_topic   = var.project_budget.interconnect_alert_pubsub_topic
   budget_alert_spent_percents = var.project_budget.interconnect_alert_spent_percents
   budget_amount               = var.project_budget.interconnect_budget_amount
   budget_alert_spend_basis    = var.project_budget.interconnect_budget_alert_spend_basis
+
+  depends_on = [module.service_control]
 }
 
 /******************************************
@@ -217,6 +252,10 @@ module "scc_notifications" {
   deletion_policy          = var.project_deletion_policy
   activate_apis            = ["logging.googleapis.com", "pubsub.googleapis.com", "securitycenter.googleapis.com", "billingbudgets.googleapis.com", "cloudkms.googleapis.com"]
 
+  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+
   labels = {
     environment       = "common"
     application_name  = "org-scc"
@@ -227,10 +266,13 @@ module "scc_notifications" {
     env_code          = "c"
     vpc               = "none"
   }
+
   budget_alert_pubsub_topic   = var.project_budget.scc_notifications_alert_pubsub_topic
   budget_alert_spent_percents = var.project_budget.scc_notifications_alert_spent_percents
   budget_amount               = var.project_budget.scc_notifications_budget_amount
   budget_alert_spend_basis    = var.project_budget.scc_notifications_budget_alert_spend_basis
+
+  depends_on = [module.service_control]
 }
 
 /******************************************
@@ -260,6 +302,10 @@ module "network_hub" {
     "billingbudgets.googleapis.com"
   ]
 
+  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+
   labels = {
     environment       = "network"
     application_name  = "org-net-hub"
@@ -270,10 +316,13 @@ module "network_hub" {
     env_code          = "net"
     vpc               = "svpc"
   }
+
   budget_alert_pubsub_topic   = var.project_budget.net_hub_alert_pubsub_topic
   budget_alert_spent_percents = var.project_budget.net_hub_alert_spent_percents
   budget_amount               = var.project_budget.net_hub_budget_amount
   budget_alert_spend_basis    = var.project_budget.net_hub_budget_alert_spend_basis
+
+  depends_on = [module.service_control]
 }
 
 /************************************************************
@@ -294,12 +343,18 @@ module "environment_network" {
   env      = each.key
   env_code = each.value
 
+  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+
   project_budget = {
     network_budget_amount            = var.project_budget.shared_network_budget_amount
     network_alert_spent_percents     = var.project_budget.shared_network_alert_spent_percents
     network_alert_pubsub_topic       = var.project_budget.shared_network_alert_pubsub_topic
     network_budget_alert_spend_basis = var.project_budget.shared_network_budget_alert_spend_basis
   }
+
+  depends_on = [module.service_control]
 }
 
 /*********************************************************************

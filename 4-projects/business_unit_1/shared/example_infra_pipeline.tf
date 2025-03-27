@@ -15,7 +15,8 @@
  */
 
 locals {
-  repo_names = ["bu1-example-app"]
+  repo_names                 = ["bu1-example-app"]
+  terraform_service_accounts = values(module.infra_pipelines[0].terraform_service_accounts)
 }
 
 module "app_infra_cloudbuild_project" {
@@ -39,6 +40,12 @@ module "app_infra_cloudbuild_project" {
     "artifactregistry.googleapis.com",
     "cloudresourcemanager.googleapis.com"
   ]
+
+  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  vpc_service_control_sleep_duration = "60s"
+
   # Metadata
   project_suffix    = "infra-pipeline"
   application_name  = "app-infra-pipelines"
@@ -46,6 +53,12 @@ module "app_infra_cloudbuild_project" {
   primary_contact   = "example@example.com"
   secondary_contact = "example2@example.com"
   business_code     = "bu1"
+}
+
+resource "google_organization_iam_member" "terraform_service_accounts" {
+  org_id = local.org_id
+  role   = "roles/iam.serviceAccountCreator"
+  member = "serviceAccount:${local.terraform_service_accounts[0]}"
 }
 
 module "infra_pipelines" {
