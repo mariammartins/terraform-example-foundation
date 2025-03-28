@@ -38,7 +38,7 @@ variable "private_worker_pool" {
     region                   = optional(string, "us-central1")
     disk_size_gb             = optional(number, 100)
     machine_type             = optional(string, "e2-medium")
-    no_external_ip           = optional(bool, false)
+    no_external_ip           = optional(bool, true)
     enable_network_peering   = optional(bool, false)
     create_peered_network    = optional(bool, false)
     peered_network_id        = optional(string, "")
