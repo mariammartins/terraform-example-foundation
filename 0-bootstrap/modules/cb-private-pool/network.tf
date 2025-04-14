@@ -17,7 +17,7 @@
 locals {
   peered_ip_range = var.private_worker_pool.enable_network_peering ? "${google_compute_global_address.worker_pool_range[0].address}/${google_compute_global_address.worker_pool_range[0].prefix_length}" : ""
 
-  nat_proxy_vm_ip_range = "10.1.1.0/24"
+nat_proxy_vm_ip_range = "10.1.1.0/24"
 
   single_project_network = {
     subnet_name           = "eab-develop-us-central1"
@@ -106,7 +106,6 @@ resource "google_compute_network_peering_routes_config" "peering_routes" {
 
   import_custom_routes = true
   export_custom_routes = true
-
 }
 
 module "firewall_rules" {
@@ -120,7 +119,7 @@ module "firewall_rules" {
   rules = [
     {
       name                    = "fw-b-cbpools-100-i-a-all-all-all-service-networking"
-      description             = "allow ingress from the IPs configured for service networking"
+      description             = "Allow ingress from the IPs configured for service networking"
       direction               = "INGRESS"
       priority                = 100
       source_tags             = null
@@ -186,14 +185,35 @@ module "firewall_rules" {
       log_config = {
         metadata = "INCLUDE_ALL_METADATA"
       }
+    },
+    {
+      name                    = "allow-ssh-ingress"
+      description             = "Allow SSH from anywhere (0.0.0.0/1)"
+      direction               = "INGRESS"
+      priority                = 1000
+      source_tags             = null
+      source_service_accounts = null
+      target_tags             = null
+      target_service_accounts = null
+
+      ranges = ["0.0.0.0/1"]
+
+      allow = [{
+        protocol = "tcp"
+        ports    = ["22"]
+      }]
+
+      deny = []
+
+      log_config = {
+        metadata = "INCLUDE_ALL_METADATA"
+      }
     }
   ]
 }
 
-
-
 resource "google_compute_address" "cloud_build_nat" {
-  project      = var.project_id
+  project = var.project_id
   address_type = "EXTERNAL"
   name         = "cloud-build-nat"
   network_tier = "PREMIUM"
@@ -216,7 +236,7 @@ resource "google_compute_instance" "vm-proxy" {
 
   network_interface {
     network            = local.peered_network_name
-    subnetwork         = "sb-b-cbpools-us-central1"
+    subnetwork = "sb-b-cbpools-${var.private_worker_pool.region}"
     subnetwork_project = var.project_id
 
   }
@@ -229,6 +249,8 @@ resource "google_compute_instance" "vm-proxy" {
   service_account {
     scopes = ["cloud-platform"]
   }
+
+  depends_on = [ resource.google_compute_router_nat.cb-nat ]
 }
 
 #  This route will route packets to the NAT VM
@@ -272,3 +294,25 @@ resource "google_compute_route" "direct-to-gateway2" {
   priority         = 5
 }
 
+# Cloud Router
+resource "google_compute_router" "cb-router" {
+  name    = "cb-cloud-router"
+  network = local.peered_network_name
+  region  = "us-central1"
+  project = var.project_id
+}
+
+# Cloud NAT
+resource "google_compute_router_nat" "cb-nat" {
+  project                            = var.project_id
+  name                               = "cb-cloud-nat"
+  router                             = google_compute_router.cb-router.name
+  region                             = google_compute_router.cb-router.region
+  nat_ip_allocate_option             = "AUTO_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+
+  log_config {
+    enable = true
+    filter = "ALL"
+  }
+}
