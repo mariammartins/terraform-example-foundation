@@ -17,7 +17,7 @@
 locals {
   peered_ip_range = var.private_worker_pool.enable_network_peering ? "${google_compute_global_address.worker_pool_range[0].address}/${google_compute_global_address.worker_pool_range[0].prefix_length}" : ""
 
-nat_proxy_vm_ip_range = "10.1.1.0/24"
+  nat_proxy_vm_ip_range = "10.1.1.0/24"
 
   single_project_network = {
     subnet_name           = "eab-develop-us-central1"
@@ -213,7 +213,7 @@ module "firewall_rules" {
 }
 
 resource "google_compute_address" "cloud_build_nat" {
-  project = var.project_id
+  project      = var.project_id
   address_type = "EXTERNAL"
   name         = "cloud-build-nat"
   network_tier = "PREMIUM"
@@ -236,7 +236,7 @@ resource "google_compute_instance" "vm-proxy" {
 
   network_interface {
     network            = local.peered_network_name
-    subnetwork = "sb-b-cbpools-${var.private_worker_pool.region}"
+    subnetwork         = "sb-b-cbpools-${var.private_worker_pool.region}"
     subnetwork_project = var.project_id
 
   }
@@ -250,7 +250,7 @@ resource "google_compute_instance" "vm-proxy" {
     scopes = ["cloud-platform"]
   }
 
-  depends_on = [ resource.google_compute_router_nat.cb-nat ]
+  depends_on = [resource.google_compute_router_nat.cb-nat]
 }
 
 #  This route will route packets to the NAT VM

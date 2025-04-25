@@ -173,6 +173,13 @@ If required, run `terraform output cloudbuild_project_id` in the `0-bootstrap` f
    if [ ! -z "${ACCESS_CONTEXT_MANAGER_ID}" ]; then sed -i'' -e "s=//create_access_context_manager_access_policy=create_access_context_manager_access_policy=" ./envs/shared/terraform.tfvars; fi
    ```
 
+1. Run `terraform init` in `/envs/shared` to generate the outputs used in other steps.
+   ```bash
+   cd envs/shared
+   terraform init
+   cd ../..
+   ```
+
 1. Commit changes.
 
    ```bash

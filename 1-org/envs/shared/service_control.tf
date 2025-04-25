@@ -151,42 +151,42 @@ locals {
 
   egress_policies = [
     {
-        from = {
-          identity_type = "ANY_IDENTITY"
-        }
-        to = {
-          resources = [
-            "*"
-          ]
-          operations = {
-            "*" = {
-              methods = ["*"]
-            }
+      from = {
+        identity_type = "ANY_IDENTITY"
+      }
+      to = {
+        resources = [
+          "*"
+        ]
+        operations = {
+          "*" = {
+            methods = ["*"]
           }
         }
       }
-    ]
+    }
+  ]
 
   ingress_policies = [
-      {
-        from = {
-          identity_type = "ANY_IDENTITY"
-          sources = {
-            access_level = module.service_control.access_level_name
-          }
+    {
+      from = {
+        identity_type = "ANY_IDENTITY"
+        sources = {
+          access_level = module.service_control.access_level_name
         }
-        to = {
-          resources = [
-            "projects/${local.cloudbuild_project_number}",
-          ]
-          operations = {
-            "*" = {
-              methods = ["*"]
-            }
+      }
+      to = {
+        resources = [
+          "projects/${local.cloudbuild_project_number}",
+        ]
+        operations = {
+          "*" = {
+            methods = ["*"]
           }
         }
       }
-    ]
+    }
+  ]
 }
 
 module "service_control" {
