@@ -152,7 +152,24 @@ locals {
   egress_policies = [
     {
       from = {
+        identity_type = ""
+        identities    = ["serviceAccount:sa-terraform-env@prj-b-seed-AAAA.iam.gserviceaccount.com"]
+      }
+      to = {
+        resources = [
+          "*"
+        ]
+        operations = {
+          "cloudresourcemanager.googleapis.com" = {
+            methods = ["*"]
+          }
+        }
+      }
+    },
+    {
+      from = {
         identity_type = "ANY_IDENTITY"
+        identities    = []
       }
       to = {
         resources = [
@@ -164,6 +181,57 @@ locals {
           }
         }
       }
+    },
+    /// prj-c-scc
+    {
+      from = {
+        identity_type = ""
+        identities    = ["serviceAccount:project-service-account@prj-c-scc-XXXX.iam.gserviceaccount.com"]
+      }
+      to = {
+        resources = [
+          "projects/1111111111111", //prj-c-scc-XXXX
+        ]
+        operations = {
+          [
+            "cloudresourcemanager.googleapis.com",
+            "cloudfunctions.googleapis.com",
+            "cloudbuild.googleapis.com",
+            "cloudasset.googleapis.com",
+            "pubsub.googleapis.com",
+            "artifactregistry.googleapis.com",
+            "storage.googleapis.com",
+            "run.googleapis.com",
+            "eventarc.googleapis.com"
+            ] = {
+            methods = ["*"]
+          }
+        }
+      }
+    },
+    /// prj-c-logging d
+    {
+      from = {
+        identity_type = ""
+        identities = [
+          "serviceAccount:sa-terraform-org@prj-b-seed-XXXX.iam.gserviceaccount.com"
+        ]
+      }
+      to = {
+        resources = [
+          "projects/698675820208",
+          "projects/186207638745",
+          "projects/887022251085",
+          "projects/72426614137",
+          "projects/879585323170",
+          "projects/623912688192",
+        ]
+        operations = {
+          "logging.googleapis.com" = {
+            methods = ["*"]
+          }
+        }
+      }
     }
   ]
 
@@ -171,6 +239,7 @@ locals {
     {
       from = {
         identity_type = "ANY_IDENTITY"
+        identities    = []
         sources = {
           access_level = module.service_control.access_level_name
         }
@@ -181,6 +250,50 @@ locals {
         ]
         operations = {
           "*" = {
+            methods = ["*"]
+          }
+        }
+      }
+    },
+    // ingress prj-c-billing-export
+    {
+      from = {
+        identity_type = ""
+        identities    = ["project-service-account@prj-c-billing-export-YYYY.iam.gserviceaccount.com"]
+        sources = {
+          access_level = module.service_control.access_level_name
+        }
+      }
+      to = {
+        resources = [
+          "projects/2222222222222222", //prj-c-billing-export-YYYY
+        ]
+        operations = {
+          "bigquery.googleapis.com" = {
+            methods = ["*"]
+          }
+        }
+      }
+    },
+    //// prj-c-logging
+    {
+      from = {
+        identity_type = "serviceAccount:sa-terraform-org@prj-b-seed-b78c.iam.gserviceaccount.com"
+        sources = {
+          access_level = module.service_control.access_level_name
+        }
+      }
+      to = {
+        resources = [
+          "projects/698675820208",
+          "projects/186207638745",
+          "projects/887022251085",
+          "projects/72426614137",
+          "projects/879585323170",
+          "projects/623912688192",
+        ]
+        operations = {
+          "logging.googleapis.com" = {
             methods = ["*"]
           }
         }
