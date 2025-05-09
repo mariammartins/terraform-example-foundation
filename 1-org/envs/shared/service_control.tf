@@ -148,45 +148,6 @@ locals {
 
   restricted_services         = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
   restricted_services_dry_run = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
-
-  egress_policies = [
-    {
-      from = {
-        identity_type = "ANY_IDENTITY"
-      }
-      to = {
-        resources = [
-          "*"
-        ]
-        operations = {
-          "*" = {
-            methods = ["*"]
-          }
-        }
-      }
-    }
-  ]
-
-  ingress_policies = [
-    {
-      from = {
-        identity_type = "ANY_IDENTITY"
-        sources = {
-          access_level = module.service_control.access_level_name
-        }
-      }
-      to = {
-        resources = [
-          "projects/${local.cloudbuild_project_number}",
-        ]
-        operations = {
-          "*" = {
-            methods = ["*"]
-          }
-        }
-      }
-    }
-  ]
 }
 
 module "service_control" {
@@ -202,7 +163,6 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
   resources = distinct([
-    local.cloudbuild_project_number,
     local.seed_project_number
   ])
   members_dry_run = distinct(concat([
@@ -212,11 +172,10 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
   resources_dry_run = distinct(concat([
-    local.cloudbuild_project_number,
     local.seed_project_number
   ]))
-  ingress_policies         = local.ingress_policies
+  ingress_policies         = var.ingress_policies
   ingress_policies_dry_run = var.ingress_policies_dry_run
-  egress_policies          = distinct(local.egress_policies)
+  egress_policies          = distinct(var.egress_policies)
   egress_policies_dry_run  = distinct(var.egress_policies_dry_run)
 }
