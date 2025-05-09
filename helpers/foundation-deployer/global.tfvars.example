@@ -118,11 +118,6 @@ create_unique_tag_key = false
 
 domain = "example.com." # The DNS name of peering managed zone. Must end with a period.
 
-// Add your email in the perimeter_additional_members list.
-// You must be in this list to be able to view/access resources in the project protected by the VPC service controls.
-
-perimeter_additional_members = ["user:YOUR-USER-EMAIL@example.com"]
-
 enable_hub_and_spoke_transitivity = false
 
 // List of IPv4 address of target name servers for the forwarding zone configuration.

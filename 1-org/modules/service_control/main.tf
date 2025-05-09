@@ -15,11 +15,7 @@
  */
 
 locals {
-<<<<<<<< HEAD:1-org/modules/service_control/main.tf
   prefix                    = "svpc"
-========
-  prefix                    = "${var.environment_code}_svpc"
->>>>>>>> main:3-networks-svpc/modules/shared_vpc/service_control.tf
   access_level_name         = "alp_${local.prefix}_members_${random_id.random_access_level_suffix.hex}"
   access_level_name_dry_run = "alp_${local.prefix}_members_dry_run_${random_id.random_access_level_suffix.hex}"
   perimeter_name            = "sp_${local.prefix}_default_common_perimeter_${random_id.random_access_level_suffix.hex}"

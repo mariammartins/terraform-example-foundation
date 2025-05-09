@@ -20,20 +20,12 @@ terraform {
     google = {
       // version 6.26.0 and 6.27.0 removed because of the bug https://github.com/hashicorp/terraform-provider-google/issues/21950
       source  = "hashicorp/google"
-<<<<<<< HEAD
-      version = ">= 3.82, < 6.26.0"
-=======
       version = ">= 3.82, != 6.26.0, != 6.27.0, < 7.0"
->>>>>>> main
     }
     google-beta = {
       // version 6.26.0 and 6.27.0 removed because of the bug https://github.com/hashicorp/terraform-provider-google/issues/21950
       source  = "hashicorp/google-beta"
-<<<<<<< HEAD
-      version = ">= 3.82, < 6.26.0"
-=======
       version = ">= 3.82, != 6.26.0, != 6.27.0, < 7.0"
->>>>>>> main
     }
     random = {
       source = "hashicorp/random"
