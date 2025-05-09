@@ -1,3 +1,21 @@
+<<<<<<< HEAD
+<<<<<<<< HEAD:3-networks-svpc/modules/base_env/README.md
+========
+# 3-networks-svpc/production
+
+The purpose of this step is to set up shared VPCs with default DNS, NAT (optional), Private Service networking, VPC service controls, onprem Dedicated Interconnect, onprem VPN and baseline firewall rules for environment production and the global [DNS Hub](https://cloud.google.com/blog/products/networking/cloud-forwarding-peering-and-zones) that will be used by all environments.
+
+## Prerequisites
+
+1. 0-bootstrap executed successfully.
+1. 1-org executed successfully.
+1. 2-environments/envs/production executed successfully.
+1. 3-networks-svpc/envs/shared executed successfully.
+1. Obtain the value for the access_context_manager_policy_id variable. Can be obtained by running `gcloud access-context-manager policies list --organization YOUR_ORGANIZATION_ID --format="value(name)"`.
+
+>>>>>>>> main:3-networks-svpc/envs/production/README.md
+=======
+>>>>>>> main
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
@@ -33,13 +51,38 @@
 
 | Name | Description |
 |------|-------------|
+<<<<<<< HEAD
+<<<<<<<< HEAD:3-networks-svpc/modules/base_env/README.md
 | network\_name | The name of the VPC being created |
 | network\_self\_link | The URI of the VPC being created |
+========
+| access\_context\_manager\_policy\_id | Access Context Manager Policy ID. |
+| access\_level\_name | Access context manager access level name |
+=======
+| access\_level\_name | Access context manager access level name for the enforced perimeter |
+>>>>>>> main
+| access\_level\_name\_dry\_run | Access context manager access level name for the dry-run perimeter |
+| enforce\_vpcsc | Enable the enforced mode for VPC Service Controls. It is not recommended to enable VPC-SC on the first run deploying your foundation. Review [best practices for enabling VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/enable), then only enforce the perimeter after you have analyzed the access patterns in your dry-run perimeter and created the necessary exceptions for your use cases. |
+| network\_name | The name of the VPC being created |
+| network\_self\_link | The URI of the VPC being created |
+<<<<<<< HEAD
+| service\_perimeter\_name | Access context manager service perimeter name |
+>>>>>>>> main:3-networks-svpc/envs/production/README.md
+=======
+| service\_perimeter\_name | Access context manager service perimeter name for the enforced perimeter |
+>>>>>>> main
 | shared\_vpc\_host\_project\_id | The shared vpc host project ID |
 | subnets\_ips | The IPs and CIDRs of the subnets being created |
 | subnets\_names | The names of the subnets being created |
 | subnets\_secondary\_ranges | The secondary ranges associated with these subnets |
 | subnets\_self\_links | The self-links of subnets being created |
+<<<<<<< HEAD
+<<<<<<<< HEAD:3-networks-svpc/modules/base_env/README.md
 | target\_name\_server\_addresses | List of IPv4 addresses of the target name servers for the forwarding zone configuration. These IP addresses should point to the name server responsible for replying to DNS queries. |
+========
+>>>>>>>> main:3-networks-svpc/envs/production/README.md
+=======
+| target\_name\_server\_addresses | List of IPv4 addresses of the target name servers for the forwarding zone configuration. These IP addresses should point to the name server responsible for replying to DNS queries. |
+>>>>>>> main
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

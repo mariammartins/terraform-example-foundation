@@ -24,6 +24,7 @@ locals {
 
 /******************************************
  Shared VPC
+ Shared VPC
 *****************************************/
 
 module "shared_vpc" {
@@ -91,6 +92,7 @@ module "shared_vpc" {
     }
   ]
   secondary_ranges = {
+    "sb-${var.environment_code}-svpc-${var.default_region1}" = var.subnet_secondary_ranges[var.default_region1]
     "sb-${var.environment_code}-svpc-${var.default_region1}" = var.subnet_secondary_ranges[var.default_region1]
   }
 }

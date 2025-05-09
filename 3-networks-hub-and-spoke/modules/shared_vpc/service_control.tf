@@ -15,14 +15,11 @@
  */
 
 locals {
-<<<<<<<< HEAD:1-org/modules/service_control/main.tf
-  prefix                    = "svpc"
-========
-  prefix                    = "${var.environment_code}_svpc"
->>>>>>>> main:3-networks-svpc/modules/shared_vpc/service_control.tf
+  prefix                    = "${var.environment_code}_shared_vpc"
   access_level_name         = "alp_${local.prefix}_members_${random_id.random_access_level_suffix.hex}"
   access_level_name_dry_run = "alp_${local.prefix}_members_dry_run_${random_id.random_access_level_suffix.hex}"
-  perimeter_name            = "sp_${local.prefix}_default_common_perimeter_${random_id.random_access_level_suffix.hex}"
+  perimeter_name            = "sp_${local.prefix}_default_perimeter_${random_id.random_access_level_suffix.hex}"
+  bridge_name               = "spb_c_to_${local.prefix}_bridge_${random_id.random_access_level_suffix.hex}"
 }
 
 resource "random_id" "random_access_level_suffix" {
@@ -31,9 +28,9 @@ resource "random_id" "random_access_level_suffix" {
 
 module "access_level" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/access_level"
-  version = "~> 6.2.1"
+  version = "~> 6.0"
 
-  description = "${local.prefix} Access Level for use in an enforced perimeter"
+  description = "${local.prefix} Access Level"
   policy      = var.access_context_manager_policy_id
   name        = local.access_level_name
   members     = var.members
@@ -41,7 +38,7 @@ module "access_level" {
 
 module "access_level_dry_run" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/access_level"
-  version = "~> 6.2.1"
+  version = "~> 6.0"
 
   description = "${local.prefix} Access Level for testing with a dry run perimeter"
   policy      = var.access_context_manager_policy_id
@@ -49,33 +46,74 @@ module "access_level_dry_run" {
   members     = var.members_dry_run
 }
 
+resource "time_sleep" "wait_vpc_sc_propagation" {
+  create_duration  = "60s"
+  destroy_duration = "60s"
+
+  depends_on = [
+    module.main,
+    module.peering,
+    google_compute_global_address.private_service_access_address,
+    google_service_networking_connection.private_vpc_connection,
+    module.region1_router1,
+    module.region1_router2,
+    module.region2_router1,
+    module.region2_router2,
+    module.private_service_connect,
+    google_dns_policy.default_policy,
+    module.peering_zone,
+    module.firewall_rules,
+    google_compute_router.nat_router_region1,
+    google_compute_address.nat_external_addresses1,
+    google_compute_router_nat.nat_external_addresses_region1,
+    google_compute_router.nat_router_region2,
+    google_compute_address.nat_external_addresses_region2,
+    google_compute_router_nat.egress_nat_region2,
+  ]
+}
+
 module "regular_service_perimeter" {
-  source = "git::https://github.com/mariammartins/terraform-google-vpc-service-controls.git//modules/regular_service_perimeter?ref=updt-version-perimeter"
-  # version = "~> 6.2.1"
+  source  = "terraform-google-modules/vpc-service-controls/google//modules/regular_service_perimeter"
+  version = "~> 6.0"
 
   policy         = var.access_context_manager_policy_id
   perimeter_name = local.perimeter_name
   description    = "Default VPC Service Controls perimeter"
 
   # configurations for a perimeter in enforced mode.
+  resources               = var.enforce_vpcsc ? [var.project_number] : []
   access_levels           = var.enforce_vpcsc ? [module.access_level.name] : []
   restricted_services     = var.enforce_vpcsc ? var.restricted_services : []
-  vpc_accessible_services = var.enforce_vpcsc ? ["*"] : []
+  vpc_accessible_services = var.enforce_vpcsc ? ["RESTRICTED-SERVICES"] : []
   ingress_policies        = var.enforce_vpcsc ? var.ingress_policies : []
   egress_policies         = var.enforce_vpcsc ? var.egress_policies : []
-  resources               = var.enforce_vpcsc ? var.resources : []
 
   # configurations for a perimeter in dry run mode.
+  resources_dry_run               = [var.project_number]
   access_levels_dry_run           = [module.access_level_dry_run.name]
   restricted_services_dry_run     = var.restricted_services_dry_run
-  vpc_accessible_services_dry_run = ["*"]
+  vpc_accessible_services_dry_run = ["RESTRICTED-SERVICES"]
   ingress_policies_dry_run        = var.ingress_policies_dry_run
   egress_policies_dry_run         = var.egress_policies_dry_run
-  resources_dry_run               = var.resources_dry_run
+
+  depends_on = [
+    time_sleep.wait_vpc_sc_propagation
+  ]
 }
 
-resource "time_sleep" "wait_vpc_sc_propagation" {
-  create_duration = "60s"
+resource "google_access_context_manager_service_perimeter" "bridge_to_network_hub_perimeter" {
+  count = var.mode == "spoke" ? 1 : 0
+
+  perimeter_type = "PERIMETER_TYPE_BRIDGE"
+  parent         = "accessPolicies/${var.access_context_manager_policy_id}"
+  name           = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.bridge_name}"
+  title          = local.bridge_name
+
+  use_explicit_dry_run_spec = var.enforce_vpcsc ? false : true
+
+  status {
+    resources = var.enforce_vpcsc ? formatlist("projects/%s", [var.project_number, var.net_hub_project_number]) : []
+  }
 
   depends_on = [module.regular_service_perimeter]
 }
