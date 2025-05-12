@@ -56,6 +56,7 @@ locals {
       "roles/resourcemanager.tagUser",
       "roles/assuredworkloads.admin",
       "roles/serviceusage.serviceUsageConsumer",
+      "roles/logging.configWriter",
     ], local.common_roles)),
     "net" = distinct(concat([
       "roles/accesscontextmanager.policyAdmin",
