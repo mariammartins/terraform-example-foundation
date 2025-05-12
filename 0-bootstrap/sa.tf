@@ -40,6 +40,7 @@ locals {
     "org" = distinct(concat([
       "roles/orgpolicy.policyAdmin",
       "roles/logging.configWriter",
+      "roles/logging.logwriter",
       "roles/resourcemanager.organizationAdmin",
       "roles/securitycenter.notificationConfigEditor",
       "roles/resourcemanager.organizationViewer",
@@ -56,18 +57,20 @@ locals {
       "roles/resourcemanager.tagUser",
       "roles/assuredworkloads.admin",
       "roles/serviceusage.serviceUsageConsumer",
-      "roles/logging.configWriter",
+      "roles/logging.logwriter",
     ], local.common_roles)),
     "net" = distinct(concat([
       "roles/accesscontextmanager.policyAdmin",
       "roles/compute.xpnAdmin",
       "roles/serviceusage.serviceUsageConsumer",
+      "roles/logging.logwriter",
     ], local.common_roles)),
     "proj" = distinct(concat([
       "roles/accesscontextmanager.policyAdmin",
       "roles/resourcemanager.organizationAdmin",
       "roles/serviceusage.serviceUsageConsumer",
       "roles/cloudkms.admin",
+      "roles/logging.logwriter",
     ], local.common_roles)),
   }
 
