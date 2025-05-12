@@ -176,7 +176,8 @@ locals {
       # prj-c-logging
       # Ingress policy from $commonPerimeter, specify identity and service of log sinks
       from = {
-        identity_type = [
+        identity_type = ""
+        identities = [
           "serviceAccount:sa-terraform-org@PROJECT_SEED_ID.iam.gserviceaccount.com",
           "serviceAccount:project-service-account@PROJECT_LOGGING_ID.iam.gserviceaccount.com",
         ]
