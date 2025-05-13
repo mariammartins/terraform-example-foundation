@@ -350,6 +350,6 @@ module "service_control" {
   # egress_policies_dry_run  = distinct(var.egress_policies_dry_run)
 
   depends_on = [
-    resource.time_sleep.wait_projects
+    time_sleep.wait_projects
    ]
 }
