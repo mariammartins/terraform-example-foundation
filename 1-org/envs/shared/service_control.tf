@@ -149,9 +149,9 @@ locals {
   restricted_services         = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
   restricted_services_dry_run = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
 
-  ingress_policies = [
+   ingress_policies = [
     # prj-c-billing-export 
-    # Ingress policy into $commonPerimeter, specific identity and service of bq export
+    # Ingress policy for BigQuery export
     {
       from = {
         identity_type = ""
@@ -165,7 +165,7 @@ locals {
       }
       to = {
         resources = [
-          "projects/PROJECT_BILLING_EXPORT_ID",
+          "projects/PROJECT_BILLING_EXPORT_ID"
         ]
         operations = {
           "bigquery.googleapis.com" = {
@@ -175,13 +175,13 @@ locals {
       }
     },
     # prj-c-logging
-    # Ingress policy from $commonPerimeter, specify identity and service of log sinks
+    # Ingress policy for logging
     {
       from = {
         identity_type = ""
         identities = [
           "serviceAccount:sa-terraform-org@PROJECT_SEED_ID.iam.gserviceaccount.com",
-          "serviceAccount:project-service-account@PROJECT_LOGGING_ID.iam.gserviceaccount.com",
+          "serviceAccount:project-service-account@PROJECT_LOGGING_ID.iam.gserviceaccount.com"
         ]
         sources = {
           access_level = module.service_control.access_level_name
@@ -189,7 +189,7 @@ locals {
       }
       to = {
         resources = [
-          "projects/PROJECT_LOGGING_ID",
+          "projects/PROJECT_LOGGING_ID"
         ]
         operations = {
           "logging.googleapis.com" = {
@@ -203,18 +203,17 @@ locals {
   egress_policies = [
     {
       # prj-c-scc
-      # Egress policy from $ $commonPerimeter, specific identity and services related to CAI feeds
+      # Egress policy for SCC
       from = {
         identity_type = ""
         identities = [
           "serviceAccount:sa-terraform-org@PROJECT_SEED_ID.iam.gserviceaccount.com",
           "serviceAccount:project-service-account@PROJECT_SCC_ID.iam.gserviceaccount.com"
         ]
-
       }
       to = {
         resources = [
-          "projects/PROJECT_SCC_ID",
+          "projects/PROJECT_SCC_ID"
         ]
         operations = {
           "cloudresourcemanager.googleapis.com" = {
@@ -249,18 +248,17 @@ locals {
     },
     {
       # prj-c-logging
-      # Egress policy from $commonPerimeter, specify identity and service of log sinks
+      # Egress policy for logging
       from = {
         identity_type = ""
         identities = [
           "serviceAccount:sa-terraform-org@PROJECT_SEED_ID.iam.gserviceaccount.com",
           "serviceAccount:project-service-account@PROJECT_LOGGING_ID.iam.gserviceaccount.com"
         ]
-
       }
       to = {
         resources = [
-          "projects/PROJECT_LOGGING_NUMBER",
+          "projects/PROJECT_LOGGING_NUMBER"
         ]
         operations = {
           "cloudresourcemanager.googleapis.com" = {

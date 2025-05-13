@@ -49,9 +49,9 @@ module "org_audit_logs" {
   deletion_policy          = var.project_deletion_policy
   activate_apis            = ["logging.googleapis.com", "bigquery.googleapis.com", "billingbudgets.googleapis.com"]
 
-  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  //vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  //vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  //vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
   labels = {
     environment       = "common"
@@ -68,7 +68,7 @@ module "org_audit_logs" {
   budget_amount               = var.project_budget.org_audit_logs_budget_amount
   budget_alert_spend_basis    = var.project_budget.org_audit_logs_budget_alert_spend_basis
 
-  depends_on = [module.service_control]
+  //depends_on = [module.service_control]
 }
 
 /******************************************
@@ -89,9 +89,9 @@ module "org_billing_export" {
   deletion_policy          = var.project_deletion_policy
   activate_apis            = ["logging.googleapis.com", "bigquery.googleapis.com", "billingbudgets.googleapis.com"]
 
-  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  # vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
   labels = {
     environment       = "common"
@@ -109,7 +109,7 @@ module "org_billing_export" {
   budget_amount               = var.project_budget.org_billing_export_budget_amount
   budget_alert_spend_basis    = var.project_budget.org_billing_export_budget_alert_spend_basis
 
-  depends_on = [module.service_control]
+  //depends_on = [module.service_control]
 }
 
 /******************************************
@@ -130,9 +130,9 @@ module "common_kms" {
   deletion_policy          = var.project_deletion_policy
   activate_apis            = ["logging.googleapis.com", "cloudkms.googleapis.com", "billingbudgets.googleapis.com"]
 
-  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  # vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
   labels = {
     environment       = "common"
@@ -150,7 +150,7 @@ module "common_kms" {
   budget_amount               = var.project_budget.common_kms_budget_amount
   budget_alert_spend_basis    = var.project_budget.common_kms_budget_alert_spend_basis
 
-  depends_on = [module.service_control]
+  //depends_on = [module.service_control]
 }
 
 /******************************************
@@ -171,9 +171,9 @@ module "org_secrets" {
   deletion_policy          = var.project_deletion_policy
   activate_apis            = ["logging.googleapis.com", "secretmanager.googleapis.com", "billingbudgets.googleapis.com"]
 
-  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  # vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
   labels = {
     environment       = "common"
@@ -190,7 +190,7 @@ module "org_secrets" {
   budget_amount               = var.project_budget.org_secrets_budget_amount
   budget_alert_spend_basis    = var.project_budget.org_secrets_budget_alert_spend_basis
 
-  depends_on = [module.service_control]
+  //depends_on = [module.service_control]
 }
 
 /******************************************
@@ -211,9 +211,9 @@ module "interconnect" {
   deletion_policy          = var.project_deletion_policy
   activate_apis            = ["billingbudgets.googleapis.com", "compute.googleapis.com"]
 
-  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  # vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
   labels = {
     environment       = "network"
@@ -231,7 +231,7 @@ module "interconnect" {
   budget_amount               = var.project_budget.interconnect_budget_amount
   budget_alert_spend_basis    = var.project_budget.interconnect_budget_alert_spend_basis
 
-  depends_on = [module.service_control]
+  //depends_on = [module.service_control]
 }
 
 /******************************************
@@ -252,9 +252,9 @@ module "scc_notifications" {
   deletion_policy          = var.project_deletion_policy
   activate_apis            = ["logging.googleapis.com", "pubsub.googleapis.com", "securitycenter.googleapis.com", "billingbudgets.googleapis.com", "cloudkms.googleapis.com"]
 
-  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  # vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
   labels = {
     environment       = "common"
@@ -272,7 +272,7 @@ module "scc_notifications" {
   budget_amount               = var.project_budget.scc_notifications_budget_amount
   budget_alert_spend_basis    = var.project_budget.scc_notifications_budget_alert_spend_basis
 
-  depends_on = [module.service_control]
+  //depends_on = [module.service_control]
 }
 
 /******************************************
@@ -302,9 +302,9 @@ module "network_hub" {
     "billingbudgets.googleapis.com"
   ]
 
-  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  # vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
   labels = {
     environment       = "network"
@@ -322,7 +322,7 @@ module "network_hub" {
   budget_amount               = var.project_budget.net_hub_budget_amount
   budget_alert_spend_basis    = var.project_budget.net_hub_budget_alert_spend_basis
 
-  depends_on = [module.service_control]
+  //depends_on = [module.service_control]
 }
 
 /************************************************************
@@ -343,9 +343,9 @@ module "environment_network" {
   env      = each.key
   env_code = each.value
 
-  vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
-  vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  # vpc_service_control_attach_enabled = local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_attach_dry_run = !local.enforce_vpcsc ? "true" : "false"
+  # vpc_service_control_perimeter_name = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
   project_budget = {
     network_budget_amount            = var.project_budget.shared_network_budget_amount
@@ -354,7 +354,7 @@ module "environment_network" {
     network_budget_alert_spend_basis = var.project_budget.shared_network_budget_alert_spend_basis
   }
 
-  depends_on = [module.service_control]
+  //depends_on = [module.service_control]
 }
 
 /*********************************************************************
@@ -367,4 +367,19 @@ resource "google_project_iam_member" "network_sa" {
   project = module.network_hub[0].project_id
   role    = each.key
   member  = "serviceAccount:${local.networks_step_terraform_service_account_email}"
+}
+
+resource "time_sleep" "wait_projects" {
+  create_duration = "30s"
+
+  depends_on = [
+  module.org_audit_logs,
+  module.org_billing_export,
+  module.common_kms,
+  module.org_secrets,
+  module.interconnect,
+  module.scc_notifications,
+  module.network_hub,
+  module.environment_network
+  ]
 }
