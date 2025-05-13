@@ -173,10 +173,10 @@ locals {
           }
         }
       }
-      },
-      {
-      # prj-c-logging
-      # Ingress policy from $commonPerimeter, specify identity and service of log sinks
+    },
+    # prj-c-logging
+    # Ingress policy from $commonPerimeter, specify identity and service of log sinks
+    {
       from = {
         identity_type = ""
         identities = [
@@ -246,8 +246,8 @@ locals {
           }
         }
       }
-      },
-      {
+    },
+    {
       # prj-c-logging
       # Egress policy from $commonPerimeter, specify identity and service of log sinks
       from = {
@@ -294,7 +294,6 @@ locals {
       }
     }
   ]
-
 }
 
 module "service_control" {
@@ -310,7 +309,17 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
   resources = distinct([
-    local.seed_project_number
+    local.seed_project_number,
+    "913576875098",// prj-c-billing-export-h9fy
+    "130148430584",// prj-c-logging-wxgu
+    "1065327696106",//prj-b-seed-c507
+    "348715422838",// prj-c-kms-7dc7
+    "971741096857",// prj-c-scc-b7mb
+    "903983488123",// prj-c-secrets-779t
+    "408558630155",// prj-d-svpc-yeqf
+    "1070091425805",// prj-n-svpc-zzhb
+    "7249033203",// prj-net-interconnect-0h2s
+    "234315486213"// prj-p-svpc-cbk1
   ])
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
@@ -319,10 +328,30 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
   resources_dry_run = distinct(concat([
-    local.seed_project_number
+    local.seed_project_number,
+    "913576875098",// prj-c-billing-export-h9fy
+    "130148430584",// prj-c-logging-wxgu
+    "1065327696106",//prj-b-seed-c507
+    "348715422838",// prj-c-kms-7dc7
+    "971741096857",// prj-c-scc-b7mb
+    "903983488123",// prj-c-secrets-779t
+    "408558630155",// prj-d-svpc-yeqf
+    "1070091425805",// prj-n-svpc-zzhb
+    "7249033203",// prj-net-interconnect-0h2s
+    "234315486213"// prj-p-svpc-cbk1
   ]))
   ingress_policies         = local.ingress_policies
-  ingress_policies_dry_run = var.ingress_policies_dry_run
+  ingress_policies_dry_run = local.ingress_policies
+  #ingress_policies_dry_run = distinct(concat(local.ingress_policies))
   egress_policies          = distinct(local.egress_policies)
-  egress_policies_dry_run  = distinct(var.egress_policies_dry_run)
+  egress_policies_dry_run  = distinct(local.egress_policies)
+  #egress_policies_dry_run  = distinct(concat(local.egress_policies))
+  # ingress_policies         = var.ingress_policies
+  # ingress_policies_dry_run = var.ingress_policies_dry_run
+  # egress_policies          = distinct(var.egress_policies)
+  # egress_policies_dry_run  = distinct(var.egress_policies_dry_run)
+
+  depends_on = [
+    resource.time_sleep.wait_projects
+   ]
 }
