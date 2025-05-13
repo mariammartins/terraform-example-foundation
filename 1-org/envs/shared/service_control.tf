@@ -172,7 +172,9 @@ locals {
             methods = ["*"]
           }
         }
+      }
       },
+      {
       # prj-c-logging
       # Ingress policy from $commonPerimeter, specify identity and service of log sinks
       from = {
@@ -243,7 +245,9 @@ locals {
             methods = ["*"]
           }
         }
+      }
       },
+      {
       # prj-c-logging
       # Egress policy from $commonPerimeter, specify identity and service of log sinks
       from = {
