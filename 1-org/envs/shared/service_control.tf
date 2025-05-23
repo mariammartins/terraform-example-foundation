@@ -149,7 +149,7 @@ locals {
   restricted_services         = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
   restricted_services_dry_run = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
 
-   ingress_policies = [
+  ingress_policies = [
     # prj-c-billing-export 
     # Ingress policy for BigQuery export
     {
@@ -308,16 +308,7 @@ module "service_control" {
   ], var.perimeter_additional_members))
   resources = distinct([
     local.seed_project_number,
-    "913576875098",// prj-c-billing-export-h9fy
-    "130148430584",// prj-c-logging-wxgu
-    "1065327696106",//prj-b-seed-c507
-    "348715422838",// prj-c-kms-7dc7
-    "971741096857",// prj-c-scc-b7mb
-    "903983488123",// prj-c-secrets-779t
-    "408558630155",// prj-d-svpc-yeqf
-    "1070091425805",// prj-n-svpc-zzhb
-    "7249033203",// prj-net-interconnect-0h2s
-    "234315486213"// prj-p-svpc-cbk1
+    var.resources
   ])
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
@@ -327,29 +318,14 @@ module "service_control" {
   ], var.perimeter_additional_members))
   resources_dry_run = distinct(concat([
     local.seed_project_number,
-    "913576875098",// prj-c-billing-export-h9fy
-    "130148430584",// prj-c-logging-wxgu
-    "1065327696106",//prj-b-seed-c507
-    "348715422838",// prj-c-kms-7dc7
-    "971741096857",// prj-c-scc-b7mb
-    "903983488123",// prj-c-secrets-779t
-    "408558630155",// prj-d-svpc-yeqf
-    "1070091425805",// prj-n-svpc-zzhb
-    "7249033203",// prj-net-interconnect-0h2s
-    "234315486213"// prj-p-svpc-cbk1
+    var.resources_dry_run
   ]))
   ingress_policies         = local.ingress_policies
   ingress_policies_dry_run = local.ingress_policies
-  #ingress_policies_dry_run = distinct(concat(local.ingress_policies))
   egress_policies          = distinct(local.egress_policies)
   egress_policies_dry_run  = distinct(local.egress_policies)
-  #egress_policies_dry_run  = distinct(concat(local.egress_policies))
-  # ingress_policies         = var.ingress_policies
-  # ingress_policies_dry_run = var.ingress_policies_dry_run
-  # egress_policies          = distinct(var.egress_policies)
-  # egress_policies_dry_run  = distinct(var.egress_policies_dry_run)
 
   depends_on = [
     time_sleep.wait_projects
-   ]
+  ]
 }
