@@ -1,4 +1,4 @@
-/**
+i/**
  * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@ resource "random_id" "random_access_level_suffix" {
 
 module "access_level" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/access_level"
-  version = "~> 7.0.0"
+  version = "~> 6.2.1"
 
   description = "${local.prefix} Access Level for use in an enforced perimeter"
   policy      = var.access_context_manager_policy_id
@@ -37,7 +37,7 @@ module "access_level" {
 
 module "access_level_dry_run" {
   source  = "terraform-google-modules/vpc-service-controls/google//modules/access_level"
-  version = "~> 7.0.0"
+  version = "~> 6.2.1"
 
   description = "${local.prefix} Access Level for testing with a dry run perimeter"
   policy      = var.access_context_manager_policy_id
@@ -46,9 +46,8 @@ module "access_level_dry_run" {
 }
 
 module "regular_service_perimeter" {
-  #source = "git::https://github.com/mariammartins/terraform-google-vpc-service-controls.git//modules/regular_service_perimeter?ref=updt-version-perimeter"
   source  = "terraform-google-modules/vpc-service-controls/google//modules/regular_service_perimeter"
-  version = "~> 7.0.0"
+  version = "~> 7.0"
 
   policy         = var.access_context_manager_policy_id
   perimeter_name = local.perimeter_name
@@ -59,7 +58,7 @@ module "regular_service_perimeter" {
   restricted_services     = var.enforce_vpcsc ? var.restricted_services : []
   vpc_accessible_services = var.enforce_vpcsc ? ["*"] : []
   ingress_policies        = var.enforce_vpcsc ? var.ingress_policies : []
-  egress_policies         = var.enforce_vpcsc ? var.egress_policies : []
+  #egress_policies         = var.enforce_vpcsc ? var.egress_policies : []
   resources               = var.enforce_vpcsc ? var.resources : []
 
   # configurations for a perimeter in dry run mode.
@@ -67,7 +66,7 @@ module "regular_service_perimeter" {
   restricted_services_dry_run     = var.restricted_services_dry_run
   vpc_accessible_services_dry_run = ["*"]
   ingress_policies_dry_run        = var.ingress_policies_dry_run
-  egress_policies_dry_run         = var.egress_policies_dry_run
+  #egress_policies_dry_run         = var.egress_policies_dry_run
   resources_dry_run               = var.resources_dry_run
 }
 
@@ -76,3 +75,4 @@ resource "time_sleep" "wait_vpc_sc_propagation" {
 
   depends_on = [module.regular_service_perimeter]
 }
+
