@@ -205,121 +205,148 @@ locals {
   #   }
   # ]
 
- ingress_policies = [
-    {
-      from = {
-        //identity_type = "ANY_IDENTITY"
-       identity_type = ""
-        identities = [
-          "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
-          //"serviceAccount:project-service-account@PROJECT_BILLING_EXPORT_ID.iam.gserviceaccount.com"
-        ]
-        sources = {
-          resource = "projects/623969658122" //,
-          //resource = "projects/623969658122"
-        }
-      }
-      to = {
-        resources = [
-          "projects/42184019201"
-        ]
-        operations = {
-          "bigquery.googleapis.com" = {
-            methods = ["*"]
-          }
-          "pubsub.googleapis.com" = {
-            methods = ["*"]
-          }
-          # "artifactregistry.googleapis.com" = {
-          #   methods = ["*"]
-          # }
-        }
-      }
-    },
-    {
-      from = {
-        identity_type = ""
-        identities = [
-          "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com" //,
-          //"serviceAccount:project-service-account@PROJECT_LOGGING_ID.iam.gserviceaccount.com"
-        ]
-        sources = {
-          resource = "projects/623969658122",
-          resource = "projects/317298441760"
-        }
-      }
-      to = {
-        resources = [
-          "projects/42184019201"//,
-          //"projects/12312312312"
-        ]
-        operations = {
-          "storage.googleapis.com" = {
-            methods = ["*"]
-          }
-        }
-      }
-    }
-  ]
+#  ingress_policies = [
+#     {
+#       from = {
+#         //identity_type = "ANY_IDENTITY"
+#        identity_type = ""
+#         identities = [
+#           "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
+#           //"serviceAccount:project-service-account@PROJECT_BILLING_EXPORT_ID.iam.gserviceaccount.com"
+#         ]
+#         sources = {
+#           resource = "projects/623969658122" //,
+#           //resource = "projects/623969658122"
+#         }
+#       }
+#       to = {
+#         resources = [
+#           "projects/42184019201"
+#         ]
+#         operations = {
+#           "bigquery.googleapis.com" = {
+#             methods = ["*"]
+#           }
+#           "pubsub.googleapis.com" = {
+#             methods = ["*"]
+#           }
+#           # "artifactregistry.googleapis.com" = {
+#           #   methods = ["*"]
+#           # }
+#         }
+#       }
+#     },
+#     {
+#       from = {
+#         identity_type = ""
+#         identities = [
+#           "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com" //,
+#           //"serviceAccount:project-service-account@PROJECT_LOGGING_ID.iam.gserviceaccount.com"
+#         ]
+#         sources = {
+#           resource = "projects/623969658122",
+#           resource = "projects/317298441760"
+#         }
+#       }
+#       to = {
+#         resources = [
+#           "projects/42184019201"//,
+#           //"projects/12312312312"
+#         ]
+#         operations = {
+#           "storage.googleapis.com" = {
+#             methods = ["*"]
+#           }
+#         }
+#       }
+#     }
+#   ]
 
 
-  /////dry-run
-  ingress_policies_dry_run = [
-    {
-      from = {
-        //identity_type = "ANY_IDENTITY"
-       identity_type = ""
-        identities = [
-          "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
-          //"serviceAccount:project-service-account@PROJECT_BILLING_EXPORT_ID.iam.gserviceaccount.com"
-        ]
-        sources = {
-          resource = "projects/623969658122",
-          resource = "projects/317298441760"
-        }
-      }
-      to = {
-        resources = [
-          "projects/42184019201"
-        ]
-        operations = {
-          "cloudfunctions.googleapis.com" = {
-            methods = ["*"]
-          }
-        }
-      }
-    },
-    {
-      from = {
-        identity_type = ""
-        identities = [
-          "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com" //,
-          //"serviceAccount:project-service-account@PROJECT_LOGGING_ID.iam.gserviceaccount.com"
-        ]
-        # sources = {
-        #   resource = "projects/623969658122" //,
-        #   //resource = "projects/623969658122"
-        # }
-      }
-      to = {
-        resources = [
-          "projects/42184019201" //,
-          //"projects/12312312312"
-        ]
-        operations = {
-          "cloudfunctions.googleapis.com" = {
-            methods = ["*"]
-          }
-          "storage.googleapis.com" = {
-            methods = ["*"]
-          }
-          # "run.googleapis.com" = {
-          #   methods = ["*"]
-          # }
-        }
+#   /////dry-run
+#   ingress_policies_dry_run = [
+#     {
+#       from = {
+#         //identity_type = "ANY_IDENTITY"
+#        identity_type = ""
+#         identities = [
+#           "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
+#           //"serviceAccount:project-service-account@PROJECT_BILLING_EXPORT_ID.iam.gserviceaccount.com"
+#         ]
+#         sources = {
+#           resource = "projects/623969658122",
+#           resource = "projects/317298441760"
+#         }
+#       }
+#       to = {
+#         resources = [
+#           "projects/42184019201"
+#         ]
+#         operations = {
+#           "cloudfunctions.googleapis.com" = {
+#             methods = ["*"]
+#           }
+#         }
+#       }
+#     },
+#     {
+#       from = {
+#         identity_type = ""
+#         identities = [
+#           "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com" //,
+#           //"serviceAccount:project-service-account@PROJECT_LOGGING_ID.iam.gserviceaccount.com"
+#         ]
+#         # sources = {
+#         #   resource = "projects/623969658122" //,
+#         #   //resource = "projects/623969658122"
+#         # }
+#       }
+#       to = {
+#         resources = [
+#           "projects/42184019201" //,
+#           //"projects/12312312312"
+#         ]
+#         operations = {
+#           "cloudfunctions.googleapis.com" = {
+#             methods = ["*"]
+#           }
+#           "storage.googleapis.com" = {
+#             methods = ["*"]
+#           }
+#           # "run.googleapis.com" = {
+#           #   methods = ["*"]
+#           # }
+#         }
+#       }
+#     }
+#   ]
+}
+
+resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy" "ingress_policies_dry_run" {
+  title     = "Ingress Policy " ///added
+  count = var.enforce_vpcsc ? 0 : 1
+  perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+  ingress_from {
+    identity_type = "ANY_IDENTITY"
+    sources {
+      resource = "projects/623969658122"
+    }
+  }
+  ingress_to {
+    resources = [
+      "projects/42184019201"
+    ]
+
+    operations {
+      service_name = "bigquery.googleapis.com"
+      method_selectors {
+        method = "*"
       }
     }
-  ]
+  }
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 module "service_control" {
@@ -366,8 +393,8 @@ module "service_control" {
     "438975717654", // prj-net-interconnect-qxc2
     "942489737540"  // prj-p-svpc-krnv
   ]))
-  ingress_policies         = local.ingress_policies
-  ingress_policies_dry_run = local.ingress_policies_dry_run
+  #ingress_policies         = local.ingress_policies
+  #ingress_policies_dry_run = local.ingress_policies_dry_run
   #egress_policies          = distinct(local.egress_policies)
   #egress_policies_dry_run  = distinct(local.egress_policies)
 
