@@ -149,7 +149,8 @@ locals {
   restricted_services         = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
   restricted_services_dry_run = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
 
-  ingress_policies = {
+  ingress_policies = [
+  {
     title = "Ingress rule 1"
     ingress_from = [
       {
@@ -202,6 +203,7 @@ locals {
       ]
     }
   }
+ ]
 }
 
 module "service_control" {
