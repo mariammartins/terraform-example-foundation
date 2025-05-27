@@ -149,149 +149,59 @@ locals {
   restricted_services         = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
   restricted_services_dry_run = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
 
-  ingress_policies = [
-    # prj-c-billing-export 
-    # Ingress policy for BigQuery export
-    {
-      from = {
-        identity_type = ""
-        identities = [
-          "serviceAccount:sa-terraform-org@PROJECT_SEED_ID.iam.gserviceaccount.com",
-          "serviceAccount:project-service-account@PROJECT_BILLING_EXPORT_ID.iam.gserviceaccount.com"
-        ]
-        sources = {
-          access_level = module.service_control.access_level_name
-        }
-      }
-      to = {
-        resources = [
-          "projects/PROJECT_BILLING_EXPORT_ID"
-        ]
-        operations = {
-          "bigquery.googleapis.com" = {
-            methods = ["*"]
+  ingress_policies = {
+    title = "Ingress rule 1"
+    ingress_from = [
+      {
+        identity_type = "ANY_IDENTITY"
+        sources = [
+          {
+            resource = "projects/42184019201"
+          },
+          {
+            resource = "projects/163357783814"
           }
-        }
-      }
-    },
-    # prj-c-logging
-    # Ingress policy for logging
-    {
-      from = {
-        identity_type = ""
-        identities = [
-          "serviceAccount:sa-terraform-org@PROJECT_SEED_ID.iam.gserviceaccount.com",
-          "serviceAccount:project-service-account@PROJECT_LOGGING_ID.iam.gserviceaccount.com"
         ]
-        sources = {
-          access_level = module.service_control.access_level_name
-        }
       }
-      to = {
-        resources = [
-          "projects/PROJECT_LOGGING_ID"
-        ]
-        operations = {
-          "logging.googleapis.com" = {
-            methods = ["*"]
-          }
-        }
-      }
-    }
-  ]
+    ]
 
-  egress_policies = [
-    {
-      # prj-c-scc
-      # Egress policy for SCC
-      from = {
-        identity_type = ""
-        identities = [
-          "serviceAccount:sa-terraform-org@PROJECT_SEED_ID.iam.gserviceaccount.com",
-          "serviceAccount:project-service-account@PROJECT_SCC_ID.iam.gserviceaccount.com"
-        ]
-      }
-      to = {
-        resources = [
-          "projects/PROJECT_SCC_ID"
-        ]
-        operations = {
-          "cloudresourcemanager.googleapis.com" = {
-            methods = ["*"]
-          }
-          "cloudfunctions.googleapis.com" = {
-            methods = ["*"]
-          }
-          "cloudbuild.googleapis.com" = {
-            methods = ["*"]
-          }
-          "cloudasset.googleapis.com" = {
-            methods = ["*"]
-          }
-          "pubsub.googleapis.com" = {
-            methods = ["*"]
-          }
-          "artifactregistry.googleapis.com" = {
-            methods = ["*"]
-          }
-          "storage.googleapis.com" = {
-            methods = ["*"]
-          }
-          "run.googleapis.com" = {
-            methods = ["*"]
-          }
-          "eventarc.googleapis.com" = {
-            methods = ["*"]
-          }
+    ingress_to = {
+      resources = ["*"]
+      operations = [
+        {
+          service_name = "logging.googleapis.com"
+          method_selectors = [
+            {
+              method = "*"
+            }
+          ]
         }
-      }
-    },
-    {
-      # prj-c-logging
-      # Egress policy for logging
-      from = {
-        identity_type = ""
-        identities = [
-          "serviceAccount:sa-terraform-org@PROJECT_SEED_ID.iam.gserviceaccount.com",
-          "serviceAccount:project-service-account@PROJECT_LOGGING_ID.iam.gserviceaccount.com"
+      ]
+    }, title = "Ingress rule 2"
+    ingress_from = [
+      {
+        identity_type = "ANY_IDENTITY"
+        sources = [
+          {
+            resource = "projects/163357783814"
+          }
         ]
       }
-      to = {
-        resources = [
-          "projects/PROJECT_LOGGING_NUMBER"
-        ]
-        operations = {
-          "cloudresourcemanager.googleapis.com" = {
-            methods = ["*"]
-          }
-          "cloudfunctions.googleapis.com" = {
-            methods = ["*"]
-          }
-          "cloudbuild.googleapis.com" = {
-            methods = ["*"]
-          }
-          "cloudasset.googleapis.com" = {
-            methods = ["*"]
-          }
-          "pubsub.googleapis.com" = {
-            methods = ["*"]
-          }
-          "artifactregistry.googleapis.com" = {
-            methods = ["*"]
-          }
-          "storage.googleapis.com" = {
-            methods = ["*"]
-          }
-          "run.googleapis.com" = {
-            methods = ["*"]
-          }
-          "eventarc.googleapis.com" = {
-            methods = ["*"]
-          }
+    ]
+    ingress_to = {
+      resources = ["*"]
+      operations = [
+        {
+          service_name = "storage.googleapis.com"
+          method_selectors = [
+            {
+              method = "*"
+            }
+          ]
         }
-      }
+      ]
     }
-  ]
+  }
 }
 
 module "service_control" {
@@ -307,8 +217,17 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
   resources = distinct([
-    local.seed_project_number,
-    var.resources
+    local.seed_project_number, //42184019201
+    "1005098596866",// prj-c-billing-export-8f0e
+    "163357783814",// prj-c-logging-1s0a
+    # "42184019201",//prj-b-seed-c507
+    "651399064839",// prj-c-kms-m27z
+    "658193253743",// prj-c-scc-btid
+    "130486420663",// prj-c-secrets-3k5a
+    "823601631320",// prj-d-svpc-mojc
+    "404448127608",// prj-n-svpc-ydpo
+    "438975717654",// prj-net-interconnect-qxc2
+    "942489737540"// prj-p-svpc-krnv
   ])
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
@@ -317,15 +236,25 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
   resources_dry_run = distinct(concat([
-    local.seed_project_number,
-    var.resources_dry_run
+    local.seed_project_number, //42184019201
+    "1005098596866",// prj-c-billing-export-8f0e
+    "163357783814",// prj-c-logging-1s0a
+    # "42184019201",//prj-b-seed-c507
+    "651399064839",// prj-c-kms-m27z
+    "658193253743",// prj-c-scc-btid
+    "130486420663",// prj-c-secrets-3k5a
+    "823601631320",// prj-d-svpc-mojc
+    "404448127608",// prj-n-svpc-ydpo
+    "438975717654",// prj-net-interconnect-qxc2
+    "942489737540"// prj-p-svpc-krnv
   ]))
   ingress_policies         = local.ingress_policies
   ingress_policies_dry_run = local.ingress_policies
-  egress_policies          = distinct(local.egress_policies)
-  egress_policies_dry_run  = distinct(local.egress_policies)
+  #egress_policies          = distinct(local.egress_policies)
+  #egress_policies_dry_run  = distinct(local.egress_policies)
 
   depends_on = [
     time_sleep.wait_projects
   ]
 }
+
