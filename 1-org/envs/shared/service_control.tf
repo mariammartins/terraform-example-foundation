@@ -150,60 +150,60 @@ locals {
   restricted_services_dry_run = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
 
   ingress_policies = [
-  {
-    title = "Ingress rule 1"
-    ingress_from = [
-      {
-        identity_type = "ANY_IDENTITY"
-        sources = [
-          {
-            resource = "projects/42184019201"
-          },
-          {
-            resource = "projects/163357783814"
-          }
-        ]
-      }
-    ]
+    {
+      title = "Ingress rule 1"
+      from = [
+        {
+          identity_type = "ANY_IDENTITY"
+          sources = [
+            {
+              resource = "projects/42184019201"
+            },
+            {
+              resource = "projects/163357783814"
+            }
+          ]
+        }
+      ]
 
-    ingress_to = {
-      resources = ["*"]
-      operations = [
+      to = {
+        resources = ["*"]
+        operations = [
+          {
+            service_name = "logging.googleapis.com"
+            method_selectors = [
+              {
+                method = "*"
+              }
+            ]
+          }
+        ]
+      }, title = "Ingress rule 2"
+      from = [
         {
-          service_name = "logging.googleapis.com"
-          method_selectors = [
+          identity_type = "ANY_IDENTITY"
+          sources = [
             {
-              method = "*"
+              resource = "projects/163357783814"
             }
           ]
         }
       ]
-    }, title = "Ingress rule 2"
-    ingress_from = [
-      {
-        identity_type = "ANY_IDENTITY"
-        sources = [
+      to = {
+        resources = ["*"]
+        operations = [
           {
-            resource = "projects/163357783814"
+            service_name = "storage.googleapis.com"
+            method_selectors = [
+              {
+                method = "*"
+              }
+            ]
           }
         ]
       }
-    ]
-    ingress_to = {
-      resources = ["*"]
-      operations = [
-        {
-          service_name = "storage.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-      ]
     }
-  }
- ]
+  ]
 }
 
 module "service_control" {
@@ -220,16 +220,16 @@ module "service_control" {
   ], var.perimeter_additional_members))
   resources = distinct([
     local.seed_project_number, //42184019201
-    "1005098596866",// prj-c-billing-export-8f0e
-    "163357783814",// prj-c-logging-1s0a
+    "1005098596866",           // prj-c-billing-export-8f0e
+    "163357783814",            // prj-c-logging-1s0a
     # "42184019201",//prj-b-seed-c507
-    "651399064839",// prj-c-kms-m27z
-    "658193253743",// prj-c-scc-btid
-    "130486420663",// prj-c-secrets-3k5a
-    "823601631320",// prj-d-svpc-mojc
-    "404448127608",// prj-n-svpc-ydpo
-    "438975717654",// prj-net-interconnect-qxc2
-    "942489737540"// prj-p-svpc-krnv
+    "651399064839", // prj-c-kms-m27z
+    "658193253743", // prj-c-scc-btid
+    "130486420663", // prj-c-secrets-3k5a
+    "823601631320", // prj-d-svpc-mojc
+    "404448127608", // prj-n-svpc-ydpo
+    "438975717654", // prj-net-interconnect-qxc2
+    "942489737540"  // prj-p-svpc-krnv
   ])
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
@@ -239,16 +239,16 @@ module "service_control" {
   ], var.perimeter_additional_members))
   resources_dry_run = distinct(concat([
     local.seed_project_number, //42184019201
-    "1005098596866",// prj-c-billing-export-8f0e
-    "163357783814",// prj-c-logging-1s0a
+    "1005098596866",           // prj-c-billing-export-8f0e
+    "163357783814",            // prj-c-logging-1s0a
     # "42184019201",//prj-b-seed-c507
-    "651399064839",// prj-c-kms-m27z
-    "658193253743",// prj-c-scc-btid
-    "130486420663",// prj-c-secrets-3k5a
-    "823601631320",// prj-d-svpc-mojc
-    "404448127608",// prj-n-svpc-ydpo
-    "438975717654",// prj-net-interconnect-qxc2
-    "942489737540"// prj-p-svpc-krnv
+    "651399064839", // prj-c-kms-m27z
+    "658193253743", // prj-c-scc-btid
+    "130486420663", // prj-c-secrets-3k5a
+    "823601631320", // prj-d-svpc-mojc
+    "404448127608", // prj-n-svpc-ydpo
+    "438975717654", // prj-net-interconnect-qxc2
+    "942489737540"  // prj-p-svpc-krnv
   ]))
   ingress_policies         = local.ingress_policies
   ingress_policies_dry_run = local.ingress_policies
