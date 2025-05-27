@@ -149,58 +149,174 @@ locals {
   restricted_services         = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
   restricted_services_dry_run = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
 
-  ingress_policies = [
-    {
-      title = "Ingress rule 1"
-      from = [
-        {
-          identity_type = "ANY_IDENTITY"
-          sources = [
-            {
-              resource = "projects/42184019201"
-            },
-            {
-              resource = "projects/163357783814"
-            }
-          ]
-        }
-      ]
+  # ingress_policies = [
+  #   {
+  #     title = "Ingress rule 1"
+  #     from = [
+  #       {
+  #         identity_type = "ANY_IDENTITY"
+  #         sources = [
+  #           {
+  #             resource = "projects/42184019201"
+  #           },
+  #           {
+  #             resource = "projects/163357783814"
+  #           }
+  #         ]
+  #       }
+  #     ]
 
-      to = {
-        resources = ["*"]
-        operations = [
-          {
-            service_name = "logging.googleapis.com"
-            method_selectors = [
-              {
-                method = "*"
-              }
-            ]
-          }
+  #     to = {
+  #       resources = ["*"]
+  #       operations = [
+  #         {
+  #           service_name = "logging.googleapis.com"
+  #           method_selectors = [
+  #             {
+  #               method = "*"
+  #             }
+  #           ]
+  #         }
+  #       ]
+  #     }, title = "Ingress rule 2"
+  #     from = [
+  #       {
+  #         identity_type = "ANY_IDENTITY"
+  #         sources = [
+  #           {
+  #             resource = "projects/163357783814"
+  #           }
+  #         ]
+  #       }
+  #     ]
+  #     to = {
+  #       resources = ["*"]
+  #       operations = [
+  #         {
+  #           service_name = "storage.googleapis.com"
+  #           method_selectors = [
+  #             {
+  #               method = "*"
+  #             }
+  #           ]
+  #         }
+  #       ]
+  #     }
+  #   }
+  # ]
+
+ ingress_policies = [
+    {
+      from = {
+        //identity_type = "ANY_IDENTITY"
+       identity_type = ""
+        identities = [
+          "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
+          //"serviceAccount:project-service-account@PROJECT_BILLING_EXPORT_ID.iam.gserviceaccount.com"
         ]
-      }, title = "Ingress rule 2"
-      from = [
-        {
-          identity_type = "ANY_IDENTITY"
-          sources = [
-            {
-              resource = "projects/163357783814"
-            }
-          ]
+        sources = {
+          resource = "projects/623969658122" //,
+          //resource = "projects/623969658122"
         }
-      ]
+      }
       to = {
-        resources = ["*"]
-        operations = [
-          {
-            service_name = "storage.googleapis.com"
-            method_selectors = [
-              {
-                method = "*"
-              }
-            ]
-          }
+        resources = [
+          "projects/42184019201"
         ]
+        operations = {
+          "bigquery.googleapis.com" = {
+            methods = ["*"]
+          }
+          "pubsub.googleapis.com" = {
+            methods = ["*"]
+          }
+          # "artifactregistry.googleapis.com" = {
+          #   methods = ["*"]
+          # }
+        }
+      }
+    },
+    {
+      from = {
+        identity_type = ""
+        identities = [
+          "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com" //,
+          //"serviceAccount:project-service-account@PROJECT_LOGGING_ID.iam.gserviceaccount.com"
+        ]
+        sources = {
+          resource = "projects/623969658122",
+          resource = "projects/317298441760"
+        }
+      }
+      to = {
+        resources = [
+          "projects/42184019201"//,
+          //"projects/12312312312"
+        ]
+        operations = {
+          "storage.googleapis.com" = {
+            methods = ["*"]
+          }
+        }
+      }
+    }
+  ]
+
+
+  /////dry-run
+  ingress_policies_dry_run = [
+    {
+      from = {
+        //identity_type = "ANY_IDENTITY"
+       identity_type = ""
+        identities = [
+          "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
+          //"serviceAccount:project-service-account@PROJECT_BILLING_EXPORT_ID.iam.gserviceaccount.com"
+        ]
+        sources = {
+          resource = "projects/623969658122",
+          resource = "projects/317298441760"
+        }
+      }
+      to = {
+        resources = [
+          "projects/42184019201"
+        ]
+        operations = {
+          "cloudfunctions.googleapis.com" = {
+            methods = ["*"]
+          }
+        }
+      }
+    },
+    {
+      from = {
+        identity_type = ""
+        identities = [
+          "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com" //,
+          //"serviceAccount:project-service-account@PROJECT_LOGGING_ID.iam.gserviceaccount.com"
+        ]
+        # sources = {
+        #   resource = "projects/623969658122" //,
+        #   //resource = "projects/623969658122"
+        # }
+      }
+      to = {
+        resources = [
+          "projects/42184019201" //,
+          //"projects/12312312312"
+        ]
+        operations = {
+          "cloudfunctions.googleapis.com" = {
+            methods = ["*"]
+          }
+          "storage.googleapis.com" = {
+            methods = ["*"]
+          }
+          # "run.googleapis.com" = {
+          #   methods = ["*"]
+          # }
+        }
       }
     }
   ]
@@ -251,7 +367,7 @@ module "service_control" {
     "942489737540"  // prj-p-svpc-krnv
   ]))
   ingress_policies         = local.ingress_policies
-  ingress_policies_dry_run = local.ingress_policies
+  ingress_policies_dry_run = local.ingress_policies_dry_run
   #egress_policies          = distinct(local.egress_policies)
   #egress_policies_dry_run  = distinct(local.egress_policies)
 
