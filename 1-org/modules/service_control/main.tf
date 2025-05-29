@@ -47,8 +47,10 @@ module "access_level_dry_run" {
 
 module "regular_service_perimeter" {
   #source = "git::https://github.com/mariammartins/terraform-google-vpc-service-controls.git//modules/regular_service_perimeter?ref=updt-version-perimeter"
-  source  = "terraform-google-modules/vpc-service-controls/google//modules/regular_service_perimeter"
-  version = "~> 7.0.0"
+  #source  = "terraform-google-modules/vpc-service-controls/google//modules/regular_service_perimeter"
+  #version = "~> 7.0.0"
+  source = "git::https://github.com/renato-rudnicki/terraform-google-vpc-service-controls.git//modules/regular_service_perimeter"
+
 
   policy         = var.access_context_manager_policy_id
   perimeter_name = local.perimeter_name
