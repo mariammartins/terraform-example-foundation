@@ -631,7 +631,6 @@ resource "google_access_context_manager_service_perimeter_ingress_policy" "ingre
   lifecycle {
     create_before_destroy = true
   }
-  depends_on = [module.service_control]
 }
 
 resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy" "ingress_policies_dry_run_CB" {
@@ -661,11 +660,10 @@ resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy
   lifecycle {
     create_before_destroy = true
   }
-  depends_on = [module.service_control]
 }
 
 resource "google_access_context_manager_service_perimeter_ingress_policy" "ingress_policies" {
-  for_each = local.ingress_rules
+  for_each  = var.enforce_vpcsc ? local.ingress_rules : {}
 
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
@@ -694,12 +692,10 @@ resource "google_access_context_manager_service_perimeter_ingress_policy" "ingre
   lifecycle {
     create_before_destroy = true
   }
-
-  depends_on = [module.service_control]
 }
 
 resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy" "ingress_policies_dry_run" {
-  for_each = local.ingress_rules_dry_run
+  for_each  = var.enforce_vpcsc ? {} : local.ingress_rules_dry_run
 
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
@@ -728,12 +724,10 @@ resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy
   lifecycle {
     create_before_destroy = true
   }
-
-  depends_on = [module.service_control]
 }
 
 resource "google_access_context_manager_service_perimeter_egress_policy" "egress_policies" {
-  for_each = local.egress_rules
+  for_each  = var.enforce_vpcsc ? local.egress_rules : {}
 
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
@@ -761,12 +755,10 @@ resource "google_access_context_manager_service_perimeter_egress_policy" "egress
   lifecycle {
     create_before_destroy = true
   }
-
-  depends_on = [module.service_control]
 }
 
 resource "google_access_context_manager_service_perimeter_dry_run_egress_policy" "egress_policies_dry_run" {
-  for_each = local.egress_rules_dry_run
+  for_each  = var.enforce_vpcsc ? {} : local.egress_rules_dry_run
 
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
@@ -794,8 +786,6 @@ resource "google_access_context_manager_service_perimeter_dry_run_egress_policy"
   lifecycle {
     create_before_destroy = true
   }
-
-  depends_on = [module.service_control]
 }
 
 module "service_control" {
