@@ -811,16 +811,7 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
   resources = distinct([
-    local.seed_project_number, //42184019201
-    "1005098596866",           // prj-c-billing-export
-    "163357783814",            // prj-c-logging
-    "651399064839",            // prj-c-kms
-    "658193253743",            // prj-c-scc
-    "130486420663",            // prj-c-secrets
-    "823601631320",            // prj-d-svpc
-    "404448127608",            // prj-n-svpc
-    "438975717654",            // prj-net-interconnect
-    "942489737540"             // prj-p-svpc
+  var.resources
   ])
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
@@ -829,16 +820,7 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
   resources_dry_run = distinct(concat([
-    local.seed_project_number, //42184019201
-    "1005098596866",           // prj-c-billing-export
-    "163357783814",            // prj-c-logging
-    "651399064839",            // prj-c-kms
-    "658193253743",            // prj-c-scc
-    "130486420663",            // prj-c-secrets
-    "823601631320",            // prj-d-svpc
-    "404448127608",            // prj-n-svpc
-    "438975717654",            // prj-net-interconnect
-    "942489737540"             // prj-p-svpc
+  var.resources_dry_run
   ]))
 
   depends_on = [
