@@ -159,12 +159,12 @@ locals {
       ]
       sources = {
         resources = [
-          "projects/42184019201",
-          "projects/1005098596866"
+          "projects/42184019201", //prj-b-seed
+          "projects/1005098596866" //prj-c-billing-export
         ]
       }
       resources = [
-        "projects/438975717654"
+        "projects/438975717654" //prj-net-interconnect
       ]
     }
     rule_ingress_logging = {
@@ -175,14 +175,14 @@ locals {
       ]
       sources = {
         resources = [
-          "projects/42184019201",
-          "projects/130486420663",
-          "projects/1005098596866",
-          "projects/942489737540"
+          "projects/42184019201", //prj-b-seed
+          "projects/130486420663", //prj-c-secrets
+          "projects/1005098596866", //prj-c-billing-export
+          "projects/942489737540" //prj-p-svpc
         ]
       }
       resources = [
-        "projects/942489737540"
+        "projects/942489737540" //prj-p-svpc
       ]
     }
   }
@@ -194,7 +194,7 @@ locals {
         "serviceAccount:project-service-account@prj-c-scc-btid.iam.gserviceaccount.com"
       ]
       resources = [
-        "projects/658193253743"
+        "projects/658193253743" //prj-c-scc
       ]
       operations = {
         cloudresourcemanager = {
@@ -278,7 +278,7 @@ locals {
         "serviceAccount:project-service-account@prj-c-logging-1s0a.iam.gserviceaccount.com"
       ]
       resources = [
-        "projects/163357783814"
+        "projects/163357783814" //prj-c-logging
       ]
       operations = {
         cloudresourcemanager = {
@@ -357,14 +357,16 @@ locals {
     }
     rule_egress_cloudbuild = {
       identities = [
-        "serviceAccount:service-623969658122@gcp-sa-cloudbuild.iam.gserviceaccount.com"
+        "serviceAccount:service-623969658122@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+        "serviceAccount:623969658122@cloudbuild.gserviceaccount.com",
+        "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
+        //the SA bellow can only be added after step 5-app-infra
+        //"serviceAccount:352733979866@cloudbuild.gserviceaccount.com",
+        //"serviceAccount:sa-tf-cb-bu1-example-app@prj-c-bu1-infra-pipeline-oiqc.iam.gserviceaccount.com"
       ]
       resources = [
-        "projects/42184019201",
-        "projects/623969658122"
-      ]
-      resources = [
-        "projects/42184019201"
+        "projects/42184019201", //	prj-b-seed
+        "projects/623969658122" //	prj-b-cicd
       ]
       operations = {
         all_services = {
@@ -385,12 +387,12 @@ locals {
       ]
       sources = {
         resources = [
-          "projects/42184019201",
-          "projects/1005098596866"
+          "projects/42184019201", //prj-b-seed
+          "projects/1005098596866" //prj-c-billing-export
         ]
       }
       resources = [
-        "projects/438975717654"
+        "projects/438975717654" //prj-net-interconnect
       ]
     }
     rule_ingress_logging = {
@@ -401,14 +403,14 @@ locals {
       ]
       sources = {
         resources = [
-          "projects/42184019201",
-          "projects/130486420663",
-          "projects/1005098596866",
-          "projects/942489737540"
+          "projects/42184019201", //prj-b-seed
+          "projects/130486420663", //prj-c-secrets
+          "projects/1005098596866", //prj-c-billing-export
+          "projects/942489737540" //prj-p-svpc
         ]
       }
       resources = [
-        "projects/942489737540"
+        "projects/942489737540" //prj-p-svpc
       ]
     }
   }
@@ -420,7 +422,7 @@ locals {
         "serviceAccount:project-service-account@prj-c-scc-btid.iam.gserviceaccount.com"
       ]
       resources = [
-        "projects/658193253743"
+        "projects/658193253743" //prj-c-scc
       ]
       operations = {
         cloudresourcemanager = {
@@ -504,7 +506,7 @@ locals {
         "serviceAccount:project-service-account@prj-c-logging-1s0a.iam.gserviceaccount.com"
       ]
       resources = [
-        "projects/163357783814"
+        "projects/163357783814" //prj-c-logging
       ]
       operations = {
         cloudresourcemanager = {
@@ -583,14 +585,15 @@ locals {
     }
     rule_egress_cloudbuild = {
       identities = [
-        "serviceAccount:service-623969658122@gcp-sa-cloudbuild.iam.gserviceaccount.com"
+        "serviceAccount:service-623969658122@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+        "serviceAccount:623969658122@cloudbuild.gserviceaccount.com"//,
+        //the SA bellow can only be added after step 5-app-infra
+        //"serviceAccount:352733979866@cloudbuild.gserviceaccount.com",
+        //"serviceAccount:sa-tf-cb-bu1-example-app@prj-c-bu1-infra-pipeline-oiqc.iam.gserviceaccount.com"
       ]
       resources = [
-        "projects/42184019201",
-        "projects/623969658122"
-      ]
-      resources = [
-        "projects/42184019201"
+        "projects/42184019201", //prj-b-seed
+        "projects/623969658122" //prj-b-cicd
       ]
       operations = {
         all_services = {
@@ -604,28 +607,29 @@ locals {
 
 }
 
+# TODO: create a  single local for CB resources using for_each
+
 resource "google_access_context_manager_service_perimeter_ingress_policy" "ingress_policies_CB" {
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
   ingress_from {
     identity_type = ""
     identities = [
       "serviceAccount:service-623969658122@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-      "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"
+      "serviceAccount:623969658122@cloudbuild.gserviceaccount.com",
+      "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
+      //the SA bellow can only be added after step 5-app-infra
+      //"serviceAccount:352733979866@cloudbuild.gserviceaccount.com",
+      //"serviceAccount:sa-tf-cb-bu1-example-app@prj-c-bu1-infra-pipeline-oiqc.iam.gserviceaccount.com"
     ]
     sources {
-      resource = "projects/623969658122"
+      access_level = "*"
     }
   }
   ingress_to {
-    resources = [
-      "projects/42184019201"
-    ]
+    resources = ["*"]
 
     operations {
-      service_name = "bigquery.googleapis.com"
-      method_selectors {
-        method = "*"
-      }
+      service_name = "*"
     }
   }
   lifecycle {
@@ -639,28 +643,28 @@ resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy
     identity_type = ""
     identities = [
       "serviceAccount:service-623969658122@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-      "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"
+      "serviceAccount:623969658122@cloudbuild.gserviceaccount.com",
+      "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
+      //the SA bellow can only be added after step 5-app-infra
+      //"serviceAccount:352733979866@cloudbuild.gserviceaccount.com",
+      //"serviceAccount:sa-tf-cb-bu1-example-app@prj-c-bu1-infra-pipeline-oiqc.iam.gserviceaccount.com"
     ]
     sources {
-      resource = "projects/623969658122"
+      access_level = "*"
     }
   }
   ingress_to {
-    resources = [
-      "projects/42184019201"
-    ]
+    resources = ["*"]
 
     operations {
-      service_name = "bigquery.googleapis.com"
-      method_selectors {
-        method = "*"
-      }
+      service_name = "*"
     }
   }
   lifecycle {
     create_before_destroy = true
   }
 }
+
 
 resource "google_access_context_manager_service_perimeter_ingress_policy" "ingress_policies" {
   for_each  = var.enforce_vpcsc ? local.ingress_rules : {}
@@ -788,6 +792,7 @@ resource "google_access_context_manager_service_perimeter_dry_run_egress_policy"
   }
 }
 
+
 module "service_control" {
   source = "../../modules/service_control"
 
@@ -801,7 +806,17 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
   resources = distinct([
-  var.resources
+    local.seed_project_number, //42184019201
+    "1005098596866",           // prj-c-billing-export
+    "163357783814",            // prj-c-logging
+    "651399064839",            // prj-c-kms
+    "658193253743",            // prj-c-scc
+    "130486420663",            // prj-c-secrets
+    "823601631320",            // prj-d-svpc
+    "404448127608",            // prj-n-svpc
+    "438975717654",            // prj-net-interconnect
+    "942489737540"             // prj-p-svpc
+    //var.resources
   ])
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
@@ -810,11 +825,20 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
   resources_dry_run = distinct(concat([
-  var.resources_dry_run
+    local.seed_project_number, //42184019201
+    "1005098596866",           // prj-c-billing-export
+    "163357783814",            // prj-c-logging
+    "651399064839",            // prj-c-kms
+    "658193253743",            // prj-c-scc
+    "130486420663",            // prj-c-secrets
+    "823601631320",            // prj-d-svpc
+    "404448127608",            // prj-n-svpc
+    "438975717654",            // prj-net-interconnect
+    "942489737540"             // prj-p-svpc
+    //var.resources
   ]))
 
   depends_on = [
     time_sleep.wait_projects
   ]
 }
-
