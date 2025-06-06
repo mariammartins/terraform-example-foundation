@@ -277,7 +277,7 @@ resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy
 }
 
 resource "google_access_context_manager_service_perimeter_ingress_policy" "ingress_policies" {
- for_each = var.enforce_vpcsc ?  { for idx, policy in var.egress_policies : idx => policy } : {}
+ for_each = var.enforce_vpcsc ?  { for idx, policy in var.ingress_policies : idx => policy } : {}
 
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
