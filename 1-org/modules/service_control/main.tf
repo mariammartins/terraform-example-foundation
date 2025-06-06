@@ -49,7 +49,8 @@ module "regular_service_perimeter" {
   #source = "git::https://github.com/mariammartins/terraform-google-vpc-service-controls.git//modules/regular_service_perimeter?ref=updt-version-perimeter"
   #source  = "terraform-google-modules/vpc-service-controls/google//modules/regular_service_perimeter"
   #version = "~> 7.0.0"
-  source = "git::https://github.com/renato-rudnicki/terraform-google-vpc-service-controls.git//modules/regular_service_perimeter"
+  #source = "git::https://github.com/renato-rudnicki/terraform-google-vpc-service-controls.git//modules/regular_service_perimeter"
+  source = "git::https://github.com/daniel-cit/terraform-google-vpc-service-controls.git//modules/regular_service_perimeter?ref=fix-directional-rules"
 
 
   policy         = var.access_context_manager_policy_id
@@ -62,8 +63,7 @@ module "regular_service_perimeter" {
   vpc_accessible_services = var.enforce_vpcsc ? ["*"] : []
   ingress_policies        = var.enforce_vpcsc ? var.ingress_policies : []
   egress_policies         = var.enforce_vpcsc ? var.egress_policies : []
-  #resources               = var.enforce_vpcsc ? var.resources : []
-  resources               = var.resources
+  resources               = var.enforce_vpcsc ? var.resources : []
 
   # configurations for a perimeter in dry run mode.
   access_levels_dry_run           = [module.access_level_dry_run.name]

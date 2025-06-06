@@ -149,475 +149,17 @@ locals {
   restricted_services         = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
   restricted_services_dry_run = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
 
-
-  ingress_rules = {
-    rule_ingress_billing_export = {
-      service_name = "logging.googleapis.com"
-      identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-c-billing-export-8f0e.iam.gserviceaccount.com"
-      ]
-      sources = {
-        resources = [
-          "projects/42184019201", //prj-b-seed
-          "projects/1005098596866" //prj-c-billing-export
-        ]
-      }
-      resources = [
-        "projects/438975717654" //prj-net-interconnect
-      ]
-    }
-    rule_ingress_logging = {
-      service_name = "bigquery.googleapis.com"
-      identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-p-svpc-krnv.iam.gserviceaccount.com"
-      ]
-      sources = {
-        resources = [
-          "projects/42184019201", //prj-b-seed
-          "projects/130486420663", //prj-c-secrets
-          "projects/1005098596866", //prj-c-billing-export
-          "projects/942489737540" //prj-p-svpc
-        ]
-      }
-      resources = [
-        "projects/942489737540" //prj-p-svpc
-      ]
-    }
-  }
-
-  egress_rules = {
-    rule_egress_c_scc = {
-      identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-c-scc-btid.iam.gserviceaccount.com"
-      ]
-      resources = [
-        "projects/658193253743" //prj-c-scc
-      ]
-      operations = {
-        cloudresourcemanager = {
-          service_name = "cloudresourcemanager.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        cloudfunctions = {
-          service_name = "cloudfunctions.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        cloudbuild = {
-          service_name = "cloudbuild.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        cloudasset = {
-          service_name = "cloudasset.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        pubsub = {
-          service_name = "pubsub.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        artifactregistry = {
-          service_name = "artifactregistry.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        storage = {
-          service_name = "storage.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        run = {
-          service_name = "run.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        eventarc = {
-          service_name = "eventarc.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-      }
-    }
-
-    rule_egress_c_logging = {
-      identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-c-logging-1s0a.iam.gserviceaccount.com"
-      ]
-      resources = [
-        "projects/163357783814" //prj-c-logging
-      ]
-      operations = {
-        cloudresourcemanager = {
-          service_name = "cloudresourcemanager.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        cloudfunctions = {
-          service_name = "cloudfunctions.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        cloudbuild = {
-          service_name = "cloudbuild.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        cloudasset = {
-          service_name = "cloudasset.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        pubsub = {
-          service_name = "pubsub.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        artifactregistry = {
-          service_name = "artifactregistry.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        storage = {
-          service_name = "storage.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        run = {
-          service_name = "run.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        eventarc = {
-          service_name = "eventarc.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-      }
-    }
-    rule_egress_cloudbuild = {
-      identities = [
-        "serviceAccount:service-623969658122@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-        "serviceAccount:623969658122@cloudbuild.gserviceaccount.com",
-        "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
-        //the SA bellow can only be added after step 5-app-infra
-        //"serviceAccount:352733979866@cloudbuild.gserviceaccount.com",
-        //"serviceAccount:sa-tf-cb-bu1-example-app@prj-c-bu1-infra-pipeline-oiqc.iam.gserviceaccount.com"
-      ]
-      resources = [
-        "projects/42184019201", //	prj-b-seed
-        "projects/623969658122" //	prj-b-cicd
-      ]
-      operations = {
-        all_services = {
-          service_name = "*"
-          method_selectors = [
-          ]
-        }
-      }
-    }
-  }
-
-  ingress_rules_dry_run = {
-    rule_ingress_billing_export = {
-      service_name = "logging.googleapis.com"
-      identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-c-billing-export-8f0e.iam.gserviceaccount.com"
-      ]
-      sources = {
-        resources = [
-          "projects/42184019201", //prj-b-seed
-          "projects/1005098596866" //prj-c-billing-export
-        ]
-      }
-      resources = [
-        "projects/438975717654" //prj-net-interconnect
-      ]
-    }
-    rule_ingress_logging = {
-      service_name = "bigquery.googleapis.com"
-      identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-p-svpc-krnv.iam.gserviceaccount.com"
-      ]
-      sources = {
-        resources = [
-          "projects/42184019201", //prj-b-seed
-          "projects/130486420663", //prj-c-secrets
-          "projects/1005098596866", //prj-c-billing-export
-          "projects/942489737540" //prj-p-svpc
-        ]
-      }
-      resources = [
-        "projects/942489737540" //prj-p-svpc
-      ]
-    }
-  }
-
-  egress_rules_dry_run = {
-    rule_egress_c_scc = {
-      identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-c-scc-btid.iam.gserviceaccount.com"
-      ]
-      resources = [
-        "projects/658193253743" //prj-c-scc
-      ]
-      operations = {
-        cloudresourcemanager = {
-          service_name = "cloudresourcemanager.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        cloudfunctions = {
-          service_name = "cloudfunctions.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        cloudbuild = {
-          service_name = "cloudbuild.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        cloudasset = {
-          service_name = "cloudasset.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        pubsub = {
-          service_name = "pubsub.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        artifactregistry = {
-          service_name = "artifactregistry.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        storage = {
-          service_name = "storage.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        run = {
-          service_name = "run.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        eventarc = {
-          service_name = "eventarc.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-      }
-    }
-
-    rule_egress_c_logging = {
-      identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-c-logging-1s0a.iam.gserviceaccount.com"
-      ]
-      resources = [
-        "projects/163357783814" //prj-c-logging
-      ]
-      operations = {
-        cloudresourcemanager = {
-          service_name = "cloudresourcemanager.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        cloudfunctions = {
-          service_name = "cloudfunctions.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        cloudbuild = {
-          service_name = "cloudbuild.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        cloudasset = {
-          service_name = "cloudasset.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        pubsub = {
-          service_name = "pubsub.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        artifactregistry = {
-          service_name = "artifactregistry.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        storage = {
-          service_name = "storage.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        run = {
-          service_name = "run.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-        eventarc = {
-          service_name = "eventarc.googleapis.com"
-          method_selectors = [
-            {
-              method = "*"
-            }
-          ]
-        }
-      }
-    }
-    rule_egress_cloudbuild = {
-      identities = [
-        "serviceAccount:service-623969658122@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-        "serviceAccount:623969658122@cloudbuild.gserviceaccount.com"//,
-        //the SA bellow can only be added after step 5-app-infra
-        //"serviceAccount:352733979866@cloudbuild.gserviceaccount.com",
-        //"serviceAccount:sa-tf-cb-bu1-example-app@prj-c-bu1-infra-pipeline-oiqc.iam.gserviceaccount.com"
-      ]
-      resources = [
-        "projects/42184019201", //prj-b-seed
-        "projects/623969658122" //prj-b-cicd
-      ]
-      operations = {
-        all_services = {
-          service_name = "*"
-          method_selectors = [
-          ]
-        }
-      }
-    }
-  }
-
 }
-
-# TODO: create a  single local for CB resources using for_each
 
 resource "google_access_context_manager_service_perimeter_ingress_policy" "ingress_policies_CB" {
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
   ingress_from {
     identity_type = ""
     identities = [
-      "serviceAccount:service-623969658122@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-      "serviceAccount:623969658122@cloudbuild.gserviceaccount.com",
-      "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
-      //the SA bellow can only be added after step 5-app-infra
+      "serviceAccount:service-812628934602@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+      "serviceAccount:812628934602@cloudbuild.gserviceaccount.com",
+      "serviceAccount:sa-terraform-org@prj-b-seed-6f89.iam.gserviceaccount.com" //,
+      //the SA bellow can only be added after step 5-app-infra in dry-run
       //"serviceAccount:352733979866@cloudbuild.gserviceaccount.com",
       //"serviceAccount:sa-tf-cb-bu1-example-app@prj-c-bu1-infra-pipeline-oiqc.iam.gserviceaccount.com"
     ]
@@ -642,9 +184,9 @@ resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy
   ingress_from {
     identity_type = ""
     identities = [
-      "serviceAccount:service-623969658122@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-      "serviceAccount:623969658122@cloudbuild.gserviceaccount.com",
-      "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
+      "serviceAccount:service-812628934602@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+      "serviceAccount:812628934602@cloudbuild.gserviceaccount.com",
+      "serviceAccount:sa-terraform-org@prj-b-seed-6f89.iam.gserviceaccount.com" //,
       //the SA bellow can only be added after step 5-app-infra
       //"serviceAccount:352733979866@cloudbuild.gserviceaccount.com",
       //"serviceAccount:sa-tf-cb-bu1-example-app@prj-c-bu1-infra-pipeline-oiqc.iam.gserviceaccount.com"
@@ -666,29 +208,29 @@ resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy
 }
 
 
-resource "google_access_context_manager_service_perimeter_ingress_policy" "ingress_policies" {
-  for_each  = var.enforce_vpcsc ? local.ingress_rules : {}
+
+resource "google_access_context_manager_service_perimeter_dry_run_egress_policy" "egress_policies_dry_run" {
+  for_each = var.enforce_vpcsc ? {} : { for idx, policy in var.egress_policies_dry_run : idx => policy }
 
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
-  ingress_from {
+  egress_from {
     identity_type = ""
     identities    = each.value.identities
-
-    dynamic "sources" {
-      for_each = each.value.sources.resources
-      content {
-        resource = sources.value
-      }
-    }
   }
 
-  ingress_to {
+  egress_to {
     resources = each.value.resources
-    operations {
-      service_name = each.value.service_name
-      method_selectors {
-        method = "*"
+    dynamic "operations" {
+      for_each = [for op in each.value.operations : op]
+      content {
+        service_name = operations.value.service_name
+        dynamic "method_selectors" {
+          for_each = operations.value.method_selectors
+          content {
+            method = method_selectors.value.method
+          }
+        }
       }
     }
   }
@@ -699,7 +241,7 @@ resource "google_access_context_manager_service_perimeter_ingress_policy" "ingre
 }
 
 resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy" "ingress_policies_dry_run" {
-  for_each  = var.enforce_vpcsc ? {} : local.ingress_rules_dry_run
+  for_each = var.enforce_vpcsc ? {} : { for idx, policy in var.ingress_policies_dry_run : idx => policy }
 
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
@@ -728,10 +270,50 @@ resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy
   lifecycle {
     create_before_destroy = true
   }
+
+  depends_on = [
+    module.service_control
+  ]
+}
+
+resource "google_access_context_manager_service_perimeter_ingress_policy" "ingress_policies" {
+ for_each = var.enforce_vpcsc ?  { for idx, policy in var.egress_policies : idx => policy } : {}
+
+  perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
+
+  ingress_from {
+    identity_type = ""
+    identities    = each.value.identities
+
+    dynamic "sources" {
+      for_each = each.value.sources.resources
+      content {
+        resource = sources.value
+      }
+    }
+  }
+
+  ingress_to {
+    resources = each.value.resources
+    operations {
+      service_name = each.value.service_name
+      method_selectors {
+        method = "*"
+      }
+    }
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  depends_on = [
+    module.service_control
+  ]
 }
 
 resource "google_access_context_manager_service_perimeter_egress_policy" "egress_policies" {
-  for_each  = var.enforce_vpcsc ? local.egress_rules : {}
+  for_each = var.enforce_vpcsc ?  { for idx, policy in var.egress_policies : idx => policy } : {}
 
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
@@ -760,38 +342,6 @@ resource "google_access_context_manager_service_perimeter_egress_policy" "egress
     create_before_destroy = true
   }
 }
-
-resource "google_access_context_manager_service_perimeter_dry_run_egress_policy" "egress_policies_dry_run" {
-  for_each  = var.enforce_vpcsc ? {} : local.egress_rules_dry_run
-
-  perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-
-  egress_from {
-    identity_type = ""
-    identities    = each.value.identities
-  }
-
-  egress_to {
-    resources = each.value.resources
-    dynamic "operations" {
-      for_each = [for op in each.value.operations : op]
-      content {
-        service_name = operations.value.service_name
-        dynamic "method_selectors" {
-          for_each = operations.value.method_selectors
-          content {
-            method = method_selectors.value.method
-          }
-        }
-      }
-    }
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
 
 module "service_control" {
   source = "../../modules/service_control"
@@ -805,38 +355,24 @@ module "service_control" {
     "serviceAccount:${local.organization_service_account}",
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
-  resources = distinct([
-    local.seed_project_number, //42184019201
-    "1005098596866",           // prj-c-billing-export
-    "163357783814",            // prj-c-logging
-    "651399064839",            // prj-c-kms
-    "658193253743",            // prj-c-scc
-    "130486420663",            // prj-c-secrets
-    "823601631320",            // prj-d-svpc
-    "404448127608",            // prj-n-svpc
-    "438975717654",            // prj-net-interconnect
-    "942489737540"             // prj-p-svpc
-    //var.resources
-  ])
+  # resources = distinct([
+  #   local.seed_project_number, // "345676339661"
+  # ])
+  resources = distinct(
+    var.resources
+  )
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
     "serviceAccount:${local.projects_service_account}",
     "serviceAccount:${local.organization_service_account}",
     "serviceAccount:${local.environment_service_account}"
   ], var.perimeter_additional_members))
-  resources_dry_run = distinct(concat([
-    local.seed_project_number, //42184019201
-    "1005098596866",           // prj-c-billing-export
-    "163357783814",            // prj-c-logging
-    "651399064839",            // prj-c-kms
-    "658193253743",            // prj-c-scc
-    "130486420663",            // prj-c-secrets
-    "823601631320",            // prj-d-svpc
-    "404448127608",            // prj-n-svpc
-    "438975717654",            // prj-net-interconnect
-    "942489737540"             // prj-p-svpc
-    //var.resources
-  ]))
+  resources_dry_run = distinct(concat(
+    var.resources_dry_run
+  ))
+  # resources_dry_run = [
+  #   local.seed_project_number, // "345676339661"
+  # ]
 
   depends_on = [
     time_sleep.wait_projects
