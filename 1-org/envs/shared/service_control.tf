@@ -151,63 +151,6 @@ locals {
 
 }
 
-resource "google_access_context_manager_service_perimeter_ingress_policy" "ingress_policies_CB" {
-  perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-  ingress_from {
-    identity_type = ""
-    identities = [
-      "serviceAccount:service-812628934602@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-      "serviceAccount:812628934602@cloudbuild.gserviceaccount.com",
-      "serviceAccount:sa-terraform-org@prj-b-seed-6f89.iam.gserviceaccount.com" //,
-      //the SA bellow can only be added after step 5-app-infra in dry-run
-      //"serviceAccount:352733979866@cloudbuild.gserviceaccount.com",
-      //"serviceAccount:sa-tf-cb-bu1-example-app@prj-c-bu1-infra-pipeline-oiqc.iam.gserviceaccount.com"
-    ]
-    sources {
-      access_level = "*"
-    }
-  }
-  ingress_to {
-    resources = ["*"]
-
-    operations {
-      service_name = "*"
-    }
-  }
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy" "ingress_policies_dry_run_CB" {
-  perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-  ingress_from {
-    identity_type = ""
-    identities = [
-      "serviceAccount:service-812628934602@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-      "serviceAccount:812628934602@cloudbuild.gserviceaccount.com",
-      "serviceAccount:sa-terraform-org@prj-b-seed-6f89.iam.gserviceaccount.com" //,
-      //the SA bellow can only be added after step 5-app-infra
-      //"serviceAccount:352733979866@cloudbuild.gserviceaccount.com",
-      //"serviceAccount:sa-tf-cb-bu1-example-app@prj-c-bu1-infra-pipeline-oiqc.iam.gserviceaccount.com"
-    ]
-    sources {
-      access_level = "*"
-    }
-  }
-  ingress_to {
-    resources = ["*"]
-
-    operations {
-      service_name = "*"
-    }
-  }
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-
 
 resource "google_access_context_manager_service_perimeter_dry_run_egress_policy" "egress_policies_dry_run" {
   for_each = { for idx, policy in var.egress_policies_dry_run : idx => policy }
@@ -353,28 +296,51 @@ module "service_control" {
     "serviceAccount:${local.networks_service_account}",
     "serviceAccount:${local.projects_service_account}",
     "serviceAccount:${local.organization_service_account}",
-    "serviceAccount:${local.environment_service_account}"
+    "serviceAccount:${local.environment_service_account}",
+    "serviceAccount:service-812628934602@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+    "serviceAccount:812628934602@cloudbuild.gserviceaccount.com",
+    "serviceAccount:service-folder-77454778564@gcp-sa-logging.iam.gserviceaccount.com",
+    "serviceAccount:service-b-010ECE-40301B-50DDD5@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
-  # resources = distinct([
-  #   local.seed_project_number, // "345676339661"
-  # ])
-  resources = distinct(
-    var.resources
-  )
+  resources = distinct(concat([
+    local.seed_project_number,
+    module.org_audit_logs.project_number,
+    module.org_billing_export.project_number,
+    module.common_kms.project_number,
+    module.org_secrets.project_number,
+    module.interconnect.project_number,
+    module.scc_notifications.project_number,
+    "prj-d-svpc-number",
+    "prj-n-svpc-number",
+    "prj-p-svpc-number",
+    ], var.resources
+  ))
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
     "serviceAccount:${local.projects_service_account}",
     "serviceAccount:${local.organization_service_account}",
-    "serviceAccount:${local.environment_service_account}"
+    "serviceAccount:${local.environment_service_account}",
+    "serviceAccount:service-cloudbuild_project_number@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+    "serviceAccount:cloudbuild_project_number@cloudbuild.gserviceaccount.com",
+    "serviceAccount:service-folder-folder_number@gcp-sa-logging.iam.gserviceaccount.com",
+    "serviceAccount:service-b-billing_number@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
-  resources_dry_run = distinct(concat(
-    var.resources_dry_run
+  resources_dry_run = distinct(concat([
+    local.seed_project_number,
+    module.org_audit_logs.project_number,
+    module.org_billing_export.project_number,
+    module.common_kms.project_number,
+    module.org_secrets.project_number,
+    module.interconnect.project_number,
+    module.scc_notifications.project_number,
+    "prj-d-svpc-number",
+    "prj-n-svpc-number",
+    "prj-p-svpc-number",
+    ], var.resources_dry_run
   ))
-  # resources_dry_run = [
-  #   local.seed_project_number, // "345676339661"
-  # ]
 
   depends_on = [
     time_sleep.wait_projects
   ]
 }
+
