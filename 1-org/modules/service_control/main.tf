@@ -20,44 +20,44 @@ locals {
   access_level_name_dry_run = "alp_${local.prefix}_members_dry_run_${random_id.random_access_level_suffix.hex}"
   perimeter_name            = "sp_${local.prefix}_default_common_perimeter_${random_id.random_access_level_suffix.hex}"
 
-ingress_rules = {
+  ingress_rules = {
     rule_ingress_billing_export = {
       service_name = "logging.googleapis.com"
       identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-PROJECT_ID.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-c-billing-export-PROJECT_ID.iam.gserviceaccount.com"
+        "serviceAccount:sa-terraform-org@SEED_PROJECT_ID.iam.gserviceaccount.com",
+        "serviceAccount:project-service-account@BILLING_EXPORT_PROJECT_ID.iam.gserviceaccount.com"
       ]
       sources = {
         resources = [
-          "projects/prj-b-seed_PROJECT_NUMBER",
-          "projects/prj-c-billing-export_PROJECT_NUMBER"
+          "projects/SEED_PROJECT_NUMBER",
+          "projects/BILLING_EXPORT_PROJECT_NUMBER"
         ]
       }
       resources = [
-        "projects/prj-net-interconnect_PROJECT_NUMBER"
+        "projects/INTERCONNECT_PROJECT_NUMBER"
       ]
     }
     rule_ingress_logging = {
       service_name = "bigquery.googleapis.com"
       identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-PROJECT_ID.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-p-svpc-PROJECT_ID.iam.gserviceaccount.com"
+        "serviceAccount:sa-terraform-org@SEED_PROJECT_ID.iam.gserviceaccount.com",
+        "serviceAccount:project-service-account@PRODUCTION_NETWORK_PROJECT_ID.iam.gserviceaccount.com"
       ]
       sources = {
         resources = [
-          "projects/prj-b-seed_PROJECT_NUMBER",
-          "projects/prj-c-secrets_PROJECT_NUMBER",
-          "projects/prj-c-billing-export_PROJECT_NUMBER",
-          "projects/prj-p-svpc_PROJECT_NUMBER"
+          "projects/SEED_PROJECT_NUMBER",
+          "projects/SECRETS_PROJECT_NUMBER",
+          "projects/BILLING_EXPORT_PROJECT_NUMBER",
+          "projects/PRODUCTION_NETWORK_PROJECT_ID"
         ]
       }
       resources = [
-        "projects/prj-p-svpc_PROJECT_NUMBER"
+        "projects/PRODUCTION_NETWORK_PROJECT_ID"
       ]
     }
   }
 
-egress_rules = {
+  egress_rules = {
     rule_egress_c_scc = {
       identities = [
         "serviceAccount:sa-terraform-org@prj-b-seed-PROJECT_ID.iam.gserviceaccount.com",
@@ -247,51 +247,51 @@ egress_rules = {
     }
   }
 
-ingress_rules_dry_run = {
+  ingress_rules_dry_run = {
     rule_ingress_billing_export = {
       service_name = "logging.googleapis.com"
       identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-PROJECT_ID.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-c-billing-export-PROJECT_ID.iam.gserviceaccount.com"
+        "serviceAccount:sa-terraform-org@SEED_PROJECT_ID.iam.gserviceaccount.com",
+        "serviceAccount:project-service-account@BILLING_EXPORT_PROJECT_ID.iam.gserviceaccount.com"
       ]
       sources = {
         resources = [
-          "projects/prj-b-seed_PROJECT_NUMBER",
-          "projects/prj-c-billing-export_PROJECT_NUMBER"
+          "projects/SEED_PROJECT_NUMBER",
+          "projects/BILLING_EXPORT_PROJECT_NUMBER"
         ]
       }
       resources = [
-        "projects/prj-net-interconnect_PROJECT_NUMBER"
+        "projects/INTERCONNECT_PROJECT_NUMBER"
       ]
     }
     rule_ingress_logging = {
       service_name = "bigquery.googleapis.com"
       identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-PROJECT_ID.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-p-svpc-PROJECT_ID.iam.gserviceaccount.com"
+        "serviceAccount:sa-terraform-org@SEED_PROJECT_ID.iam.gserviceaccount.com",
+        "serviceAccount:project-service-account@PRODUCTION_NETWORK_PROJECT_ID.iam.gserviceaccount.com"
       ]
       sources = {
         resources = [
-          "projects/prj-b-seed_PROJECT_NUMBER",
-          "projects/prj-c-secrets_PROJECT_NUMBER",
-          "projects/prj-c-billing-export_PROJECT_NUMBER",
-          "projects/prj-p-svpc_PROJECT_NUMBER"
+          "projects/SEED_PROJECT_NUMBER",
+          "projects/SECRETS_PROJECT_NUMBER",
+          "projects/BILLING_EXPORT_PROJECT_NUMBER",
+          "projects/PRODUCTION_NETWORK_PROJECT_ID"
         ]
       }
       resources = [
-        "projects/prj-p-svpc_PROJECT_NUMBER"
+        "projects/PRODUCTION_NETWORK_PROJECT_ID"
       ]
     }
   }
 
-egress_rules_dry_run = {
+  egress_rules_dry_run = {
     rule_egress_c_scc = {
       identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-PROJECT_ID.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-c-scc-PROJECT_ID.iam.gserviceaccount.com"
+        "serviceAccount:sa-terraform-org@SEED_PROJECT_ID.iam.gserviceaccount.com",
+        "serviceAccount:project-service-account@SCC_PROJECT_ID.iam.gserviceaccount.com"
       ]
       resources = [
-        "projects/prj-c-scc_PROJECT_NUMBER"
+        "projects/SCC_PROJECT_NUMBER"
       ]
       operations = {
         cloudresourcemanager = {
@@ -371,11 +371,11 @@ egress_rules_dry_run = {
 
     rule_egress_c_logging = {
       identities = [
-        "serviceAccount:sa-terraform-org@prj-b-seed-PROJECT_ID.iam.gserviceaccount.com",
-        "serviceAccount:project-service-account@prj-c-logging-PROJECT_ID.iam.gserviceaccount.com"
+        "serviceAccount:sa-terraform-org@SEED_PROJECT_ID.iam.gserviceaccount.com",
+        "serviceAccount:project-service-account@LOGGING_PROJECT_ID.iam.gserviceaccount.com"
       ]
       resources = [
-        "projects/prj-c-logging-PROJECT_NUMBER"
+        "projects/LOGGING_PROJECT_NUMBER"
       ]
       operations = {
         cloudresourcemanager = {
@@ -454,15 +454,15 @@ egress_rules_dry_run = {
     }
     rule_egress_cloudbuild = {
       identities = [
-        "serviceAccount:service-CB_1ORG_PROJECT_NUMBER@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-        "serviceAccount:CB_1ORG_PROJECT_NUMBER@cloudbuild.gserviceaccount.com" //,
+        "serviceAccount:service-CICD_PROJECT_NUMBER@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+        "serviceAccount:CICD_PROJECT_NUMBER@cloudbuild.gserviceaccount.com" //,
         //the SA bellow can only be added after step 5-app-infra
-        //"serviceAccount:CB_4PROJECTS_PROJECT_NUMBER@cloudbuild.gserviceaccount.com",
-        //"serviceAccount:sa-tf-cb-bu1-example-app@prj-c-bu1-infra-pipeline-PROJECT_ID.iam.gserviceaccount.com"
+        //"serviceAccount:BU1_INFRA_PIPELINE_CICD_PROJECT_NUMBER@cloudbuild.gserviceaccount.com",
+        //"serviceAccount:sa-tf-cb-bu1-example-app@BU1_INFRA_PIPELINE_CICD_PROJECT_ID.iam.gserviceaccount.com"
       ]
       resources = [
-        "projects/prj-b-seed-PROJECT_NUMBER",
-        "projects/prj-b-cicd-PROJECT_NUMBER"
+        "projects/SEED_PROJECT_NUMBER",
+        "projects/CICD_PROJECT_NUMBER"
       ]
       operations = {
         all_services = {
@@ -473,7 +473,6 @@ egress_rules_dry_run = {
       }
     }
   }
-
 }
 
 resource "random_id" "random_access_level_suffix" {
@@ -541,7 +540,7 @@ resource "google_access_context_manager_service_perimeter_ingress_policy" "ingre
     identities = [
       "serviceAccount:service-623969658122@gcp-sa-cloudbuild.iam.gserviceaccount.com",
       "serviceAccount:623969658122@cloudbuild.gserviceaccount.com",
-      "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
+      "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com" //,
       //the SAs bellow can only be added after step 5-app-infra
       //"serviceAccount:cloudbuild_BU1_project_number@cloudbuild.gserviceaccount.com",
       //"serviceAccount:sa-tf-cb-bu1-example-app@prj-c-bu1-infra-pipeline-PROJECT_ID.iam.gserviceaccount.com"
@@ -569,7 +568,7 @@ resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy
     identities = [
       "serviceAccount:service-623969658122@gcp-sa-cloudbuild.iam.gserviceaccount.com",
       "serviceAccount:623969658122@cloudbuild.gserviceaccount.com",
-      "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com"//,
+      "serviceAccount:sa-terraform-org@prj-b-seed-3b72.iam.gserviceaccount.com" //,
       //the SAs bellow can only be added after step 5-app-infra
       //"serviceAccount:cloudbuild_BU1_project_number@cloudbuild.gserviceaccount.com",
       //"serviceAccount:sa-tf-cb-bu1-example-app@prj-c-bu1-infra-pipeline-PROJECT_ID.iam.gserviceaccount.com"
@@ -592,7 +591,7 @@ resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy
 
 
 resource "google_access_context_manager_service_perimeter_ingress_policy" "ingress_policies" {
-  for_each  = local.ingress_rules
+  for_each = local.ingress_rules
 
   perimeter = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
@@ -624,7 +623,7 @@ resource "google_access_context_manager_service_perimeter_ingress_policy" "ingre
 }
 
 resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy" "ingress_policies_dry_run" {
-  for_each  = local.ingress_rules_dry_run
+  for_each = local.ingress_rules_dry_run
 
   perimeter = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
@@ -656,7 +655,7 @@ resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy
 }
 
 resource "google_access_context_manager_service_perimeter_egress_policy" "egress_policies" {
-  for_each  = local.egress_rules
+  for_each = local.egress_rules
 
   perimeter = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
@@ -687,7 +686,7 @@ resource "google_access_context_manager_service_perimeter_egress_policy" "egress
 }
 
 resource "google_access_context_manager_service_perimeter_dry_run_egress_policy" "egress_policies_dry_run" {
-  for_each  = local.egress_rules_dry_run
+  for_each = local.egress_rules_dry_run
 
   perimeter = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
