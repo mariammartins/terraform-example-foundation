@@ -591,7 +591,7 @@ resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy
 
 
 resource "google_access_context_manager_service_perimeter_ingress_policy" "ingress_policies" {
-  for_each = local.ingress_rules
+  for_each  = var.enable_ingress_rules ? local.ingress_rules : {}
 
   perimeter = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
@@ -623,7 +623,7 @@ resource "google_access_context_manager_service_perimeter_ingress_policy" "ingre
 }
 
 resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy" "ingress_policies_dry_run" {
-  for_each = local.ingress_rules_dry_run
+  for_each  = var.enable_ingress_rules ? local.ingress_rules : {}
 
   perimeter = "accessPolicies/${var.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 

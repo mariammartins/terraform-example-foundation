@@ -93,3 +93,11 @@ variable "resources_dry_run" {
   type        = list(string)
   default     = []
 }
+
+////update name and description
+variable "enable_ingress_rules" {
+  description = "Add ingress rules to the perimeter."
+  type        = bool
+  default     = false
+}
+
