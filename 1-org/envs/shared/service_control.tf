@@ -149,6 +149,12 @@ locals {
   restricted_services         = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
   restricted_services_dry_run = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
 
+  shared_vpc_projects_numbers = [
+    for v in values({
+      for k, m in module.environment_network :
+      k => m.shared_vpc_project_number
+    }) : tostring(v)
+  ]
 }
 
 
@@ -220,7 +226,7 @@ resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy
 }
 
 resource "google_access_context_manager_service_perimeter_ingress_policy" "ingress_policies" {
- for_each = { for idx, policy in var.ingress_policies : idx => policy }
+  for_each = { for idx, policy in var.ingress_policies : idx => policy }
 
   perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
 
@@ -310,10 +316,7 @@ module "service_control" {
     module.org_secrets.project_number,
     module.interconnect.project_number,
     module.scc_notifications.project_number,
-    "prj-d-svpc-number",
-    "prj-n-svpc-number",
-    "prj-p-svpc-number",
-    ], var.resources
+    ], local.shared_vpc_projects_numbers, var.resources_dry_run
   ))
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
@@ -333,10 +336,7 @@ module "service_control" {
     module.org_secrets.project_number,
     module.interconnect.project_number,
     module.scc_notifications.project_number,
-    "prj-d-svpc-number",
-    "prj-n-svpc-number",
-    "prj-p-svpc-number",
-    ], var.resources_dry_run
+    ], local.shared_vpc_projects_numbers, var.resources_dry_run
   ))
 
   depends_on = [
