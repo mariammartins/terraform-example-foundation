@@ -273,6 +273,7 @@ locals {
         identities = [
           "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
           "serviceAccount:project-service-account@${module.org_audit_logs.project_id}.iam.gserviceaccount.com",
+          "serviceAccount:service-folder-930514596188@gcp-sa-logging.iam.gserviceaccount.com" //930514596188 parent_id deploy folder ID
         ]
       }
       to = {
