@@ -36,7 +36,9 @@ locals {
   projects_service_account                      = data.terraform_remote_state.bootstrap.outputs.projects_step_terraform_service_account_email
   environment_service_account                   = data.terraform_remote_state.bootstrap.outputs.environment_step_terraform_service_account_email
   cloudbuild_project_number                     = data.terraform_remote_state.bootstrap.outputs.cloudbuild_project_number
+  seed_project_id                               = data.terraform_remote_state.bootstrap.outputs.seed_project_id
   seed_project_number                           = data.terraform_remote_state.bootstrap.outputs.seed_project_number
+  parent_id_deployment                          = data.terraform_remote_state.bootstrap.outputs.parent_id_deployment
 }
 
 data "terraform_remote_state" "bootstrap" {

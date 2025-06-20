@@ -304,4 +304,9 @@ variable "resources_dry_run" {
   default     = []
 }
 
+variable "enable_mandatory_ingress_rules" {
+  description = "Add ingress rules to the perimeter.."
+  type        = bool
+  default     = true
+}
 

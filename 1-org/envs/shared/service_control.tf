@@ -148,6 +148,7 @@ locals {
 
   restricted_services         = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
   restricted_services_dry_run = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
+  ingress_rules               = var.enable_mandatory_ingress_rules ? local.mandatory_ingress_rules : []
 
   shared_vpc_projects_numbers = [
     for v in values({
@@ -155,38 +156,141 @@ locals {
       k => m.shared_vpc_project_number
     }) : tostring(v)
   ]
-}
 
-
-resource "google_access_context_manager_service_perimeter_dry_run_egress_policy" "egress_policies_dry_run" {
-  for_each = { for idx, policy in var.egress_policies_dry_run : idx => policy }
-
-  perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-
-  egress_from {
-    identity_type = ""
-    identities    = each.value.identities
-  }
-
-  egress_to {
-    resources = each.value.resources
-    dynamic "operations" {
-      for_each = [for op in each.value.operations : op]
-      content {
-        service_name = operations.value.service_name
-        dynamic "method_selectors" {
-          for_each = operations.value.method_selectors
-          content {
-            method = method_selectors.value.method
+  egress_rules = [
+    //prj-c-scc
+    {
+      from = {
+        identities = [
+          "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
+          "serviceAccount:project-service-account@${module.scc_notifications.project_id}.iam.gserviceaccount.com"
+        ]
+      }
+      to = {
+        resources = [
+          "projects/${module.scc_notifications.project_number}"
+        ]
+        operations = {
+          for service in [
+            "cloudresourcemanager.googleapis.com",
+            "cloudfunctions.googleapis.com",
+            "eventarc.googleapis.com",
+            "run.googleapis.com",
+            "storage.googleapis.com",
+            "artifactregistry.googleapis.com",
+            "pubsub.googleapis.com",
+            "cloudasset.googleapis.com",
+            "cloudbuild.googleapis.com"
+          ] : service =>
+          {
+            methods = ["*"]
+          }
+        }
+      }
+    },
+    //prj-c-logging
+    {
+      from = {
+        identities = [
+          "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
+          "serviceAccount:project-service-account@${module.org_audit_logs.project_id}.iam.gserviceaccount.com"
+        ]
+      }
+      to = {
+        resources = [
+          "projects/${module.org_audit_logs.project_number}"
+        ]
+        operations = {
+          "logging.googleapis.com" = {
+            methods = ["*"]
+          }
+        }
+      }
+    },
+    //cloudbuild-egress-rule
+    {
+      from = {
+        identities = [
+          "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com"
+        ]
+      }
+      to = {
+        resources = [
+          "projects/${local.cloudbuild_project_number}"
+        ]
+        operations = {
+          "cloudbuild.googleapis.com" = {
+            methods = ["*"]
           }
         }
       }
     }
-  }
+  ]
 
-  lifecycle {
-    create_before_destroy = true
-  }
+  #   rule_egress_cloudbuild = {
+  #     identities = [
+  #       "serviceAccount:service-${local.cloudbuild_project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+  #       "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com" //,
+  #       //the SA bellow can only be added after step 5-app-infra
+  #       //"serviceAccount:BU1_INFRA_PIPELINE_CICD_PROJECT_NUMBER@cloudbuild.gserviceaccount.com",
+  #       //"serviceAccount:sa-tf-cb-bu1-example-app@BU1_INFRA_PIPELINE_CICD_PROJECT_ID.iam.gserviceaccount.com"
+  #     ]
+  #     resources = [
+  #       "projects/${local.seed_project_number}",
+  #       "projects/${local.cloudbuild_project_number}"
+  #     ]
+  #     operations = {
+  #       all_services = {
+  #         service_name = "*"
+  #         method_selectors = [
+  #         ]
+  #       }
+  #     }
+  #   }
+  mandatory_ingress_rules = [
+    //prj-c-billing-export
+    {
+      from = {
+        identities = [
+          "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
+          "serviceAccount:project-service-account@${module.org_billing_export.project_id}.iam.gserviceaccount.com"
+        ]
+      }
+      to = {
+        resources = [
+          "projects/${module.org_billing_export.project_number}"
+        ]
+        operations = {
+          "logging.googleapis.com" = {
+            methods = ["*"]
+          }
+        }
+      }
+    },
+    //logging projects
+    {
+      from = {
+        identities = [
+          "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
+          "serviceAccount:project-service-account@${module.org_audit_logs.project_id}.iam.gserviceaccount.com",
+        ]
+      }
+      to = {
+        resources = [
+          "projects/${module.org_audit_logs.project_number}"
+        ]
+        operations = {
+          for service in [
+            "logging.googleapis.com",
+            "pubsub.googleapis.com",
+          ] : service =>
+          {
+            methods = ["*"]
+          }
+        }
+      }
+    }
+  ]
 }
 
 resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy" "ingress_policies_dry_run" {
@@ -323,10 +427,10 @@ module "service_control" {
     "serviceAccount:${local.projects_service_account}",
     "serviceAccount:${local.organization_service_account}",
     "serviceAccount:${local.environment_service_account}",
-    "serviceAccount:service-cloudbuild_project_number@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-    "serviceAccount:cloudbuild_project_number@cloudbuild.gserviceaccount.com",
-    "serviceAccount:service-folder-folder_number@gcp-sa-logging.iam.gserviceaccount.com",
-    "serviceAccount:service-b-billing_number@gcp-sa-logging.iam.gserviceaccount.com"
+    # "serviceAccount:service-cloudbuild_project_number@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+    # "serviceAccount:cloudbuild_project_number@cloudbuild.gserviceaccount.com",
+    # "serviceAccount:service-folder-folder_number@gcp-sa-logging.iam.gserviceaccount.com",
+    # "serviceAccount:service-b-billing_number@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
   resources_dry_run = distinct(concat([
     local.seed_project_number,
@@ -338,7 +442,10 @@ module "service_control" {
     module.scc_notifications.project_number,
     ], local.shared_vpc_projects_numbers, var.resources_dry_run
   ))
-
+  ingress_policies         = distinct(concat(var.ingress_policies, local.ingress_rules))
+  ingress_policies_dry_run = distinct(concat(var.ingress_policies, local.ingress_rules))
+  egress_policies          = distinct(concat(var.egress_policies, local.egress_rules))
+  egress_policies_dry_run  = distinct(concat(var.egress_policies_dry_run, local.egress_rules))
   depends_on = [
     time_sleep.wait_projects
   ]

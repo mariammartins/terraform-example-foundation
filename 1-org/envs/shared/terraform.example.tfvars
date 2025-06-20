@@ -45,3 +45,6 @@ access_context_manager_policy_id = "ACCESS_CONTEXT_MANAGER_ID"
 // unique organization-wide it will add a random suffix at each tag key
 
 //create_unique_tag_key = true
+
+// Update this variable after first push in production - UPD THIS DESCRIPTION
+# enable_mandatory_ingress_rules = true
