@@ -72,8 +72,8 @@ output "common_config" {
 }
 
 output "service_account_parent_id" {
-  description = "Parent ID deployment"
-  value       = var.parent_folder != "" ? "service-folder-${local.parent_id}" : "service-org-${var.org_id}"
+  description = "Parent ID service account."
+  value       = var.parent_folder != "" ? "folder-${local.parent_id}" : "org-${var.org_id}"
 }
 
 output "required_groups" {
