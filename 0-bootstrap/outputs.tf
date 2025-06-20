@@ -71,6 +71,11 @@ output "common_config" {
   }
 }
 
+output "parent_id" {
+  description = "Parent ID deployment"
+  value       = local.parent_id
+}
+
 output "required_groups" {
   description = "List of Google Groups created that are required by the Example Foundation steps."
   value       = var.groups.create_required_groups == false ? tomap(var.groups.required_groups) : tomap({ for key, value in module.required_group : key => value.id })
