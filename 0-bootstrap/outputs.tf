@@ -73,7 +73,7 @@ output "common_config" {
 
 output "parent_id" {
   description = "Parent ID deployment"
-  value       = local.parent_id
+  value       = var.parent_folder != "" ? var.parent_folder : var.org_id
 }
 
 output "required_groups" {
