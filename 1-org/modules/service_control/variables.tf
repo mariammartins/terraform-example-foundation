@@ -104,5 +104,5 @@ variable "enable_ingress_rules" {
 variable "enable_mandatory_ingress_rules" {
   description = "Add ingress rules to the perimeter.."
   type        = bool
-  default     = true
+  default     = false
 }
