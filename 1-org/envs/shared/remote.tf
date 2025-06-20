@@ -38,7 +38,7 @@ locals {
   cloudbuild_project_number                     = data.terraform_remote_state.bootstrap.outputs.cloudbuild_project_number
   seed_project_id                               = data.terraform_remote_state.bootstrap.outputs.seed_project_id
   seed_project_number                           = data.terraform_remote_state.bootstrap.outputs.seed_project_number
-  parent_id_deployment                          = data.terraform_remote_state.bootstrap.outputs.parent_id_deployment
+  service_account_parent_id                     = data.terraform_remote_state.bootstrap.outputs.service_account_parent_id
 }
 
 data "terraform_remote_state" "bootstrap" {

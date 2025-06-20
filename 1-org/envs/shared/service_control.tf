@@ -157,6 +157,9 @@ locals {
     }) : tostring(v)
   ]
 
+  // Elliot rules
+  #############EGRESS RULES#############
+
   egress_rules = [
     //prj-c-scc
     {
@@ -273,7 +276,7 @@ locals {
         identities = [
           "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
           "serviceAccount:project-service-account@${module.org_audit_logs.project_id}.iam.gserviceaccount.com",
-          "serviceAccount:service-folder-930514596188@gcp-sa-logging.iam.gserviceaccount.com" //930514596188 parent_id deploy folder ID
+          "serviceAccount:service-${local.service_account_parent_id}@gcp-sa-logging.iam.gserviceaccount.com"
         ]
       }
       to = {
@@ -294,109 +297,6 @@ locals {
   ]
 }
 
-resource "google_access_context_manager_service_perimeter_dry_run_ingress_policy" "ingress_policies_dry_run" {
-  for_each = { for idx, policy in var.ingress_policies_dry_run : idx => policy }
-
-  perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-
-  ingress_from {
-    identity_type = ""
-    identities    = each.value.identities
-
-    dynamic "sources" {
-      for_each = each.value.sources.resources
-      content {
-        resource = sources.value
-      }
-    }
-  }
-
-  ingress_to {
-    resources = each.value.resources
-    operations {
-      service_name = each.value.service_name
-      method_selectors {
-        method = "*"
-      }
-    }
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  depends_on = [
-    module.service_control
-  ]
-}
-
-resource "google_access_context_manager_service_perimeter_ingress_policy" "ingress_policies" {
-  for_each = { for idx, policy in var.ingress_policies : idx => policy }
-
-  perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-
-  ingress_from {
-    identity_type = ""
-    identities    = each.value.identities
-
-    dynamic "sources" {
-      for_each = each.value.sources.resources
-      content {
-        resource = sources.value
-      }
-    }
-  }
-
-  ingress_to {
-    resources = each.value.resources
-    operations {
-      service_name = each.value.service_name
-      method_selectors {
-        method = "*"
-      }
-    }
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  depends_on = [
-    module.service_control
-  ]
-}
-
-resource "google_access_context_manager_service_perimeter_egress_policy" "egress_policies" {
-  for_each = { for idx, policy in var.egress_policies : idx => policy }
-
-  perimeter = "accessPolicies/${local.access_context_manager_policy_id}/servicePerimeters/${local.perimeter_name}"
-
-  egress_from {
-    identity_type = ""
-    identities    = each.value.identities
-  }
-
-  egress_to {
-    resources = each.value.resources
-    dynamic "operations" {
-      for_each = [for op in each.value.operations : op]
-      content {
-        service_name = operations.value.service_name
-        dynamic "method_selectors" {
-          for_each = operations.value.method_selectors
-          content {
-            method = method_selectors.value.method
-          }
-        }
-      }
-    }
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
 module "service_control" {
   source = "../../modules/service_control"
 
@@ -408,10 +308,10 @@ module "service_control" {
     "serviceAccount:${local.projects_service_account}",
     "serviceAccount:${local.organization_service_account}",
     "serviceAccount:${local.environment_service_account}",
-    "serviceAccount:service-812628934602@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-    "serviceAccount:812628934602@cloudbuild.gserviceaccount.com",
-    "serviceAccount:service-folder-77454778564@gcp-sa-logging.iam.gserviceaccount.com",
-    "serviceAccount:service-b-010ECE-40301B-50DDD5@gcp-sa-logging.iam.gserviceaccount.com"
+    # "serviceAccount:service-812628934602@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+    # "serviceAccount:812628934602@cloudbuild.gserviceaccount.com",
+    # "serviceAccount:service-folder-77454778564@gcp-sa-logging.iam.gserviceaccount.com",
+    # "serviceAccount:service-b-010ECE-40301B-50DDD5@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
   resources = distinct(concat([
     local.seed_project_number,
@@ -447,6 +347,7 @@ module "service_control" {
   ingress_policies_dry_run = distinct(concat(var.ingress_policies, local.ingress_rules))
   egress_policies          = distinct(concat(var.egress_policies, local.egress_rules))
   egress_policies_dry_run  = distinct(concat(var.egress_policies_dry_run, local.egress_rules))
+
   depends_on = [
     time_sleep.wait_projects
   ]

@@ -95,14 +95,8 @@ variable "resources_dry_run" {
 }
 
 ////update name and description
-variable "enable_ingress_rules" {
-  description = "Add ingress rules to the perimeter."
-  type        = bool
-  default     = false
-}
-
 variable "enable_mandatory_ingress_rules" {
-  description = "Add ingress rules to the perimeter.."
+  description = "Add mandatory ingress rules to the perimeter."
   type        = bool
   default     = false
 }
