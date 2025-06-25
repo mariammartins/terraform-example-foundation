@@ -157,6 +157,35 @@ locals {
     }) : tostring(v)
   ]
 
+  projects = distinct(concat([
+    local.seed_project_number,
+    module.org_audit_logs.project_number,
+    module.org_billing_export.project_number,
+    module.common_kms.project_number,
+    module.org_secrets.project_number,
+    module.interconnect.project_number,
+    module.scc_notifications.project_number,
+    ], local.shared_vpc_projects_numbers
+  ))
+
+  resource_keys_dry_run = [
+    "org-seed",
+    "org-audit",
+    "org-billing",
+    "org-kms",
+    "org-secrets",
+    "org-interconnect",
+    "org-scc",
+    "net-p-svpc",
+    "net-d-svpc",
+    "net-n-svpc",
+  ]
+
+  projects_map = zipmap(
+    local.resource_keys_dry_run,
+    [for p in local.projects : "${p}"]
+  )
+
   // Elliot rules
   #############EGRESS RULES#############
 
@@ -230,26 +259,6 @@ locals {
     }
   ]
 
-  #   rule_egress_cloudbuild = {
-  #     identities = [
-  #       "serviceAccount:service-${local.cloudbuild_project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-  #       "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com" //,
-  #       //the SA bellow can only be added after step 5-app-infra
-  #       //"serviceAccount:BU1_INFRA_PIPELINE_CICD_PROJECT_NUMBER@cloudbuild.gserviceaccount.com",
-  #       //"serviceAccount:sa-tf-cb-bu1-example-app@BU1_INFRA_PIPELINE_CICD_PROJECT_ID.iam.gserviceaccount.com"
-  #     ]
-  #     resources = [
-  #       "projects/${local.seed_project_number}",
-  #       "projects/${local.cloudbuild_project_number}"
-  #     ]
-  #     operations = {
-  #       all_services = {
-  #         service_name = "*"
-  #         method_selectors = [
-  #         ]
-  #       }
-  #     }
-  #   }
   mandatory_ingress_rules = [
     //prj-c-billing-export
     {
@@ -313,16 +322,7 @@ module "service_control" {
     # "serviceAccount:service-folder-77454778564@gcp-sa-logging.iam.gserviceaccount.com",
     # "serviceAccount:service-b-010ECE-40301B-50DDD5@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
-  resources = distinct(concat([
-    local.seed_project_number,
-    module.org_audit_logs.project_number,
-    module.org_billing_export.project_number,
-    module.common_kms.project_number,
-    module.org_secrets.project_number,
-    module.interconnect.project_number,
-    module.scc_notifications.project_number,
-    ], local.shared_vpc_projects_numbers, var.resources_dry_run
-  ))
+  resources = concat(values(local.projects_map), var.resources)
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
     "serviceAccount:${local.projects_service_account}",
@@ -333,16 +333,7 @@ module "service_control" {
     # "serviceAccount:service-folder-folder_number@gcp-sa-logging.iam.gserviceaccount.com",
     # "serviceAccount:service-b-billing_number@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
-  resources_dry_run = distinct(concat([
-    local.seed_project_number,
-    module.org_audit_logs.project_number,
-    module.org_billing_export.project_number,
-    module.common_kms.project_number,
-    module.org_secrets.project_number,
-    module.interconnect.project_number,
-    module.scc_notifications.project_number,
-    ], local.shared_vpc_projects_numbers, var.resources_dry_run
-  ))
+  resources_dry_run        = concat(values(local.projects_map), var.resources_dry_run)
   ingress_policies         = distinct(concat(var.ingress_policies, local.ingress_rules))
   ingress_policies_dry_run = distinct(concat(var.ingress_policies, local.ingress_rules))
   egress_policies          = distinct(concat(var.egress_policies, local.egress_rules))
