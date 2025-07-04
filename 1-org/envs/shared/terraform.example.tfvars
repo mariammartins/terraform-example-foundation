@@ -46,5 +46,8 @@ access_context_manager_policy_id = "ACCESS_CONTEXT_MANAGER_ID"
 
 //create_unique_tag_key = true
 
-// Update this variable after first push in production - UPD THIS DESCRIPTION
-# enable_mandatory_ingress_rules = true
+// Update this variable after first push in production DRY_RUN - UPD THIS DESCRIPTION
+# enable_required_ingress_rules_dry_run = true
+
+// Update this variable after first push in production ENFORCED - UPD THIS DESCRIPTION
+# enable_required_ingress_rules = true

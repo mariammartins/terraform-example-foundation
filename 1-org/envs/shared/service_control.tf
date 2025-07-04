@@ -148,7 +148,6 @@ locals {
 
   restricted_services         = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
   restricted_services_dry_run = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
-  ingress_rules               = var.enable_mandatory_ingress_rules ? local.mandatory_ingress_rules : []
 
   shared_vpc_projects_numbers = [
     for v in values({
@@ -259,7 +258,7 @@ locals {
     }
   ]
 
-  mandatory_ingress_rules = [
+  required_ingress_rules = [
     //prj-c-billing-export
     {
       from = {
@@ -317,10 +316,10 @@ module "service_control" {
     "serviceAccount:${local.projects_service_account}",
     "serviceAccount:${local.organization_service_account}",
     "serviceAccount:${local.environment_service_account}",
-    # "serviceAccount:service-812628934602@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-    # "serviceAccount:812628934602@cloudbuild.gserviceaccount.com",
-    # "serviceAccount:service-folder-77454778564@gcp-sa-logging.iam.gserviceaccount.com",
-    # "serviceAccount:service-b-010ECE-40301B-50DDD5@gcp-sa-logging.iam.gserviceaccount.com"
+    "serviceAccount:service-${local.cloudbuild_project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+    "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com",
+    "serviceAccount:service-${local.service_account_parent_id}@gcp-sa-logging.iam.gserviceaccount.com",
+    "serviceAccount:service-b-${local.billing_account}@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
   resources = concat(values(local.projects_map), var.resources)
   members_dry_run = distinct(concat([
@@ -328,14 +327,15 @@ module "service_control" {
     "serviceAccount:${local.projects_service_account}",
     "serviceAccount:${local.organization_service_account}",
     "serviceAccount:${local.environment_service_account}",
-    # "serviceAccount:service-cloudbuild_project_number@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-    # "serviceAccount:cloudbuild_project_number@cloudbuild.gserviceaccount.com",
-    # "serviceAccount:service-folder-folder_number@gcp-sa-logging.iam.gserviceaccount.com",
-    # "serviceAccount:service-b-billing_number@gcp-sa-logging.iam.gserviceaccount.com"
+    "serviceAccount:service-${local.cloudbuild_project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+    "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com",
+    "serviceAccount:service-${local.service_account_parent_id}@gcp-sa-logging.iam.gserviceaccount.com",
+    "serviceAccount:service-b-${local.billing_account}@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
-  resources_dry_run        = concat(values(local.projects_map), var.resources_dry_run)
-  ingress_policies         = distinct(concat(var.ingress_policies, local.ingress_rules))
-  ingress_policies_dry_run = distinct(concat(var.ingress_policies, local.ingress_rules))
+  resources_dry_run = concat(values(local.projects_map), var.resources_dry_run)
+
+  ingress_policies         = var.enable_required_ingress_rules ? distinct(concat(var.ingress_policies, local.required_ingress_rules)) : tolist([])
+  ingress_policies_dry_run = var.enable_required_ingress_rules_dry_run ? distinct(concat(var.ingress_policies_dry_run, local.required_ingress_rules)) : tolist([])
   egress_policies          = distinct(concat(var.egress_policies, local.egress_rules))
   egress_policies_dry_run  = distinct(concat(var.egress_policies_dry_run, local.egress_rules))
 
@@ -343,4 +343,3 @@ module "service_control" {
     time_sleep.wait_projects
   ]
 }
-
