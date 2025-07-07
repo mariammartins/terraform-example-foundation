@@ -185,17 +185,19 @@ locals {
     [for p in local.projects : "${p}"]
   )
 
-  // Elliot rules
-  #############EGRESS RULES#############
-
   egress_rules = [
-    //prj-c-scc
     {
       from = {
         identities = [
           "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
           "serviceAccount:project-service-account@${module.scc_notifications.project_id}.iam.gserviceaccount.com"
         ]
+        sources = {
+          access_levels = [
+            "${module.access_level.name}",
+            "${module.access_level_dry_run.name}"
+          ]
+        }
       }
       to = {
         resources = [
@@ -219,13 +221,18 @@ locals {
         }
       }
     },
-    //prj-c-logging
     {
       from = {
         identities = [
           "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
           "serviceAccount:project-service-account@${module.org_audit_logs.project_id}.iam.gserviceaccount.com"
         ]
+        sources = {
+          access_levels = [
+            "${module.access_level.name}",
+            "${module.access_level_dry_run.name}"
+          ]
+        }
       }
       to = {
         resources = [
@@ -238,34 +245,133 @@ locals {
         }
       }
     },
-    //cloudbuild-egress-rule
     {
       from = {
         identities = [
-          "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com"
+          "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com",
+          "serviceAccount:service-${local.cloudbuild_project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com"
         ]
+        sources = {
+          access_levels = [
+            "*",
+          ]
+        }
       }
       to = {
         resources = [
-          "projects/${local.cloudbuild_project_number}"
+          "projects/${local.cloudbuild_project_number}",
+          "projects/${local.seed_project_number}"
         ]
         operations = {
-          "cloudbuild.googleapis.com" = {
+          "*" = {
             methods = ["*"]
           }
         }
       }
     }
+    //Add egress rule SA bu1 infra pipeline
+  ]
+
+  egress_rules_dry_run = [
+    {
+      from = {
+        identities = [
+          "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
+          "serviceAccount:project-service-account@${module.scc_notifications.project_id}.iam.gserviceaccount.com"
+        ]
+        sources = {
+          access_levels = [
+            "${module.access_level.name}",
+            "${module.access_level_dry_run.name}"
+          ]
+        }
+      }
+      to = {
+        resources = [
+          "projects/${module.scc_notifications.project_number}"
+        ]
+        operations = {
+          for service in [
+            "cloudresourcemanager.googleapis.com",
+            "cloudfunctions.googleapis.com",
+            "eventarc.googleapis.com",
+            "run.googleapis.com",
+            "storage.googleapis.com",
+            "artifactregistry.googleapis.com",
+            "pubsub.googleapis.com",
+            "cloudasset.googleapis.com",
+            "cloudbuild.googleapis.com"
+          ] : service =>
+          {
+            methods = ["*"]
+          }
+        }
+      }
+    },
+    {
+      from = {
+        identities = [
+          "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
+          "serviceAccount:project-service-account@${module.org_audit_logs.project_id}.iam.gserviceaccount.com"
+        ]
+        sources = {
+          access_levels = [
+            "${module.access_level.name}",
+            "${module.access_level_dry_run.name}"
+          ]
+        }
+      }
+      to = {
+        resources = [
+          "projects/${module.org_audit_logs.project_number}"
+        ]
+        operations = {
+          "logging.googleapis.com" = {
+            methods = ["*"]
+          }
+        }
+      }
+    },
+    {
+      from = {
+        identities = [
+          "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com",
+          "serviceAccount:service-${local.cloudbuild_project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com"
+        ]
+        sources = {
+          access_levels = [
+            "*",
+          ]
+        }
+      }
+      to = {
+        resources = [
+          "projects/${local.cloudbuild_project_number}",
+          "projects/${local.seed_project_number}"
+        ]
+        operations = {
+          "*" = {
+            methods = ["*"]
+          }
+        }
+      }
+    }
+    //Add egress rule SA bu1 infra pipeline
   ]
 
   required_ingress_rules = [
-    //prj-c-billing-export
     {
       from = {
         identities = [
           "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
           "serviceAccount:project-service-account@${module.org_billing_export.project_id}.iam.gserviceaccount.com"
         ]
+        sources = {
+          access_levels = [
+            "${module.access_level.name}",
+            "${module.access_level_dry_run.name}"
+          ]
+        }
       }
       to = {
         resources = [
@@ -278,7 +384,6 @@ locals {
         }
       }
     },
-    //logging projects
     {
       from = {
         identities = [
@@ -286,6 +391,12 @@ locals {
           "serviceAccount:project-service-account@${module.org_audit_logs.project_id}.iam.gserviceaccount.com",
           "serviceAccount:service-${local.service_account_parent_id}@gcp-sa-logging.iam.gserviceaccount.com"
         ]
+        sources = {
+          access_levels = [
+            "${module.access_level.name}",
+            "${module.access_level_dry_run.name}"
+          ]
+        }
       }
       to = {
         resources = [
@@ -297,6 +408,106 @@ locals {
             "pubsub.googleapis.com",
           ] : service =>
           {
+            methods = ["*"]
+          }
+        }
+      }
+    },
+    {
+      from = {
+        identities = [
+          "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
+          "serviceAccount:service-${local.cloudbuild_project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+          "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com",
+        ]
+        sources = {
+          access_levels = ["*"]
+        }
+      }
+      to = {
+        resources = [
+          "*"
+        ]
+        operations = {
+          "*" = {
+            methods = ["*"]
+          }
+        }
+      }
+    }
+  ]
+
+  required_ingress_rules_dry_run = [
+    {
+      from = {
+        identities = [
+          "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
+          "serviceAccount:project-service-account@${module.org_billing_export.project_id}.iam.gserviceaccount.com"
+        ]
+        sources = {
+          access_levels = [
+            "${module.access_level.name}",
+            "${module.access_level_dry_run.name}"
+          ]
+        }
+      }
+      to = {
+        resources = [
+          "projects/${module.org_billing_export.project_number}"
+        ]
+        operations = {
+          "logging.googleapis.com" = {
+            methods = ["*"]
+          }
+        }
+      }
+    },
+    {
+      from = {
+        identities = [
+          "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
+          "serviceAccount:project-service-account@${module.org_audit_logs.project_id}.iam.gserviceaccount.com",
+          "serviceAccount:service-${local.service_account_parent_id}@gcp-sa-logging.iam.gserviceaccount.com"
+        ]
+        sources = {
+          access_levels = [
+            "${module.access_level.name}",
+            "${module.access_level_dry_run.name}"
+          ]
+        }
+      }
+      to = {
+        resources = [
+          "projects/${module.org_audit_logs.project_number}"
+        ]
+        operations = {
+          for service in [
+            "logging.googleapis.com",
+            "pubsub.googleapis.com",
+          ] : service =>
+          {
+            methods = ["*"]
+          }
+        }
+      }
+    },
+    {
+      from = {
+        identities = [
+          "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
+          "serviceAccount:service-${local.cloudbuild_project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com",
+          "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com",
+        ]
+        sources = {
+          access_levels = ["*"]
+        }
+      }
+      to = {
+        resources = [
+          "*"
+        ]
+        operations = {
+          "*" = {
             methods = ["*"]
           }
         }
@@ -332,12 +543,11 @@ module "service_control" {
     "serviceAccount:service-${local.service_account_parent_id}@gcp-sa-logging.iam.gserviceaccount.com",
     "serviceAccount:service-b-${local.billing_account}@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
-  resources_dry_run = concat(values(local.projects_map), var.resources_dry_run)
-
+  resources_dry_run        = concat(values(local.projects_map), var.resources_dry_run)
   ingress_policies         = var.enable_required_ingress_rules ? distinct(concat(var.ingress_policies, local.required_ingress_rules)) : tolist([])
-  ingress_policies_dry_run = var.enable_required_ingress_rules_dry_run ? distinct(concat(var.ingress_policies_dry_run, local.required_ingress_rules)) : tolist([])
+  ingress_policies_dry_run = var.enable_required_ingress_rules_dry_run ? distinct(concat(var.ingress_policies_dry_run, local.required_ingress_rules_dry_run)) : tolist([])
   egress_policies          = distinct(concat(var.egress_policies, local.egress_rules))
-  egress_policies_dry_run  = distinct(concat(var.egress_policies_dry_run, local.egress_rules))
+  egress_policies_dry_run  = distinct(concat(var.egress_policies_dry_run, local.egress_rules_dry_run))
 
   depends_on = [
     time_sleep.wait_projects
