@@ -63,8 +63,9 @@ variable "ingress_policies_dry_run" {
         methods     = optional(list(string), [])
         permissions = optional(list(string), [])
       })), {}),
-      roles     = optional(list(string), null)
-      resources = optional(list(string), ["*"])
+      roles              = optional(list(string), null)
+      resources          = optional(list(string), ["*"])
+      external_resources = optional(list(string), [])
     })
   }))
   default = []
