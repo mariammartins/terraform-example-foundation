@@ -161,7 +161,7 @@ output "access_level_name_dry_run" {
 
 output "enforce_vpcsc" {
   value       = module.service_control.enforce_vpcsc
-  description = "Enable the enforced mode for VPC Service Controls. It is not recommended to enable VPC-SC on the first run deploying your foundation. Review [best practices for enabling VPC Service Controls](https://cloud.google.com/vpc-service-controls/docs/enable), then only enforce the perimeter after you have analyzed the access patterns in your dry-run perimeter and created the necessary exceptions for your use cases."
+  description = "The mode of VPC Service Controls."
 }
 
 output "service_perimeter_name" {
@@ -175,11 +175,11 @@ output "access_context_manager_policy_id" {
 }
 
 output "enable_required_ingress_rules_dry_run" {
-  description = "Enable mandatory ingress rule test"
+  description = "Required ingress rules list for the dry-run perimeter."
   value       = var.enable_required_ingress_rules_dry_run
 }
 
 output "enable_required_ingress_rules" {
-  description = "Enable mandatory ingress rule test"
+  description = "Required ingress rules list for the enforced perimeter."
   value       = var.enable_required_ingress_rules
 }
