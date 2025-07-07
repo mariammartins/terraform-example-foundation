@@ -340,14 +340,15 @@ variable "resources_dry_run" {
   default     = []
 }
 
-variable "enable_required_ingress_rules" {
-  description = "Add ingress rules to the perimeter.."
+
+variable "enable_required_ingress_rules_dry_run" {
+  description = "Enable required ingress rules for VPC Service Controls in dry run mode."
   type        = bool
   default     = false
 }
 
-variable "enable_required_ingress_rules_dry_run" {
-  description = "Add ingress rules to the perimeter."
+variable "enable_required_ingress_rules" {
+  description = "Enable required ingress rules for VPC Service Controls in enforced mode."
   type        = bool
   default     = false
 }

@@ -40,14 +40,13 @@ access_context_manager_policy_id = "ACCESS_CONTEXT_MANAGER_ID"
 
 //create_access_context_manager_access_policy = false
 
+// enable_required_ingress_rules_dry_run = true
+
+// enable_required_ingress_rules = true
+
 // Optional - If you are deploying Foundation Example in a parent folder
 // consider using below create_unique_tag_key var because as Tag Keys are
 // unique organization-wide it will add a random suffix at each tag key
 
 //create_unique_tag_key = true
 
-// Update this variable after first push in production DRY_RUN - UPD THIS DESCRIPTION
-# enable_required_ingress_rules_dry_run = true
-
-// Update this variable after first push in production ENFORCED - UPD THIS DESCRIPTION
-# enable_required_ingress_rules = true

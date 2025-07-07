@@ -173,3 +173,13 @@ output "access_context_manager_policy_id" {
   value       = local.access_context_manager_policy_id
   description = "Access Context Manager Policy ID."
 }
+
+output "enable_required_ingress_rules_dry_run" {
+  description = "Enable mandatory ingress rule test"
+  value       = var.enable_required_ingress_rules_dry_run
+}
+
+output "enable_required_ingress_rules" {
+  description = "Enable mandatory ingress rule test"
+  value       = var.enable_required_ingress_rules
+}
