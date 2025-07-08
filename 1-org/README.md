@@ -174,6 +174,7 @@ If required, run `terraform output cloudbuild_project_id` in the `0-bootstrap` f
    ```
 
 1. Run `terraform init` in `/envs/shared` to generate the outputs used in other steps.
+   
    ```bash
    cd envs/shared
    terraform init
@@ -196,14 +197,43 @@ If required, run `terraform output cloudbuild_project_id` in the `0-bootstrap` f
    ```
 
 1. Merge changes to the production branch. Because the _production_ branch is a [named environment branch](../docs/FAQ.md#what-is-a-named-branch),
-   pushing to this branch triggers both _terraform plan_ and _terraform apply_. Review the apply output in your Cloud Build project.
+   pushing to this branch triggers both _terraform plan_ and _terraform apply_. Review the apply output in your Cloud Build project..
 
    ```bash
    git checkout -b production
    git push origin production
    ```
 
-1. Proceed to the [2-environments](../2-environments/README.md) step.
+1. Wait for the production build to finish to add the ingress rules for perimeter.
+
+
+1. If you are deploying with VPC Service Controls in dry run mode, update the `enable_required_ingress_rules_dry_run` variable with `true` value to add the required ingress rules for the correct functioning of VPC Service Controls.
+
+   ```bash
+   export enforce_vpcsc=$(terraform -chdir="./envs/shared/" output -raw enforce_vpcsc)
+   echo "enforce_vpcsc" = "${enforce_vpcsc}"
+
+   [ "${enforce_vpcsc}" = "false" ] && sed -i'' -e 's|^//\s*\(enable_required_ingress_rules_dry_run *= *true\)|\1|' ./envs/shared/terraform.tfvars
+   ```
+
+2. If you are deploying with VPC Service Controls in enforced mode, updathe the `required_ingress_rules` variable with `true`, value to add the required ingress rules for the correct functioning of VPC Service Controls.
+
+   ```bash
+   export enforce_vpcsc=$(terraform -chdir="./envs/shared/" output -raw enforce_vpcsc)
+   echo "enforce_vpcsc" = "${enforce_vpcsc}"
+
+   [ "${enforce_vpcsc}" = "true" ] && sed -i'' -e 's|^//\s*\(enable_required_ingress_rules *= *true\)|\1|' ./envs/shared/terraform.tfvars
+   ```
+
+2. Commit and push changes to the production branch.
+
+   ```bash
+   git add .
+   git commit -m 'Enable required ingress rules to perimeter.'
+   git push
+   ```
+
+3. Proceed to the [2-environments](../2-environments/README.md) step.
 
 **Troubleshooting:**
 If you received a `PERMISSION_DENIED` error while running the `gcloud access-context-manager` or the `gcloud scc notifications` commands, you can append the following to run the command as the Terraform service account:
@@ -324,6 +354,34 @@ To use the `validate` option of the `tf-wrapper.sh` script, follow the [instruct
    git merge plan
    ./tf-wrapper.sh apply production
    ```
+
+2. If you are deploying with VPC Service Controls in dry run mode, update the `enable_required_ingress_rules_dry_run` variable with `true` value to add the required ingress rules for the correct functioning of VPC Service Controls.
+
+   ```bash
+   export enforce_vpcsc=$(terraform -chdir="./envs/shared/" output -raw enforce_vpcsc)
+   echo "enforce_vpcsc" = "${enforce_vpcsc}"
+
+   [ "${enforce_vpcsc}" = "false" ] && sed -i'' -e 's|^//\s*\(enable_required_ingress_rules_dry_run *= *true\)|\1|' ./envs/shared/terraform.tfvars
+   ```
+
+3. If you are deploying with VPC Service Controls in enforced mode, updathe the `required_ingress_rules` variable with `true`, value to add the required ingress rules for the correct functioning of VPC Service Controls.
+
+   ```bash
+   export enforce_vpcsc=$(terraform -chdir="./envs/shared/" output -raw enforce_vpcsc)
+   echo "enforce_vpcsc" = "${enforce_vpcsc}"
+
+   [ "${enforce_vpcsc}" = "true" ] && sed -i'' -e 's|^//\s*\(enable_required_ingress_rules *= *true\)|\1|' ./envs/shared/terraform.tfvars
+   ```
+
+4. Commit and push changes to the production branch. Run `apply production`.
+
+   ```bash
+   git add .
+   git commit -m 'Enable required ingress rules to perimeter.'
+   git push
+   ./tf-wrapper.sh apply production
+   ```
+
 
 If you receive any errors or made any changes to the Terraform config or `terraform.tfvars`, re-run `./tf-wrapper.sh plan production` before you run `./tf-wrapper.sh apply production`.
 
