@@ -17,8 +17,6 @@
 # Must include the domain of the organization you are deploying the foundation.
 domains_to_allow = ["example.com"]
 
-essential_contacts_domains_to_allow = ["@clsecteam.com"]
-
 // Update the following line and add you email in the perimeter_additional_members list.
 // You must be in this list to be able to view/access resources in the project protected by the VPC service controls.
 
