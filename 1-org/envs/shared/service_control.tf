@@ -168,22 +168,41 @@ locals {
   ))
 
   resource_keys_dry_run = [
-    "org-seed",
-    "org-audit",
-    "org-billing",
-    "org-kms",
-    "org-secrets",
-    "org-interconnect",
-    "org-scc",
-    "net-p-svpc",
-    "net-d-svpc",
-    "net-n-svpc",
+    "prj-org-seed",
+    "prj-org-audit",
+    "prj-org-billing",
+    "prj-org-kms",
+    "prj-org-secrets",
+    "prj-org-interconnect",
+    "prj-org-scc",
+    "prj-net-p-svpc",
+    "prj-net-d-svpc",
+    "prj-net-n-svpc",
+  ]
+
+  resource_keys = [
+    "prj-org-seed",
+    "prj-org-audit",
+    "prj-org-billing",
+    "prj-org-kms",
+    "prj-org-secrets",
+    "prj-org-interconnect",
+    "prj-org-scc",
+    "prj-net-p-svpc",
+    "prj-net-d-svpc",
+    "prj-net-n-svpc",
   ]
 
   projects_map = zipmap(
+    local.resource_keys,
+    [for p in local.projects : "${p}"]
+  )
+
+  projects_map_dry_run = zipmap(
     local.resource_keys_dry_run,
     [for p in local.projects : "${p}"]
   )
+
 
   egress_rules = [
     {
@@ -532,7 +551,8 @@ module "service_control" {
     "serviceAccount:service-${local.service_account_parent_id}@gcp-sa-logging.iam.gserviceaccount.com",
     "serviceAccount:service-b-${local.billing_account}@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
-  resources = concat(values(local.projects_map), var.resources)
+  resources     = concat(values(local.projects_map), var.resources)
+  resource_keys = local.resource_keys
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
     "serviceAccount:${local.projects_service_account}",
@@ -544,6 +564,7 @@ module "service_control" {
     "serviceAccount:service-b-${local.billing_account}@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
   resources_dry_run        = concat(values(local.projects_map), var.resources_dry_run)
+  resource_keys_dry_run    = local.resource_keys_dry_run
   ingress_policies         = var.enable_required_ingress_rules ? distinct(concat(var.ingress_policies, local.required_ingress_rules)) : tolist([])
   ingress_policies_dry_run = var.enable_required_ingress_rules_dry_run ? distinct(concat(var.ingress_policies_dry_run, local.required_ingress_rules_dry_run)) : tolist([])
   egress_policies          = distinct(concat(var.egress_policies, local.egress_rules))
