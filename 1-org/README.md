@@ -382,7 +382,6 @@ To use the `validate` option of the `tf-wrapper.sh` script, follow the [instruct
    ./tf-wrapper.sh apply production
    ```
 
-
 If you receive any errors or made any changes to the Terraform config or `terraform.tfvars`, re-run `./tf-wrapper.sh plan production` before you run `./tf-wrapper.sh apply production`.
 
 Before executing the next stages, unset the `GOOGLE_IMPERSONATE_SERVICE_ACCOUNT` environment variable.
