@@ -167,20 +167,7 @@ locals {
     ], local.shared_vpc_projects_numbers
   ))
 
-  resource_keys_dry_run = [
-    "prj-org-seed",
-    "prj-org-audit",
-    "prj-org-billing",
-    "prj-org-kms",
-    "prj-org-secrets",
-    "prj-org-interconnect",
-    "prj-org-scc",
-    "prj-net-p-svpc",
-    "prj-net-d-svpc",
-    "prj-net-n-svpc",
-  ]
-
-  resource_keys = [
+  project_keys = [
     "prj-org-seed",
     "prj-org-audit",
     "prj-org-billing",
@@ -194,15 +181,9 @@ locals {
   ]
 
   projects_map = zipmap(
-    local.resource_keys,
+    local.project_keys,
     [for p in local.projects : "${p}"]
   )
-
-  projects_map_dry_run = zipmap(
-    local.resource_keys_dry_run,
-    [for p in local.projects : "${p}"]
-  )
-
 
   egress_rules = [
     {
@@ -249,7 +230,6 @@ locals {
         sources = {
           access_levels = [
             "${module.access_level.name}",
-            "${module.access_level_dry_run.name}"
           ]
         }
       }
@@ -272,7 +252,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "*",
+            "${module.access_level.name}",
           ]
         }
       }
@@ -300,7 +280,6 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level.name}",
             "${module.access_level_dry_run.name}"
           ]
         }
@@ -335,7 +314,6 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level.name}",
             "${module.access_level_dry_run.name}"
           ]
         }
@@ -359,7 +337,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "*",
+            "${module.access_level_dry_run.name}"
           ]
         }
       }
@@ -388,7 +366,6 @@ locals {
         sources = {
           access_levels = [
             "${module.access_level.name}",
-            "${module.access_level_dry_run.name}"
           ]
         }
       }
@@ -413,7 +390,6 @@ locals {
         sources = {
           access_levels = [
             "${module.access_level.name}",
-            "${module.access_level_dry_run.name}"
           ]
         }
       }
@@ -440,7 +416,9 @@ locals {
           "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com",
         ]
         sources = {
-          access_levels = ["*"]
+          access_levels = [
+            "${module.access_level.name}",
+          ]
         }
       }
       to = {
@@ -465,7 +443,6 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level.name}",
             "${module.access_level_dry_run.name}"
           ]
         }
@@ -490,7 +467,6 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level.name}",
             "${module.access_level_dry_run.name}"
           ]
         }
@@ -518,7 +494,9 @@ locals {
           "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com",
         ]
         sources = {
-          access_levels = ["*"]
+          access_levels = [
+            "${module.access_level_dry_run.name}"
+          ]
         }
       }
       to = {
@@ -552,7 +530,7 @@ module "service_control" {
     "serviceAccount:service-b-${local.billing_account}@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
   resources     = concat(values(local.projects_map), var.resources)
-  resource_keys = local.resource_keys
+  resource_keys = local.project_keys
   members_dry_run = distinct(concat([
     "serviceAccount:${local.networks_service_account}",
     "serviceAccount:${local.projects_service_account}",
@@ -563,8 +541,8 @@ module "service_control" {
     "serviceAccount:service-${local.service_account_parent_id}@gcp-sa-logging.iam.gserviceaccount.com",
     "serviceAccount:service-b-${local.billing_account}@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
-  resources_dry_run        = concat(values(local.projects_map), var.resources_dry_run)
-  resource_keys_dry_run    = local.resource_keys_dry_run
+  resources_dry_run        = concat(values(local.projects), var.resources_dry_run)
+  resource_keys_dry_run    = local.project_keys
   ingress_policies         = var.enable_required_ingress_rules ? distinct(concat(var.ingress_policies, local.required_ingress_rules)) : tolist([])
   ingress_policies_dry_run = var.enable_required_ingress_rules_dry_run ? distinct(concat(var.ingress_policies_dry_run, local.required_ingress_rules_dry_run)) : tolist([])
   egress_policies          = distinct(concat(var.egress_policies, local.egress_rules))
