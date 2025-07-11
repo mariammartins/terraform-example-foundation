@@ -220,6 +220,19 @@ grep -rl 10.3.64.0 business_unit_2/ | xargs sed -i 's/10.3.64.0/10.4.64.0/g'
    git push origin nonproduction
    ```
 
+2. Use `terraform output` to get the APP Infra Pipeline Terraform service account.
+
+   ```bash
+   export terraform_service_accounts=$(terraform -chdir="business_unit_1/shared/" output -json terraform_service_accounts | jq -r 'to_entries[0].value')
+   echo $terraform_service_accounts
+   ```
+
+3. Update the value for the variable perimeter_additional_members [gcp-org/envs/shared/terraform.tfvars](../gcp-org/envs/shared/terraform.tfvars) in the production branch adding the APP Infra Pipeline Terraform Service Account to the perimeter.
+
+   ```
+   perimeter_additional_members = ["user:YOUR-USER-EMAIL@example.com", "serviceAccount:sa-tf-cb-bu1-example-app@<prj_bu1_infra_pipeline_id>.iam.gserviceaccount.com"]
+   ```
+
 If you received any errors or made any changes to the Terraform config or any `.tfvars`, you must re-run `./tf-wrapper.sh plan <env>` before running `./tf-wrapper.sh apply <env>`.
 
 1. Before executing the next step, unset the `GOOGLE_IMPERSONATE_SERVICE_ACCOUNT` environment variable.
@@ -402,6 +415,19 @@ grep -rl 10.3.64.0 business_unit_2/ | xargs sed -i 's/10.3.64.0/10.4.64.0/g'
    git add .
    git commit -m "Initial production commit."
    cd ../
+   ```
+
+2. Use `terraform output` to get the APP Infra Pipeline Terraform service account.
+
+   ```bash
+   export terraform_service_accounts=$(terraform -chdir="business_unit_1/shared/" output -json terraform_service_accounts | jq -r 'to_entries[0].value')
+   echo $terraform_service_accounts
+   ```
+
+3. Update the value for the variable perimeter_additional_members [1-org/envs/shared/terraform.tfvars](../gcp-org/envs/shared/terraform.tfvars) in the production branch adding the APP Infra Pipeline Terraform Service Account to the perimeter.
+
+   ```
+   perimeter_additional_members = ["user:YOUR-USER-EMAIL@example.com", "serviceAccount:sa-tf-cb-bu1-example-app@<prj_bu1_infra_pipeline_id>.iam.gserviceaccount.com"]
    ```
 
 If you received any errors or made any changes to the Terraform config or any `.tfvars`, you must re-run `./tf-wrapper.sh plan <env>` before run `./tf-wrapper.sh apply <env>`.
