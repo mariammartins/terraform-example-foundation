@@ -146,8 +146,10 @@ locals {
     "workstations.googleapis.com",
   ]
 
-  restricted_services         = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
-  restricted_services_dry_run = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
+  restricted_services          = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
+  restricted_services_dry_run  = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
+  access_level_name            = module.service_control.access_level_name
+  access_level_dry_run_dry_run = module.service_control.access_level_name_dry_run
 
   shared_vpc_projects_numbers = [
     for v in values({
@@ -194,8 +196,8 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level.name}",
-            "${module.access_level_dry_run.name}"
+            "${local.access_level_name}",
+            "${local.access_level_dry_run.name}"
           ]
         }
       }
@@ -229,7 +231,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level.name}",
+            "${local.access_level_name}",
           ]
         }
       }
@@ -252,7 +254,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level.name}",
+            "${local.access_level_name}",
           ]
         }
       }
@@ -280,7 +282,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level_dry_run.name}"
+            "${local.access_level_dry_run.name}"
           ]
         }
       }
@@ -314,7 +316,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level_dry_run.name}"
+            "${local.access_level_dry_run.name}"
           ]
         }
       }
@@ -337,7 +339,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level_dry_run.name}"
+            "${local.access_level_dry_run.name}"
           ]
         }
       }
@@ -365,7 +367,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level.name}",
+            "${local.access_level_name}",
           ]
         }
       }
@@ -385,11 +387,11 @@ locals {
         identities = [
           "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
           "serviceAccount:project-service-account@${module.org_audit_logs.project_id}.iam.gserviceaccount.com",
-          "serviceAccount:service-${local.service_account_parent_id}@gcp-sa-logging.iam.gserviceaccount.com"
+          "serviceAccount:service-${local.parent_id}@gcp-sa-logging.iam.gserviceaccount.com"
         ]
         sources = {
           access_levels = [
-            "${module.access_level.name}",
+            "${local.access_level_name}",
           ]
         }
       }
@@ -417,7 +419,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level.name}",
+            "${local.access_level_name}",
           ]
         }
       }
@@ -443,7 +445,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level_dry_run.name}"
+            "${local.access_level_dry_run.name}"
           ]
         }
       }
@@ -463,11 +465,11 @@ locals {
         identities = [
           "serviceAccount:sa-terraform-org@${local.seed_project_id}.iam.gserviceaccount.com",
           "serviceAccount:project-service-account@${module.org_audit_logs.project_id}.iam.gserviceaccount.com",
-          "serviceAccount:service-${local.service_account_parent_id}@gcp-sa-logging.iam.gserviceaccount.com"
+          "serviceAccount:service-${local.parent_id}@gcp-sa-logging.iam.gserviceaccount.com"
         ]
         sources = {
           access_levels = [
-            "${module.access_level_dry_run.name}"
+            "${local.access_level_dry_run.name}"
           ]
         }
       }
@@ -495,7 +497,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${module.access_level_dry_run.name}"
+            "${local.access_level_dry_run.name}"
           ]
         }
       }
@@ -526,7 +528,7 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}",
     "serviceAccount:service-${local.cloudbuild_project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com",
     "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com",
-    "serviceAccount:service-${local.service_account_parent_id}@gcp-sa-logging.iam.gserviceaccount.com",
+    "serviceAccount:service-${local.parent_id}@gcp-sa-logging.iam.gserviceaccount.com",
     "serviceAccount:service-b-${local.billing_account}@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
   resources     = concat(values(local.projects_map), var.resources)
@@ -538,7 +540,7 @@ module "service_control" {
     "serviceAccount:${local.environment_service_account}",
     "serviceAccount:service-${local.cloudbuild_project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com",
     "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com",
-    "serviceAccount:service-${local.service_account_parent_id}@gcp-sa-logging.iam.gserviceaccount.com",
+    "serviceAccount:service-${local.parent_id}@gcp-sa-logging.iam.gserviceaccount.com",
     "serviceAccount:service-b-${local.billing_account}@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
   resources_dry_run        = concat(values(local.projects), var.resources_dry_run)

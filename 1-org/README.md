@@ -373,12 +373,11 @@ To use the `validate` option of the `tf-wrapper.sh` script, follow the [instruct
    [ "${enforce_vpcsc}" = "true" ] && sed -i'' -e 's|^//\s*\(enable_required_ingress_rules *= *true\)|\1|' ./envs/shared/terraform.tfvars
    ```
 
-4. Commit and push changes to the production branch. Run `apply production`.
+4. Commit changes to the production branch. Run `apply production`.
 
    ```bash
    git add .
    git commit -m 'Enable required ingress rules to perimeter.'
-   git push
    ./tf-wrapper.sh apply production
    ```
 

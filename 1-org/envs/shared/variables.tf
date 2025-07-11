@@ -340,7 +340,6 @@ variable "resources_dry_run" {
   default     = []
 }
 
-
 variable "enable_required_ingress_rules_dry_run" {
   description = "Enable required ingress rules for VPC Service Controls in dry run mode."
   type        = bool
