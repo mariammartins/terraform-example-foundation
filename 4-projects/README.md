@@ -233,6 +233,31 @@ grep -rl 10.3.64.0 business_unit_2/ | xargs sed -i 's/10.3.64.0/10.4.64.0/g'
    perimeter_additional_members = ["user:YOUR-USER-EMAIL@example.com", "serviceAccount:sa-tf-cb-bu1-example-app@<prj_bu1_infra_pipeline_id>.iam.gserviceaccount.com"]
    ```
 
+1. Update the `egress_rules_dry_run` and `egress_rules` lists in [gcp-org/envs/shared/service_control.tf](../gcp-org/envs/shared/service_control.tf) with the directional rule:
+
+   ```
+   {
+      from = {
+        identities = [
+          "serviceAccount:sa-tf-cb-bu1-example-app@<prj_bu1_infra_pipeline_id>.iam.gserviceaccount.com",
+        ]
+        sources = {
+          access_levels = ["*"]
+        }
+      }
+      to = {
+        resources = [
+          "*"
+        ]
+        operations = {
+          "*" = {
+            methods = ["*"]
+          }
+        }
+      }
+    }
+   ```
+
 If you received any errors or made any changes to the Terraform config or any `.tfvars`, you must re-run `./tf-wrapper.sh plan <env>` before running `./tf-wrapper.sh apply <env>`.
 
 1. Before executing the next step, unset the `GOOGLE_IMPERSONATE_SERVICE_ACCOUNT` environment variable.
@@ -417,17 +442,42 @@ grep -rl 10.3.64.0 business_unit_2/ | xargs sed -i 's/10.3.64.0/10.4.64.0/g'
    cd ../
    ```
 
-2. Use `terraform output` to get the APP Infra Pipeline Terraform service account.
+1. Use `terraform output` to get the APP Infra Pipeline Terraform service account.
 
    ```bash
    export terraform_service_accounts=$(terraform -chdir="business_unit_1/shared/" output -json terraform_service_accounts | jq -r 'to_entries[0].value')
    echo $terraform_service_accounts
    ```
 
-3. Update the value for the variable perimeter_additional_members [1-org/envs/shared/terraform.tfvars](../gcp-org/envs/shared/terraform.tfvars) in the production branch adding the APP Infra Pipeline Terraform Service Account to the perimeter.
+1. Update the value for the variable perimeter_additional_members [1-org/envs/shared/terraform.tfvars](../1-org/envs/shared/terraform.tfvars) in the production branch adding the APP Infra Pipeline Terraform Service Account to the perimeter.
 
    ```
    perimeter_additional_members = ["user:YOUR-USER-EMAIL@example.com", "serviceAccount:sa-tf-cb-bu1-example-app@<prj_bu1_infra_pipeline_id>.iam.gserviceaccount.com"]
+   ```
+
+1. Update the `egress_rules_dry_run` and `egress_rules` lists in [1-org/envs/shared/service_control.tf](../1-org/envs/shared/service_control.tf) with the directional rule:
+
+   ```
+   {
+      from = {
+        identities = [
+          "serviceAccount:sa-tf-cb-bu1-example-app@<prj_bu1_infra_pipeline_id>.iam.gserviceaccount.com",
+        ]
+        sources = {
+          access_levels = ["*"]
+        }
+      }
+      to = {
+        resources = [
+          "*"
+        ]
+        operations = {
+          "*" = {
+            methods = ["*"]
+          }
+        }
+      }
+    }
    ```
 
 If you received any errors or made any changes to the Terraform config or any `.tfvars`, you must re-run `./tf-wrapper.sh plan <env>` before run `./tf-wrapper.sh apply <env>`.
