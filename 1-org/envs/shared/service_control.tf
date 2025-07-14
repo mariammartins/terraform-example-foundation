@@ -146,10 +146,10 @@ locals {
     "workstations.googleapis.com",
   ]
 
-  restricted_services          = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
-  restricted_services_dry_run  = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
-  access_level_name            = module.service_control.access_level_name
-  access_level_dry_run_dry_run = module.service_control.access_level_name_dry_run
+  restricted_services         = length(var.custom_restricted_services) != 0 ? var.custom_restricted_services : local.supported_restricted_service
+  restricted_services_dry_run = length(var.custom_restricted_services_dry_run) != 0 ? var.custom_restricted_services : local.supported_restricted_service
+  access_level_name           = module.service_control.access_level_name
+  access_level_dry_run_name   = module.service_control.access_level_name_dry_run
 
   shared_vpc_projects_numbers = [
     for v in values({
@@ -197,7 +197,6 @@ locals {
         sources = {
           access_levels = [
             "${local.access_level_name}",
-            "${local.access_level_dry_run.name}"
           ]
         }
       }
@@ -282,7 +281,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${local.access_level_dry_run.name}"
+            "${local.access_level_dry_run_name}"
           ]
         }
       }
@@ -316,7 +315,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${local.access_level_dry_run.name}"
+            "${local.access_level_dry_run_name}"
           ]
         }
       }
@@ -339,7 +338,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${local.access_level_dry_run.name}"
+            "${local.access_level_dry_run_name}"
           ]
         }
       }
@@ -445,7 +444,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${local.access_level_dry_run.name}"
+            "${local.access_level_dry_run_name}"
           ]
         }
       }
@@ -469,7 +468,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${local.access_level_dry_run.name}"
+            "${local.access_level_dry_run_name}"
           ]
         }
       }
@@ -497,7 +496,7 @@ locals {
         ]
         sources = {
           access_levels = [
-            "${local.access_level_dry_run.name}"
+            "${local.access_level_dry_run_name}"
           ]
         }
       }
@@ -543,7 +542,7 @@ module "service_control" {
     "serviceAccount:service-${local.parent_id}@gcp-sa-logging.iam.gserviceaccount.com",
     "serviceAccount:service-b-${local.billing_account}@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
-  resources_dry_run        = concat(values(local.projects), var.resources_dry_run)
+  resources_dry_run        = concat(values(local.projects_map), var.resources_dry_run)
   resource_keys_dry_run    = local.project_keys
   ingress_policies         = var.enable_required_ingress_rules ? distinct(concat(var.ingress_policies, local.required_ingress_rules)) : tolist([])
   ingress_policies_dry_run = var.enable_required_ingress_rules_dry_run ? distinct(concat(var.ingress_policies_dry_run, local.required_ingress_rules_dry_run)) : tolist([])

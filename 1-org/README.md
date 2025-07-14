@@ -181,14 +181,14 @@ If required, run `terraform output cloudbuild_project_id` in the `0-bootstrap` f
    cd ../..
    ```
 
-1. Commit changes.
+2. Commit changes.
 
    ```bash
    git add .
    git commit -m 'Initialize org repo'
    ```
 
-1. Push your plan branch to trigger a plan for all environments. Because the
+3. Push your plan branch to trigger a plan for all environments. Because the
    _plan_ branch is not a [named environment branch](../docs/FAQ.md#what-is-a-named-branch), pushing your _plan_
    branch triggers _terraform plan_ but not _terraform apply_. Review the plan output in your Cloud Build project.
 
@@ -196,7 +196,7 @@ If required, run `terraform output cloudbuild_project_id` in the `0-bootstrap` f
    git push --set-upstream origin plan
    ```
 
-1. Merge changes to the production branch. Because the _production_ branch is a [named environment branch](../docs/FAQ.md#what-is-a-named-branch),
+4. Merge changes to the production branch. Because the _production_ branch is a [named environment branch](../docs/FAQ.md#what-is-a-named-branch),
    pushing to this branch triggers both _terraform plan_ and _terraform apply_. Review the apply output in your Cloud Build project..
 
    ```bash
@@ -204,7 +204,7 @@ If required, run `terraform output cloudbuild_project_id` in the `0-bootstrap` f
    git push origin production
    ```
 
-1. Wait for the production build to finish to add the ingress rules for perimeter.
+5. Wait for the production build to finish to add the ingress rules for perimeter.
 
 
 1. If you are deploying with VPC Service Controls in dry run mode, update the `enable_required_ingress_rules_dry_run` variable with `true` value to add the required ingress rules for the correct functioning of VPC Service Controls.

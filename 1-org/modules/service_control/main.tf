@@ -55,6 +55,7 @@ module "regular_service_perimeter" {
 
   # configurations for a perimeter in enforced mode.
   resources               = var.enforce_vpcsc ? var.resources : []
+  resource_keys           = var.enforce_vpcsc ? var.resource_keys : []
   access_levels           = var.enforce_vpcsc ? [module.access_level.name] : []
   restricted_services     = var.enforce_vpcsc ? var.restricted_services : []
   vpc_accessible_services = var.enforce_vpcsc ? ["*"] : []
@@ -63,6 +64,7 @@ module "regular_service_perimeter" {
 
   # configurations for a perimeter in dry run mode.
   resources_dry_run               = var.resources_dry_run
+  resource_keys_dry_run           = var.resource_keys_dry_run
   access_levels_dry_run           = [module.access_level_dry_run.name]
   restricted_services_dry_run     = var.restricted_services_dry_run
   vpc_accessible_services_dry_run = ["*"]

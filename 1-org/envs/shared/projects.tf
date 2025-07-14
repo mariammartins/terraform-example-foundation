@@ -26,9 +26,6 @@ locals {
     "nonproduction" : "n",
     "production" : "p"
   }
-
-  enforce_vpcsc  = module.service_control.enforce_vpcsc
-  perimeter_name = module.service_control.service_perimeter_name
 }
 
 /******************************************
