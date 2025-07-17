@@ -174,7 +174,6 @@ locals {
       module.org_secrets.project_number,
       module.interconnect.project_number,
       module.scc_notifications.project_number,
-      module.network_hub.project_number,
   ], local.shared_vpc_projects_numbers))
 
   project_keys = var.enable_hub_and_spoke ? [
