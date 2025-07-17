@@ -174,7 +174,7 @@ If required, run `terraform output cloudbuild_project_id` in the `0-bootstrap` f
    ```
 
 1. Run `terraform init` in `/envs/shared` to generate the outputs used in other steps.
-   
+
    ```bash
    cd envs/shared
    terraform init
