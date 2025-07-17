@@ -536,8 +536,6 @@ module "service_control" {
     "serviceAccount:${local.projects_service_account}",
     "serviceAccount:${local.organization_service_account}",
     "serviceAccount:${local.environment_service_account}",
-    "serviceAccount:service-${local.cloudbuild_project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-    "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com",
     "serviceAccount:service-${local.parent_id}@gcp-sa-logging.iam.gserviceaccount.com",
     "serviceAccount:service-b-${local.billing_account}@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
@@ -548,8 +546,6 @@ module "service_control" {
     "serviceAccount:${local.projects_service_account}",
     "serviceAccount:${local.organization_service_account}",
     "serviceAccount:${local.environment_service_account}",
-    "serviceAccount:service-${local.cloudbuild_project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-    "serviceAccount:${local.cloudbuild_project_number}@cloudbuild.gserviceaccount.com",
     "serviceAccount:service-${local.parent_id}@gcp-sa-logging.iam.gserviceaccount.com",
     "serviceAccount:service-b-${local.billing_account}@gcp-sa-logging.iam.gserviceaccount.com"
   ], var.perimeter_additional_members))
