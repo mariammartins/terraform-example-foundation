@@ -196,7 +196,6 @@ locals {
     "prj-org-secrets",
     "prj-org-interconnect",
     "prj-org-scc",
-    "prj-net-hub",
     "prj-net-p-svpc",
     "prj-net-d-svpc",
     "prj-net-n-svpc",
