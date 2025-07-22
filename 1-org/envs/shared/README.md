@@ -47,10 +47,12 @@
 | access\_level\_name | Access context manager access level name |
 | access\_level\_name\_dry\_run | Access context manager access level name for the dry-run perimeter |
 | billing\_sink\_names | The name of the sinks under billing account level. |
+| build\_service\_account | Cloud Function Build Service Account Id. This is The fully-qualified name of the service account to be used for building the container. |
 | cai\_monitoring\_artifact\_registry | CAI Monitoring Cloud Function Artifact Registry name. |
 | cai\_monitoring\_asset\_feed | CAI Monitoring Cloud Function Organization Asset Feed name. |
 | cai\_monitoring\_bucket | CAI Monitoring Cloud Function Source Bucket name. |
 | cai\_monitoring\_topic | CAI Monitoring Cloud Function Pub/Sub Topic name. |
+| cloudfunction\_sa\_email | Service account mail used by Cloud Function. |
 | common\_folder\_name | The common folder name |
 | common\_kms\_project\_id | The org Cloud Key Management Service (KMS) project ID |
 | domains\_to\_allow | The list of domains to allow users from in IAM. |
@@ -59,6 +61,9 @@
 | enforce\_vpcsc | The mode of VPC Service Controls. |
 | interconnect\_project\_id | The Dedicated Interconnect project ID |
 | interconnect\_project\_number | The Dedicated Interconnect project number |
+| internal\_project\_log\_export | The service account that logging uses to write log entries to the destination. |
+| log\_export | The service account that logging uses to write log entries to the destination. |
+| log\_export\_billing | The service account that logging uses to write log entries to the destination. |
 | logs\_export\_project\_linked\_dataset\_name | The resource name of the Log Bucket linked BigQuery dataset for the project destination. |
 | logs\_export\_project\_logbucket\_name | The resource name for the Log Bucket created for the project destination. |
 | logs\_export\_pubsub\_topic | The Pub/Sub topic for destination of log exports |

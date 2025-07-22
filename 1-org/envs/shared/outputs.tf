@@ -183,3 +183,30 @@ output "enable_required_ingress_rules" {
   description = "Required ingress rules list for the enforced perimeter."
   value       = var.enable_required_ingress_rules
 }
+
+output "log_export_billing" {
+  description = "The service account that logging uses to write log entries to the destination."
+  value       = module.logs_export.log_export_billing
+}
+
+output "log_export" {
+  description = "The service account that logging uses to write log entries to the destination."
+  value       = module.logs_export.log_export
+
+}
+
+output "internal_project_log_export" {
+  description = "The service account that logging uses to write log entries to the destination."
+  value       = module.logs_export.internal_project_log_export
+
+}
+
+output "build_service_account" {
+  description = "Cloud Function Build Service Account Id. This is The fully-qualified name of the service account to be used for building the container."
+  value       = google_service_account.cai_monitoring_builder[0].email
+}
+
+output "cloudfunction_sa_email" {
+  description = "Service account mail used by Cloud Function."
+  value       = module.cai_monitoring[0].cloudfunction_sa_email
+}

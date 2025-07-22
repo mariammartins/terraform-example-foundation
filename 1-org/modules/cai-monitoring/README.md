@@ -40,6 +40,7 @@ module "secure_cai_notification" {
 | artifact\_registry\_name | Artifact Registry Repo to store the Cloud Function image. |
 | asset\_feed\_name | Organization Asset Feed. |
 | bucket\_name | Storage bucket where the source code is. |
+| cloudfunction\_sa\_email | Service account mail used by Cloud Function |
 | function\_uri | URI of the Cloud Function. |
 | scc\_source | SCC Findings Source. |
 | topic\_name | Pub/Sub Topic for the Asset Feed. |

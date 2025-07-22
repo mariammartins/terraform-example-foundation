@@ -43,3 +43,8 @@ output "function_uri" {
   description = "URI of the Cloud Function."
   value       = module.cloud_function.function_uri
 }
+
+output "cloudfunction_sa_email" {
+  description = "Service account mail used by Cloud Function"
+  value       = google_service_account.cloudfunction.email
+}
